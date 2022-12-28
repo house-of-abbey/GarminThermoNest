@@ -74,14 +74,7 @@ class NestStatus {
                     }
                     var settings = traits.get("sdm.devices.traits.Settings") as Dictionary;
                     if (settings != null) {
-                        // var s = settings.get("temperatureScale") as Lang.String;
                         scale = (settings.get("temperatureScale") as Lang.String).equals("CELSIUS") ? 'C' : 'F';
-                        // if (s.equals("CELSIUS")) {
-                        //     scale = 'C';
-                        // } else {
-                        //     // FAHRENHEIT
-                        //     scale = 'F';
-                        // }
                         if (debug) {
                             System.println("Scale: '" + scale + "'");
                         }
