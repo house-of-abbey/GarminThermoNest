@@ -1,0 +1,7 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="EcoOffIcon" filename="nest_eco_leaf_off.svg" />
+    <bitmap id="EcoOnIcon" filename="nest_eco_leaf_on.svg" />
+    <bitmap id="HeatOffIcon" filename="mode_heat_off.svg" />
+    <bitmap id="HeatOnIcon" filename="mode_heat_on.svg" />
+</drawables>
