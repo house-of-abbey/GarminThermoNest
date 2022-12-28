@@ -33,7 +33,7 @@ class NestThermoView extends WatchUi.View {
     function onUpdate(dc as Dc) as Void {
         // Get and show the current time
         var view = View.findDrawableById("TempLabel") as Text;
-        view.setText(Lang.format("$1$ °$2$", [mNestStatus.getTemp().format("%2.1f"), mNestStatus.getScale()]));
+        view.setText(Lang.format("$1$ °$2$", [mNestStatus.getAmbientTemp().format("%2.1f"), mNestStatus.getScale()]));
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
 

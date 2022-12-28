@@ -5,16 +5,18 @@ import Toybox.WatchUi;
 
 class NestStatus {
     hidden var updateTemp;
-    hidden var debug      = true  as Lang.Boolean;
-    hidden var online     = false as Lang.Boolean;
-    hidden var name       = ""    as Lang.String; 
+    hidden var debug       = true  as Lang.Boolean;
+    hidden var online      = false as Lang.Boolean;
+    hidden var name        = ""    as Lang.String; 
     // Set this to 'C' or 'F' for temperature scale
-    hidden var scale      = '-'   as Lang.Char;
-    hidden var temp       = 0.0   as Lang.Number;
-    hidden var humidity   = 0.0   as Lang.Number;
-    hidden var thermoMode = ""    as Lang.String;
-    hidden var hvac       = ""    as Lang.String;
-    hidden var eco        = false as Lang.Boolean;
+    hidden var scale       = '-'   as Lang.Char;
+    hidden var ambientTemp = 0.0   as Lang.Number;
+    hidden var heatTemp    = 0.0   as Lang.Number;
+    hidden var coolTemp    = 0.0   as Lang.Number;
+    hidden var humidity    = 0.0   as Lang.Number;
+    hidden var thermoMode  = ""    as Lang.String;
+    hidden var hvac        = ""    as Lang.String;
+    hidden var eco         = false as Lang.Boolean;
 
     function initialize(h) {
         updateTemp = h;
@@ -32,8 +34,16 @@ class NestStatus {
         return scale;
     }
 
-    function getTemp() as Lang.Number {
-        return temp;
+    function getAmbientTemp() as Lang.Number {
+        return ambientTemp;
+    }
+
+    function getHeatTemp() as Lang.Number {
+        return heatTemp;
+    }
+
+    function getCoolTemp() as Lang.Number {
+        return coolTemp;
     }
 
     function getHumidity() as Lang.Number {
@@ -82,12 +92,26 @@ class NestStatus {
                     var e = traits.get("sdm.devices.traits.Temperature") as Dictionary;
                     if (e != null) {
                         if (scale == 'C') {
-                            temp = e.get("ambientTemperatureCelsius") as Lang.Number;
+                            ambientTemp = e.get("ambientTemperatureCelsius") as Lang.Number;
                         } else {
-                            temp = e.get("ambientTemperatureFahrenheit") as Lang.Number;
+                            ambientTemp = e.get("ambientTemperatureFahrenheit") as Lang.Number;
                         }
                         if (debug) {
-                            System.println("Temperature: " + temp + " deg " + scale);
+                            System.println("Temperature: " + ambientTemp + " deg " + scale);
+                        }
+                    }
+                    var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Dictionary;
+                    if (ttsp != null) {
+                        if (scale == 'C') {
+                            heatTemp = ttsp.get("heatCelsius") as Lang.Number;
+                            coolTemp = ttsp.get("coolCelsius") as Lang.Number;
+                        } else {
+                            heatTemp = ttsp.get("heatFahrenheit") as Lang.Number;
+                            coolTemp = ttsp.get("coolFahrenheit") as Lang.Number;
+                        }
+                        if (debug) {
+                            System.println("Heat Temperature: " + heatTemp + " deg " + scale);
+                            System.println("Cool Temperature: " + coolTemp + " deg " + scale);
                         }
                     }
                     var h = traits.get("sdm.devices.traits.Humidity") as Dictionary;
