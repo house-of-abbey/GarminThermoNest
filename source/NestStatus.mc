@@ -10,8 +10,11 @@ class NestStatus {
     hidden var name        = ""    as Lang.String; 
     // Set this to 'C' or 'F' for temperature scale
     hidden var scale       = '-'   as Lang.Char;
+    // Always Celsius
     hidden var ambientTemp = 0.0   as Lang.Number;
+    // Always Celsius
     hidden var heatTemp    = 0.0   as Lang.Number;
+    // Always Celsius
     hidden var coolTemp    = 0.0   as Lang.Number;
     hidden var humidity    = 0.0   as Lang.Number;
     hidden var thermoMode  = ""    as Lang.String;
@@ -34,16 +37,31 @@ class NestStatus {
         return scale;
     }
 
+    // Convert temperature to the units in 'scale'.
     function getAmbientTemp() as Lang.Number {
-        return ambientTemp;
+        if (scale == 'C') {
+            return ambientTemp;
+        } else {
+            return (ambientTemp * 9/5) + 32;
+        }
     }
 
+    // Convert temperature to the units in 'scale'.
     function getHeatTemp() as Lang.Number {
-        return heatTemp;
+        if (scale == 'C') {
+            return heatTemp;
+        } else {
+            return (heatTemp * 9/5) + 32;
+        }
     }
 
+    // Convert temperature to the units in 'scale'.
     function getCoolTemp() as Lang.Number {
-        return coolTemp;
+        if (scale == 'C') {
+            return coolTemp;
+        } else {
+            return (coolTemp * 9/5) + 32;
+        }
     }
 
     function getHumidity() as Lang.Number {
@@ -91,27 +109,18 @@ class NestStatus {
                     }
                     var e = traits.get("sdm.devices.traits.Temperature") as Dictionary;
                     if (e != null) {
-                        if (scale == 'C') {
-                            ambientTemp = e.get("ambientTemperatureCelsius") as Lang.Number;
-                        } else {
-                            ambientTemp = e.get("ambientTemperatureFahrenheit") as Lang.Number;
-                        }
+                        ambientTemp = e.get("ambientTemperatureCelsius") as Lang.Number;
                         if (debug) {
-                            System.println("Temperature: " + ambientTemp + " deg " + scale);
+                            System.println("Temperature: " + ambientTemp + " deg C");
                         }
                     }
                     var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Dictionary;
                     if (ttsp != null) {
-                        if (scale == 'C') {
-                            heatTemp = ttsp.get("heatCelsius") as Lang.Number;
-                            coolTemp = ttsp.get("coolCelsius") as Lang.Number;
-                        } else {
-                            heatTemp = ttsp.get("heatFahrenheit") as Lang.Number;
-                            coolTemp = ttsp.get("coolFahrenheit") as Lang.Number;
-                        }
+                        heatTemp = ttsp.get("heatCelsius") as Lang.Number;
+                        coolTemp = ttsp.get("coolCelsius") as Lang.Number;
                         if (debug) {
-                            System.println("Heat Temperature: " + heatTemp + " deg " + scale);
-                            System.println("Cool Temperature: " + coolTemp + " deg " + scale);
+                            System.println("Heat Temperature: " + heatTemp + " deg C");
+                            System.println("Cool Temperature: " + coolTemp + " deg C");
                         }
                     }
                     var h = traits.get("sdm.devices.traits.Humidity") as Dictionary;
