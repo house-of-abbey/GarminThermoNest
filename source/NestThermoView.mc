@@ -15,7 +15,7 @@ class NestThermoView extends WatchUi.View {
     hidden var heatCoolIcon;
     hidden var thermostatIcon;
 
-    var buttons = new Array<WatchUi.Button>[1];
+    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[1];
 
     function initialize() {
         View.initialize();

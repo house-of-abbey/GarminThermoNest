@@ -7,7 +7,7 @@ import Toybox.Communications;
 class TempChangeView extends WatchUi.View {
     hidden var mNestStatus;
 
-    var buttons = new Array<WatchUi.Button>[2];
+    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[2];
 
     function initialize() {
         View.initialize();
