@@ -1,7 +1,9 @@
 import Toybox.System;
 import Toybox.Communications;
+import Toybox.Authentication;
 import Toybox.Lang;
 import Toybox.WatchUi;
+import Toybox.Application.Properties;
 
 class NestStatus {
     hidden var requestCallback;
@@ -159,9 +161,81 @@ class NestStatus {
         }
     }
 
+    function getAccessToken() as Void {
+        var clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
+        var clientSecret = "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";
+        var projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
+
+        var payload = {
+            "code"          => Properties.getValue("oauthCode"),
+            "client_id"     => clientId,
+            "client_secret" => clientSecret,
+            "redirect_uri"  => "https://www.abbey1.org.uk/",
+            "grant_type"    => "authorization_code"
+        };
+
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_POST,
+            :headers => {
+                "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+            },
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+
+        var responseCallback = method(:onReceive);
+
+        Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onAccessTokenMessage));
+    }
+
+    function onAccessTokenMessage(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode == 200) {
+            System.println("Response: " + data);
+            Properties.setValue("accessToken", data.get("access_token"));
+            Properties.setValue("refreshToken", data.get("refresh_token"));
+            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
+        } else {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+        }
+    }
+
+    function getOAuthToken() as Void {
+        Authentication.registerForOAuthMessages(method(:onOAuthMessage));
+
+        var clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
+        var clientSecret = "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";
+        var projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
+
+        var params = {
+            :access_type            => "offline",
+            :client_id              => clientId,
+            :include_granted_scopes => "true",
+            :prompt                 => "consent",
+            :redirect_uri           => "https://www.abbey1.org.uk/",
+            :response_type          => "code",
+            :scope                  => "https://www.googleapis.com/auth/sdm.service",
+            :state                  => "pass-through value"
+        };
+
+        Authentication.makeOAuthRequest(
+            "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
+            params,
+            "https://www.abbey1.org.uk/",
+            Authentication.OAUTH_RESULT_TYPE_URL,
+            { "code" => "oauthCode" }
+        );
+    }
+
+    function onOAuthMessage(message) {
+        if (message.data != null) {
+            Properties.setValue("oauthCode", message.data.get("oauthCode"));
+        } else {}
+    }
+
     function makeRequest() as Void {
-        // var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/<project-id>/devices/<device-id>";
-        var url = "https://www.melrose.ruins/cgi-bin/fake-nest.json";
+        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/<project-id>/devices/<device-id>";
+        url = "https://www.melrose.ruins/cgi-bin/fake-nest.json";
 
         var params = {
             "web-cache" => "10"

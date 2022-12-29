@@ -1,6 +1,7 @@
 <properties>
   <property id="appVersion" type="string">0.0.1</property>
-  <property id="accessToken" type="string">abc</property>
-  <property id="projectId" type="string">def</property>
-  <property id="deviceId" type="string">ghi</property>
+  <property id="deviceId" type="string"></property>
+  <property id="oauthCode" type="string"></property>
+  <property id="accessToken" type="string"></property>
+  <property id="refreshToken" type="string"></property>
 </properties>

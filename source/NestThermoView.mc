@@ -126,9 +126,10 @@ class NestThermoView extends WatchUi.View {
     }
 
     function onButton0() as Void {
-        buttons[0].setState(:stateDisabled);
-        requestUpdate();
-        mNestStatus.makeRequest();
+        mNestStatus.getAccessToken();
+        // buttons[0].setState(:stateDisabled);
+        // requestUpdate();
+        // mNestStatus.makeRequest();
     }
 }
 

@@ -14,7 +14,6 @@ class NestThermoApp extends Application.AppBase {
     function onStart(state as Dictionary?) as Void {
         System.println(Lang.format("appVersion: $1$", [Properties.getValue("appVersion")]));
         System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-        System.println(Lang.format("projectId: $1$", [Properties.getValue("projectId")]));
         System.println(Lang.format("deviceId: $1$", [Properties.getValue("deviceId")]));
     }
 
@@ -31,7 +30,6 @@ class NestThermoApp extends Application.AppBase {
     function onSettingsChanged() {
         System.println(Lang.format("appVersion: $1$", [Properties.getValue("appVersion")]));
         System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-        System.println(Lang.format("projectId: $1$", [Properties.getValue("projectId")]));
         System.println(Lang.format("deviceId: $1$", [Properties.getValue("deviceId")]));
     }
 }
