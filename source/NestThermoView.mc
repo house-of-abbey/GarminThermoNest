@@ -47,7 +47,7 @@ class NestThermoView extends WatchUi.View {
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onButton0,
             :locX                     => dc.getWidth()/2 - 24,
-            :locY                     => dc.getHeight()/2 - 150,
+            :locY                     => 30,
             :width                    => 48,
             :height                   => 48
         });
@@ -97,7 +97,7 @@ class NestThermoView extends WatchUi.View {
             }
 
             dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(hw, hh - 60, Graphics.FONT_MEDIUM,
+            dc.drawText(hw, hh - 40, Graphics.FONT_MEDIUM,
                         "HEAT SET TO",
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -106,19 +106,19 @@ class NestThermoView extends WatchUi.View {
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
             if (mNestStatus.getEco()) {
-                dc.drawBitmap(hw - 53, hh + 90, ecoOnIcon);
+                dc.drawBitmap(hw - 53, h - 80, ecoOnIcon);
             } else {
-                dc.drawBitmap(hw - 53, hh + 90, ecoOffIcon);
+                dc.drawBitmap(hw - 53, h - 80, ecoOffIcon);
             }
 
             if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
-                dc.drawBitmap(hw + 5, hh + 90, heatCoolIcon);
+                dc.drawBitmap(hw + 5, h - 80, heatCoolIcon);
             } else if (mNestStatus.getThermoMode().equals("HEAT")) {
-                dc.drawBitmap(hw + 5, hh + 90, heatOnIcon);
+                dc.drawBitmap(hw + 5, h - 80, heatOnIcon);
             } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                dc.drawBitmap(hw + 5, hh + 90, heatOnIcon);
+                dc.drawBitmap(hw + 5, h - 80, heatOnIcon);
             } else {
-                dc.drawBitmap(hw + 5, hh + 90, heatOffIcon);
+                dc.drawBitmap(hw + 5, h - 80, heatOffIcon);
             }
 
             buttons[0].draw(dc);
