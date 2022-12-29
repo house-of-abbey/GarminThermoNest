@@ -208,21 +208,21 @@ class NestStatus {
         var projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
         var params = {
-            :access_type            => "offline",
-            :client_id              => clientId,
-            :include_granted_scopes => "true",
-            :prompt                 => "consent",
-            :redirect_uri           => "https://www.abbey1.org.uk/",
-            :response_type          => "code",
-            :scope                  => "https://www.googleapis.com/auth/sdm.service",
-            :state                  => "pass-through value"
+            "access_type"            => "offline",
+            "client_id"              => clientId,
+            "include_granted_scopes" => "true",
+            "prompt"                 => "consent",
+            "redirect_uri"           => "https://www.abbey1.org.uk/",
+            "response_type"          => "code",
+            "scope"                  => "https://www.googleapis.com/auth/sdm.service",
+            "state"                  => "pass-through value"
         };
 
-        Authentication.makeOAuthRequest(
+        Communications.makeOAuthRequest(
             "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
             params,
             "https://www.abbey1.org.uk/",
-            Authentication.OAUTH_RESULT_TYPE_URL,
+            Communications.OAUTH_RESULT_TYPE_URL,
             { "code" => "oauthCode" }
         );
     }
