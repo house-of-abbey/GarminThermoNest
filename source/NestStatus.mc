@@ -230,6 +230,7 @@ class NestStatus {
     function onOAuthMessage(message) {
         if (message.data != null) {
             Properties.setValue("oauthCode", message.data.get("oauthCode"));
+            getAccessToken();
         } else {}
     }
 
