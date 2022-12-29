@@ -1,0 +1,17 @@
+<settings>
+  <setting propertyKey="@Properties.appVersion" title="@Strings.AppVersionTitle">
+    <settingConfig type="alphaNumeric" readonly="true" />
+  </setting>
+  <setting propertyKey="@Properties.accessToken" title="@Strings.accessTokenTitle"
+    prompt="@Strings.accessTokenPrompt">
+    <settingConfig type="alphaNumeric" />
+  </setting>
+  <setting propertyKey="@Properties.projectId" title="@Strings.projectIdTitle"
+    prompt="@Strings.projectIdPrompt">
+    <settingConfig type="alphaNumeric" />
+  </setting>
+  <setting propertyKey="@Properties.deviceId" title="@Strings.deviceIdTitle"
+    prompt="@Strings.deviceIdPrompt">
+    <settingConfig type="alphaNumeric" />
+  </setting>
+</settings>

@@ -1,3 +1,15 @@
 <strings>
-    <string id="AppName">Test</string>
+    <string id="AppName">ThermoNest</string>
+
+    <string id="AppVersionTitle">Alpha</string>
+
+    <string id="accessTokenTitle">Access Token</string>
+    <string id="accessTokenPrompt">OAuth2 Authorisation Code for your Google Nest SDM API project.</string>
+
+    <string id="projectIdTitle">Project ID</string>
+    <string id="projectIdPrompt">GCloud project ID for SDM API access.</string>
+
+    <string id="deviceIdTitle">Device ID</string>
+    <string id="deviceIdPrompt">The chosen device ID retrieved from your device access project. Make
+        sure you identify the device ID of your Nest Thermostat.</string>
 </strings>
