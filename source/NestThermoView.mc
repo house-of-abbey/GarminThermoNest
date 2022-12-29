@@ -14,30 +14,26 @@ class NestThermoView extends WatchUi.View {
     hidden var coolOnIcon;
     hidden var heatCoolIcon;
     hidden var thermostatIcon;
-    hidden var refreshIcon;
-    hidden var refreshDisabledIcon;
 
     var buttons = new Array<WatchUi.Button>[1];
 
     function initialize() {
         View.initialize();
-        mNestStatus = new NestStatus(method(:updateTemp));
+        mNestStatus = new NestStatus(method(:requestCallback));
     }
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        ecoOffIcon          = Application.loadResource(Rez.Drawables.EcoOffIcon         ) as Graphics.BitmapResource;
-        ecoOnIcon           = Application.loadResource(Rez.Drawables.EcoOnIcon          ) as Graphics.BitmapResource;
-        heatOffIcon         = Application.loadResource(Rez.Drawables.HeatOffIcon        ) as Graphics.BitmapResource;
-        heatOnIcon          = Application.loadResource(Rez.Drawables.HeatOnIcon         ) as Graphics.BitmapResource;
-        coolOnIcon          = Application.loadResource(Rez.Drawables.CoolOnIcon         ) as Graphics.BitmapResource;
-        heatCoolIcon        = Application.loadResource(Rez.Drawables.HeatCoolIcon       ) as Graphics.BitmapResource;
-        thermostatIcon      = Application.loadResource(Rez.Drawables.ThermostatIcon     ) as Graphics.BitmapResource;
-        refreshIcon         = Application.loadResource(Rez.Drawables.RefreshIcon        ) as Graphics.BitmapResource;
-        refreshDisabledIcon = Application.loadResource(Rez.Drawables.RefreshDisabledIcon) as Graphics.BitmapResource;
+        ecoOffIcon     = Application.loadResource(Rez.Drawables.EcoOffIcon    ) as Graphics.BitmapResource;
+        ecoOnIcon      = Application.loadResource(Rez.Drawables.EcoOnIcon     ) as Graphics.BitmapResource;
+        heatOffIcon    = Application.loadResource(Rez.Drawables.HeatOffIcon   ) as Graphics.BitmapResource;
+        heatOnIcon     = Application.loadResource(Rez.Drawables.HeatOnIcon    ) as Graphics.BitmapResource;
+        coolOnIcon     = Application.loadResource(Rez.Drawables.CoolOnIcon    ) as Graphics.BitmapResource;
+        heatCoolIcon   = Application.loadResource(Rez.Drawables.HeatCoolIcon  ) as Graphics.BitmapResource;
+        thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
 
-        var bRefreshIcon         = new WatchUi.Bitmap({ :rezId=>$.Rez.Drawables.RefreshIcon         });
-        var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId=>$.Rez.Drawables.RefreshDisabledIcon });
+        var bRefreshIcon         = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshIcon         });
+        var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
         buttons[0] = new WatchUi.Button({
             :stateDefault             => bRefreshIcon,
             :stateHighlighted         => bRefreshIcon,
@@ -52,12 +48,6 @@ class NestThermoView extends WatchUi.View {
             :height                   => 48
         });
         setLayout(buttons);
-    }
-
-    // Called when this View is brought to the foreground. Restore
-    // the state of this View and prepare it to be shown. This includes
-    // loading resources into memory.
-    function onShow() as Void {
     }
 
     function lerp(x, a, b, A, B) {
@@ -130,7 +120,7 @@ class NestThermoView extends WatchUi.View {
         }
     }
 
-    function updateTemp() as Void {
+    function requestCallback() as Void {
         buttons[0].setState(:stateDefault);
         requestUpdate();
     }
@@ -140,23 +130,9 @@ class NestThermoView extends WatchUi.View {
         requestUpdate();
         mNestStatus.makeRequest();
     }
-
-    // Called when this View is removed from the screen. Save the
-    // state of this View here. This includes freeing resources from
-    // memory.
-    function onHide() as Void {
-    }
-
-    // The user has just looked at their watch. Timers and animations may be started here.
-    function onExitSleep() as Void {
-    }
-
-    // Terminate any active timers and prepare for slow updates.
-    function onEnterSleep() as Void {
-    }
 }
 
-class LoadDelegate extends WatchUi.BehaviorDelegate {
+class NestThermoDelegate extends WatchUi.BehaviorDelegate {
     var mView;
     function initialize(v) {
         WatchUi.BehaviorDelegate.initialize();
@@ -166,12 +142,10 @@ class LoadDelegate extends WatchUi.BehaviorDelegate {
         return mView.onButton0(); 
     }
     function onNextPage() {
-        System.println("next page");
+        if (System.getDeviceSettings().phoneConnected) {
+            var v = new TempChangeView();
+            WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_DOWN);
+        }
         return true;
     }
-    function onPreviousPage() {
-        System.println("prev page");
-        return true;
-    }
-    // function onSelect() { return touch.invoke(); }
 }

@@ -4,7 +4,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 
 class NestStatus {
-    hidden var updateTemp;
+    hidden var requestCallback;
     hidden var debug       = true  as Lang.Boolean;
     hidden var online      = false as Lang.Boolean;
     hidden var name        = ""    as Lang.String; 
@@ -22,7 +22,7 @@ class NestStatus {
     hidden var eco         = false as Lang.Boolean;
 
     function initialize(h) {
-        updateTemp = h;
+        requestCallback = h;
     }
 
     function getOnline() as Lang.Boolean {
@@ -153,7 +153,7 @@ class NestStatus {
                     }
                 }
             }
-            updateTemp.invoke();
+            requestCallback.invoke();
         } else {
             System.println("Response: " + responseCode);
         }

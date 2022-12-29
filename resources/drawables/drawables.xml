@@ -9,4 +9,6 @@
     <bitmap id="ThermostatIcon" filename="nest_thermostat.svg" />
     <bitmap id="RefreshIcon" filename="refresh.svg" />
     <bitmap id="RefreshDisabledIcon" filename="refresh_disabled.svg" />
+    <bitmap id="ArrowDownIcon" filename="arrow_down.svg" />
+    <bitmap id="ArrowUpIcon" filename="arrow_up.svg" />
 </drawables>
