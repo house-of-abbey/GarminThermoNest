@@ -20,7 +20,7 @@ class NestThermoApp extends Application.AppBase {
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
         mView = new NestThermoView();
-        return [ mView, new LoadDelegate(mView.method(:touch)) ] as Array<Views or InputDelegates>;
+        return [ mView, new LoadDelegate(mView) ] as Array<Views or InputDelegates>;
     }
 
 }

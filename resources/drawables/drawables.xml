@@ -4,4 +4,9 @@
     <bitmap id="EcoOnIcon" filename="nest_eco_leaf_on.svg" />
     <bitmap id="HeatOffIcon" filename="mode_heat_off.svg" />
     <bitmap id="HeatOnIcon" filename="mode_heat_on.svg" />
+    <bitmap id="CoolOnIcon" filename="mode_cool_on.svg" />
+    <bitmap id="HeatCoolIcon" filename="mode_heat_cool.svg" />
+    <bitmap id="ThermostatIcon" filename="nest_thermostat.svg" />
+    <bitmap id="RefreshIcon" filename="refresh.svg" />
+    <bitmap id="RefreshDisabledIcon" filename="refresh_disabled.svg" />
 </drawables>

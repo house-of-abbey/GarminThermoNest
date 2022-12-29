@@ -160,7 +160,8 @@ class NestStatus {
     }
 
     function makeRequest() as Void {
-        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/<project-id>/devices/<device-id>";
+        // var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/<project-id>/devices/<device-id>";
+        var url = "https://www.melrose.ruins/cgi-bin/fake-nest.json";
 
         var params = {
             "web-cache" => "10"
