@@ -23,7 +23,6 @@ class NestThermoView extends WatchUi.View {
 
     hidden var wifiConnection = true;
     function onRecieveWifiConnection(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        System.println(result);
         wifiConnection = result.get(:wifiAvailable);
         requestUpdate();
     }
@@ -85,85 +84,90 @@ class NestThermoView extends WatchUi.View {
         dc.clear();
         dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
         dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, 240f, -60f);
-        var ambientTemperature = mNestStatus.getAmbientTemp();
-        if (ambientTemperature != null) {
-            var heat = mNestStatus.getHeatTemp();
-            var cool = mNestStatus.getCoolTemp();
-            var ambientTemperatureArc = mNestStatus.getScale() == 'C'
-                ? lerp(ambientTemperature, 9f, 32f, 240f, -60f)
-                : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
-            if (heat) {
-                var heatArc = mNestStatus.getScale() == 'C'
-                    ? lerp(heat, 9f, 32f, 240f, -60f)
-                    : lerp(heat, 48f, 90f, 240f, -60f);
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                if (ambientTemperature > heat) {
-                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
-                } else {
-                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+
+        if (mNestStatus.gotDeviceData) {
+            var ambientTemperature = mNestStatus.getAmbientTemp();
+            if (ambientTemperature != null) {
+                var heat = mNestStatus.getHeatTemp();
+                var cool = mNestStatus.getCoolTemp();
+                var ambientTemperatureArc = mNestStatus.getScale() == 'C'
+                    ? lerp(ambientTemperature, 9f, 32f, 240f, -60f)
+                    : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
+                if (heat) {
+                    var heatArc = mNestStatus.getScale() == 'C'
+                        ? lerp(heat, 9f, 32f, 240f, -60f)
+                        : lerp(heat, 48f, 90f, 240f, -60f);
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    if (ambientTemperature > heat) {
+                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                    } else {
+                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+                    }
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    var hrad = Math.toRadians(360 - heatArc);
+                    var ha = Math.cos(hrad);
+                    var hb = Math.sin(hrad);
+                    dc.drawLine(ha*(hw - 20) + hw, hb*(hh - 20) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
                 }
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                var hrad = Math.toRadians(360 - heatArc);
-                var ha = Math.cos(hrad);
-                var hb = Math.sin(hrad);
-                dc.drawLine(ha*(hw - 20) + hw, hb*(hh - 20) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
-            }
-            if (cool) {
-                var coolArc = mNestStatus.getScale() == 'C'
-                    ? lerp(cool, 9f, 32f, 240f, -60f)
-                    : lerp(cool, 48f, 90f, 240f, -60f);
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                if (ambientTemperature > cool) {
-                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
-                } else {
-                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                if (cool) {
+                    var coolArc = mNestStatus.getScale() == 'C'
+                        ? lerp(cool, 9f, 32f, 240f, -60f)
+                        : lerp(cool, 48f, 90f, 240f, -60f);
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    if (ambientTemperature > cool) {
+                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
+                    } else {
+                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                    }
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    var crad = Math.toRadians(360 - coolArc);
+                    var ca = Math.cos(crad);
+                    var cb = Math.sin(crad);
+                    dc.drawLine(ca*(hw - 20) + hw, cb*(hh - 20) + hh, ca*(hw - 5) + hw, cb*(hh - 5) + hh);
                 }
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                var crad = Math.toRadians(360 - coolArc);
-                var ca = Math.cos(crad);
-                var cb = Math.sin(crad);
-                dc.drawLine(ca*(hw - 20) + hw, cb*(hh - 20) + hh, ca*(hw - 5) + hw, cb*(hh - 5) + hh);
+                dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+                var arad = Math.toRadians(360 - ambientTemperatureArc);
+                var aa = Math.cos(arad);
+                var ab = Math.sin(arad);
+                dc.drawLine(aa*(hw - 15) + hw, ab*(hh - 15) + hh, aa*(hw - 5) + hw, ab*(hh - 5) + hh);
+
+                if (mNestStatus.getEco()) {
+                    dc.setColor(0x00801c, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "ECO",
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                } else {
+                    if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                    Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
+                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    } else if (mNestStatus.getThermoMode().equals("HEAT")) {
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                    Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
+                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    } else if (mNestStatus.getThermoMode().equals("COOL")) {
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                    Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
+                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    } else {
+                        dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "OFF",
+                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    }
+                }
+                dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(hw, hh + 40, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             }
-            dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-            var arad = Math.toRadians(360 - ambientTemperatureArc);
-            var aa = Math.cos(arad);
-            var ab = Math.sin(arad);
-            dc.drawLine(aa*(hw - 15) + hw, ab*(hh - 15) + hh, aa*(hw - 5) + hw, ab*(hh - 5) + hh);
 
             if (mNestStatus.getEco()) {
                 dc.drawBitmap(hw - 53, h - 80, ecoOnIcon);
-
-                dc.setColor(0x00801c, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "ECO",
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             } else {
                 dc.drawBitmap(hw - 53, h - 80, ecoOffIcon);
-
-                if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                } else if (mNestStatus.getThermoMode().equals("HEAT")) {
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                } else {
-                    dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "OFF",
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                }
             }
-            dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(hw, hh + 40, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
             if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
                 dc.drawBitmap(hw + 5, h - 80, heatCoolIcon);
@@ -178,7 +182,7 @@ class NestThermoView extends WatchUi.View {
 
         if (System.getDeviceSettings().phoneConnected) {
             if (wifiConnection) {
-                if (mNestStatus.getOnline()) {
+                if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
                     dc.drawBitmap(hw - 24, 30, refreshIcon);
                 } else {
                     dc.drawBitmap(hw - 24, 30, thermostatOfflineIcon);

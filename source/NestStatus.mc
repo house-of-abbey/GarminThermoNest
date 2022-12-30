@@ -11,8 +11,11 @@ const clientSecret = "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";
 const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
 class NestStatus {
+    public var gotDeviceData        = false as Lang.Boolean;
+
     hidden var requestCallback;
     hidden var debug                = true  as Lang.Boolean;
+
     hidden var online               = false as Lang.Boolean;
     hidden var name                 = ""    as Lang.String;
     // Set this to 'C' or '         F' for temperature scale
@@ -293,6 +296,7 @@ class NestStatus {
                     }
                 }
             }
+            gotDeviceData = true;
             requestCallback.invoke();
         } else {
             System.println("Response: " + responseCode);
