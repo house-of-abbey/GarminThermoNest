@@ -100,6 +100,34 @@ class NestStatus {
             return (coolTemp * 9/5) + 32;
         }
     }
+    function setCoolTemp(value as Lang.Number) as Void {
+        if (!eco) {
+            if (scale == 'C') {
+                coolTemp = value;
+            } else {
+                coolTemp = (value - 32) * 5/9;
+            }
+            requestCallback.invoke();
+        }
+    }
+    function onReturnCoolTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode != 200) {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+            getDeviceData();
+        }
+        requestCallback.invoke();
+    }
+    function executeCoolTemp() as Void {
+        if (!eco) {
+            executeCommand({
+                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetCool",
+                "params"  => {
+                    "CoolCelsius" => coolTemp
+                }
+            }, method(:onReturnCoolTemp));
+        }
+    }
 
     function getHumidity() as Lang.Number {
         return humidity;
@@ -112,6 +140,26 @@ class NestStatus {
     function getThermoMode() as Lang.String {
         return thermoMode;
     }
+    function setThermoMode(value as Lang.String) as Void {
+        thermoMode = value;
+        requestCallback.invoke();
+    }
+    function onReturnThermoMode(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode != 200) {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+            getDeviceData();
+        }
+        requestCallback.invoke();
+    }
+    function executeThermoMode() as Void {
+        executeCommand({
+            "command" => "sdm.devices.commands.ThermostatMode.SetMode",
+            "params"  => {
+                "mode" => thermoMode
+            }
+        }, method(:onReturnThermoMode));
+    }
 
     function getHvac() as Lang.String {
         return hvac;
@@ -123,6 +171,26 @@ class NestStatus {
 
     function getEco() as Lang.Boolean {
         return eco;
+    }
+    function setEco(value as Lang.Boolean) as Void {
+        eco = value;
+        requestCallback.invoke();
+    }
+    function onReturnEco(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode != 200) {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+            getDeviceData();
+        }
+        requestCallback.invoke();
+    }
+    function executeEco() as Void {
+        executeCommand({
+            "command" => "sdm.devices.commands.ThermostatEco.SetMode",
+            "params"  => {
+                "mode" => eco ? "MANUAL_ECO" : "OFF"
+            }
+        }, method(:onReturnEco));
     }
 
     function executeCommand(payload as Dictionary, callback) {
