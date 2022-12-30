@@ -1,5 +1,7 @@
 bin/**
-url.txt
+export/**
 .vscode/
+url.txt
 client_secret_*.json
 credentials.txt
+Thumbs.db
