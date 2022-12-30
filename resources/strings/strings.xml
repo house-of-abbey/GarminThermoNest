@@ -13,6 +13,9 @@
     <string id="accessTokenTitle">Access Token</string>
     <string id="accessTokenPrompt">OAuth2 Authorisation Code for your Google Nest SDM API project.</string>
 
+    <string id="accessTokenExpireTitle">Access Token Expire</string>
+    <string id="accessTokenExpirePrompt">A UTC value for when the access token expires.</string>
+
     <string id="refreshTokenTitle">Refresh Token</string>
     <string id="refreshTokenPrompt">OAuth2 Authorisation Code for your Google Nest SDM API project.</string>
 </strings>

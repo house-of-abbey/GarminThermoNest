@@ -14,6 +14,10 @@
     prompt="@Strings.accessTokenPrompt">
     <settingConfig type="alphaNumeric" />
   </setting>
+  <setting propertyKey="@Properties.accessTokenExpire" title="@Strings.accessTokenExpireTitle"
+    prompt="@Strings.accessTokenExpirePrompt">
+    <settingConfig type="numeric" />
+  </setting>
   <setting propertyKey="@Properties.refreshToken" title="@Strings.refreshTokenTitle"
     prompt="@Strings.refreshTokenPrompt">
     <settingConfig type="alphaNumeric" />

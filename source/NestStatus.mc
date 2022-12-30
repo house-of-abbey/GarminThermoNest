@@ -4,6 +4,7 @@ import Toybox.Authentication;
 import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Application.Properties;
+import Toybox.Time;
 
 const clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
 const clientSecret = "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";
@@ -256,6 +257,7 @@ class NestStatus {
         if (responseCode == 200) {
             System.println("Response: " + data);
             Properties.setValue("accessToken", data.get("access_token"));
+            Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
             System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
             getDevices();
         } else {
@@ -268,6 +270,7 @@ class NestStatus {
         if (responseCode == 200) {
             System.println("Response: " + data);
             Properties.setValue("accessToken", data.get("access_token"));
+            Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
             Properties.setValue("refreshToken", data.get("refresh_token"));
             System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
             System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
@@ -281,22 +284,27 @@ class NestStatus {
     function getAccessToken() as Void {
         var c = Properties.getValue("refreshToken");
         if (c != null && !c.equals("")) {
-            var payload = {
-                "refresh_token" => c,
-                "client_id"     => clientId,
-                "client_secret" => clientSecret,
-                "grant_type"    => "refresh_token"
-            };
+            var e = Properties.getValue("accessTokenExpire");
+            if (e == null || Time.today().value() > e) {
+                var payload = {
+                    "refresh_token" => c,
+                    "client_id"     => clientId,
+                    "client_secret" => clientSecret,
+                    "grant_type"    => "refresh_token"
+                };
 
-            var options = {
-                :method => Communications.HTTP_REQUEST_METHOD_POST,
-                :headers => {
-                    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
-                },
-                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-            };
+                var options = {
+                    :method => Communications.HTTP_REQUEST_METHOD_POST,
+                    :headers => {
+                        "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+                    },
+                    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+                };
 
-            Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveRefreshAccessToken));
+                Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveRefreshAccessToken));
+            } else {
+                getDevices();
+            }
         } else {
             var payload = {
                 "code"          => Properties.getValue("oauthCode"),
