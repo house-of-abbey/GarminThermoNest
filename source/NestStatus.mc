@@ -302,7 +302,7 @@ class NestStatus {
                 "code"          => Properties.getValue("oauthCode"),
                 "client_id"     => clientId,
                 "client_secret" => clientSecret,
-                "redirect_uri"  => "https://www.google.com",
+                "redirect_uri"  => "https://house-of-abbey.github.io/GarminThermoNest/auth",
                 "grant_type"    => "authorization_code"
             };
 
@@ -332,26 +332,39 @@ class NestStatus {
             return;
         }
 
-        Communications.registerForOAuthMessages(method(:onOAuthMessage));
-
-        var params = {
+        // for the time being, we cannot use the oauth api because google does not allow signin in a webview
+        // instead we will do it manually
+        Communications.openWebPage("https://nestservices.google.com/partnerconnections/" + projectId + "/auth", {
             "access_type"            => "offline",
             "client_id"              => clientId,
             "include_granted_scopes" => "true",
             "prompt"                 => "consent",
-            "redirect_uri"           => "https://www.google.com",
+            "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
             "response_type"          => "code",
             "scope"                  => "https://www.googleapis.com/auth/sdm.service",
             "state"                  => "pass-through value"
-        };
+        }, {});
 
-        Communications.makeOAuthRequest(
-            "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
-            params,
-            "https://www.google.com",
-            Communications.OAUTH_RESULT_TYPE_URL,
-            { "code" => "oauthCode" }
-        );
+        // Communications.registerForOAuthMessages(method(:onOAuthMessage));
+
+        // var params = {
+        //     "access_type"            => "offline",
+        //     "client_id"              => clientId,
+        //     "include_granted_scopes" => "true",
+        //     "prompt"                 => "consent",
+        //     "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
+        //     "response_type"          => "code",
+        //     "scope"                  => "https://www.googleapis.com/auth/sdm.service",
+        //     "state"                  => "pass-through value"
+        // };
+
+        // Communications.makeOAuthRequest(
+        //     "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
+        //     params,
+        //     "https://house-of-abbey.github.io/GarminThermoNest/auth",
+        //     Communications.OAUTH_RESULT_TYPE_URL,
+        //     { "code" => "oauthCode" }
+        // );
     }
 }
 
