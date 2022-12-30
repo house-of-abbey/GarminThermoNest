@@ -11,4 +11,7 @@
     <bitmap id="RefreshDisabledIcon" filename="refresh_disabled.svg" />
     <bitmap id="ArrowDownIcon" filename="arrow_down.svg" />
     <bitmap id="ArrowUpIcon" filename="arrow_up.svg" />
+    <bitmap id="PhoneDisconnectedIcon" filename="phone_disconnected.svg" />
+    <bitmap id="SignalDisconnectedIcon" filename="signal_disconnected.svg" />
+    <bitmap id="ThermostatOfflineIcon" filename="thermostat_offline.svg" />
 </drawables>

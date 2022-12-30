@@ -14,32 +14,47 @@ class NestThermoView extends WatchUi.View {
     hidden var coolOnIcon;
     hidden var heatCoolIcon;
     hidden var thermostatIcon;
+    hidden var phoneDisconnectedIcon;
+    hidden var signalDisconnectedIcon;
+    hidden var thermostatOfflineIcon;
+    hidden var refreshIcon;
 
     var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[1];
+
+    hidden var wifiConnection = true;
+    function onRecieveWifiConnection(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
+        System.println(result);
+        wifiConnection = result.get(:wifiAvailable);
+        requestUpdate();
+    }
 
     function initialize() {
         View.initialize();
         mNestStatus = new NestStatus(method(:requestCallback));
+        Communications.checkWifiConnection(method(:onRecieveWifiConnection));
     }
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        ecoOffIcon     = Application.loadResource(Rez.Drawables.EcoOffIcon    ) as Graphics.BitmapResource;
-        ecoOnIcon      = Application.loadResource(Rez.Drawables.EcoOnIcon     ) as Graphics.BitmapResource;
-        heatOffIcon    = Application.loadResource(Rez.Drawables.HeatOffIcon   ) as Graphics.BitmapResource;
-        heatOnIcon     = Application.loadResource(Rez.Drawables.HeatOnIcon    ) as Graphics.BitmapResource;
-        coolOnIcon     = Application.loadResource(Rez.Drawables.CoolOnIcon    ) as Graphics.BitmapResource;
-        heatCoolIcon   = Application.loadResource(Rez.Drawables.HeatCoolIcon  ) as Graphics.BitmapResource;
-        thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
+        ecoOffIcon             = Application.loadResource(Rez.Drawables.EcoOffIcon            ) as Graphics.BitmapResource;
+        ecoOnIcon              = Application.loadResource(Rez.Drawables.EcoOnIcon             ) as Graphics.BitmapResource;
+        heatOffIcon            = Application.loadResource(Rez.Drawables.HeatOffIcon           ) as Graphics.BitmapResource;
+        heatOnIcon             = Application.loadResource(Rez.Drawables.HeatOnIcon            ) as Graphics.BitmapResource;
+        coolOnIcon             = Application.loadResource(Rez.Drawables.CoolOnIcon            ) as Graphics.BitmapResource;
+        heatCoolIcon           = Application.loadResource(Rez.Drawables.HeatCoolIcon          ) as Graphics.BitmapResource;
+        thermostatIcon         = Application.loadResource(Rez.Drawables.ThermostatIcon        ) as Graphics.BitmapResource;
+        phoneDisconnectedIcon  = Application.loadResource(Rez.Drawables.PhoneDisconnectedIcon ) as Graphics.BitmapResource;
+        signalDisconnectedIcon = Application.loadResource(Rez.Drawables.SignalDisconnectedIcon) as Graphics.BitmapResource;
+        thermostatOfflineIcon  = Application.loadResource(Rez.Drawables.ThermostatOfflineIcon ) as Graphics.BitmapResource;
+        refreshIcon            = Application.loadResource(Rez.Drawables.RefreshIcon           ) as Graphics.BitmapResource;
 
-        var bRefreshIcon         = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshIcon         });
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
         buttons[0] = new WatchUi.Button({
-            :stateDefault             => bRefreshIcon,
-            :stateHighlighted         => bRefreshIcon,
-            :stateSelected            => bRefreshIcon,
+            :stateDefault             => Graphics.COLOR_TRANSPARENT,
+            :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
+            :stateSelected            => Graphics.COLOR_TRANSPARENT,
             :stateDisabled            => bRefreshDisabledIcon,
-            :stateHighlightedSelected => bRefreshIcon,
+            :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onButton0,
             :locX                     => dc.getWidth()/2 - 24,
@@ -68,48 +83,87 @@ class NestThermoView extends WatchUi.View {
                             ? 0x285DF7
                             : bg);
         dc.clear();
-        if (System.getDeviceSettings().phoneConnected) {
+        dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, 240f, -60f);
+        var ambientTemperature = mNestStatus.getAmbientTemp();
+        if (ambientTemperature != null) {
             var heat = mNestStatus.getHeatTemp();
-            var ambientTemperature = mNestStatus.getAmbientTemp();
-            var heatArc = mNestStatus.getScale() == 'C'
-                ? lerp(heat, 9f, 32f, 240f, -60f)
-                : lerp(heat, 48f, 90f, 240f, -60f);
+            var cool = mNestStatus.getCoolTemp();
             var ambientTemperatureArc = mNestStatus.getScale() == 'C'
                 ? lerp(ambientTemperature, 9f, 32f, 240f, -60f)
                 : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
-            dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-            dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, 240f, -60f);
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            if (ambientTemperature > heat) {
-                dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
-            } else {
-                dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+            if (heat) {
+                var heatArc = mNestStatus.getScale() == 'C'
+                    ? lerp(heat, 9f, 32f, 240f, -60f)
+                    : lerp(heat, 48f, 90f, 240f, -60f);
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                if (ambientTemperature > heat) {
+                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                } else {
+                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+                }
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                var hrad = Math.toRadians(360 - heatArc);
+                var ha = Math.cos(hrad);
+                var hb = Math.sin(hrad);
+                dc.drawLine(ha*(hw - 20) + hw, hb*(hh - 20) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
             }
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            var hrad = Math.toRadians(360 - heatArc);
-            var ha = Math.cos(hrad);
-            var hb = Math.sin(hrad);
-            dc.drawLine(ha*(hw - 15) + hw, hb*(hh - 15) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
+            if (cool) {
+                var coolArc = mNestStatus.getScale() == 'C'
+                    ? lerp(cool, 9f, 32f, 240f, -60f)
+                    : lerp(cool, 48f, 90f, 240f, -60f);
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                if (ambientTemperature > cool) {
+                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
+                } else {
+                    dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                }
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                var crad = Math.toRadians(360 - coolArc);
+                var ca = Math.cos(crad);
+                var cb = Math.sin(crad);
+                dc.drawLine(ca*(hw - 20) + hw, cb*(hh - 20) + hh, ca*(hw - 5) + hw, cb*(hh - 5) + hh);
+            }
             dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
             var arad = Math.toRadians(360 - ambientTemperatureArc);
             var aa = Math.cos(arad);
             var ab = Math.sin(arad);
             dc.drawLine(aa*(hw - 15) + hw, ab*(hh - 15) + hh, aa*(hw - 5) + hw, ab*(hh - 5) + hh);
 
-            dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(hw, hh - 40, Graphics.FONT_MEDIUM,
-                        "HEAT SET TO",
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
             if (mNestStatus.getEco()) {
                 dc.drawBitmap(hw - 53, h - 80, ecoOnIcon);
+
+                dc.setColor(0x00801c, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "ECO",
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             } else {
                 dc.drawBitmap(hw - 53, h - 80, ecoOffIcon);
+
+                if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                } else if (mNestStatus.getThermoMode().equals("HEAT")) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                } else if (mNestStatus.getThermoMode().equals("COOL")) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                } else {
+                    dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "OFF",
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                }
             }
+            dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(hw, hh + 40, Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
             if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
                 dc.drawBitmap(hw + 5, h - 80, heatCoolIcon);
@@ -120,14 +174,22 @@ class NestThermoView extends WatchUi.View {
             } else {
                 dc.drawBitmap(hw + 5, h - 80, heatOffIcon);
             }
-
-            buttons[0].draw(dc);
-        } else {
-            dc.drawBitmap(hw - 24, hh - 24, thermostatIcon);
-            dc.drawText(hw, hh + 60, Graphics.FONT_MEDIUM,
-                        "Not connected",
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
+
+        if (System.getDeviceSettings().phoneConnected) {
+            if (wifiConnection) {
+                if (mNestStatus.getOnline()) {
+                    dc.drawBitmap(hw - 24, 30, refreshIcon);
+                } else {
+                    dc.drawBitmap(hw - 24, 30, thermostatOfflineIcon);
+                }
+            } else {
+                dc.drawBitmap(hw - 24, 30, signalDisconnectedIcon);
+            }
+        } else {
+            dc.drawBitmap(hw - 24, 30, phoneDisconnectedIcon);
+        }
+        buttons[0].draw(dc);
     }
 
     function requestCallback() as Void {
@@ -136,6 +198,7 @@ class NestThermoView extends WatchUi.View {
     }
 
     function onButton0() as Void {
+        Communications.checkWifiConnection(method(:onRecieveWifiConnection));
         mNestStatus.getOAuthToken();
         buttons[0].setState(:stateDisabled);
         requestUpdate();
