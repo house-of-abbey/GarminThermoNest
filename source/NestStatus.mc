@@ -328,7 +328,7 @@ class NestStatus {
                 var device = devices[i];
                 if (device.get("type").equals("sdm.devices.types.THERMOSTAT")) {
                     var n = device.get("traits").get("sdm.devices.traits.Info").get("customName");
-                    var r = device.get("parentRelations")[0].get("displayName");
+                    var r = (device.get("parentRelations") as Lang.Array<Lang.Dictionary>)[0].get("displayName");
                     if (n.equals("")) {
                         n = r + " Thermostat";
                     }
@@ -447,7 +447,7 @@ class NestStatus {
 
     function onOAuthMessage(message as Communications.OAuthMessage) as Void {
         if (message.data != null) {
-            Properties.setValue("oauthCode", message.data["oauthCode"]);
+            Properties.setValue("oauthCode", (message.data as Lang.Dictionary)["oauthCode"]);
             getAccessToken();
         } else {}
     }
