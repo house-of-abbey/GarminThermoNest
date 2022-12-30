@@ -201,6 +201,28 @@ class NestStatus {
     function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (responseCode == 200) {
             System.println("Response: " + data);
+            var devices = data.get("devices") as Lang.Array;
+            var menu = new WatchUi.Menu2({ :title => "Devices" });
+            var o = 21 + projectId.length();
+            for (var i = 0; i < devices.size(); i++) {
+                var device = devices[i];
+                if (device.get("type").equals("sdm.devices.types.THERMOSTAT")) {
+                    var n = device.get("traits").get("sdm.devices.traits.Info").get("customName");
+                    var r = device.get("parentRelations")[0].get("displayName");
+                    if (n.equals("")) {
+                        n = r + " Thermostat";
+                    }
+                    menu.addItem(
+                        new MenuItem(
+                            n,
+                            r,
+                            device.get("name").substring(o, null),
+                            {}
+                        )
+                    );
+                }
+            }
+            WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
         } else {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
@@ -208,21 +230,26 @@ class NestStatus {
     }
 
     function getDevices() {
-        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
+        var c = Properties.getValue("deviceId");
+        if (c != null && !c.equals("")) {
+            getDeviceData();
+        } else {
+            var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
 
-        var params = {
-        };
+            var params = {
+            };
 
-        var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :headers => {
-                "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                "Authorization" => "Bearer " + Properties.getValue("accessToken")
-            },
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-        };
+            var options = {
+                :method => Communications.HTTP_REQUEST_METHOD_GET,
+                :headers => {
+                    "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+                    "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                },
+                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+            };
 
-        Communications.makeWebRequest(url, params, options, method(:onReceiveDevices));
+            Communications.makeWebRequest(url, params, options, method(:onReceiveDevices));
+        }
     }
 
     function onRecieveRefreshAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
@@ -325,5 +352,20 @@ class NestStatus {
             Communications.OAUTH_RESULT_TYPE_URL,
             { "code" => "oauthCode" }
         );
+    }
+}
+
+class DevicesMenuInputDelegate extends WatchUi.Menu2InputDelegate {
+    hidden var mNestStatus;
+    function initialize(h as NestStatus) {
+        Menu2InputDelegate.initialize();
+        mNestStatus = h;
+    }
+
+    function onSelect(item) {
+        Properties.setValue("deviceId", item.getId());
+        System.println("deviceId: " + Properties.getValue("deviceId"));
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+        mNestStatus.getDeviceData();
     }
 }
