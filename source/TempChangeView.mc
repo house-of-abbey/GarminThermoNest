@@ -5,13 +5,13 @@ import Toybox.WatchUi;
 import Toybox.Communications;
 
 class TempChangeView extends WatchUi.View {
-    hidden var mNestStatus;
+    var mNestStatus;
 
     var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[2];
 
-    function initialize() {
+    function initialize(s) {
         View.initialize();
-        mNestStatus = new NestStatus(method(:requestCallback));
+        mNestStatus = s;
     }
 
     // Load your resources here
@@ -61,26 +61,23 @@ class TempChangeView extends WatchUi.View {
                     Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
+        if (mNestStatus.getEco()) {
+            buttons[0].setState(:stateDisabled);
+            buttons[1].setState(:stateDisabled);
+        } else {
+            buttons[0].setState(:stateDefault);
+            buttons[1].setState(:stateDefault);
+        }
         buttons[0].draw(dc);
         buttons[1].draw(dc);
     }
 
-    function requestCallback() {
-        buttons[0].setState(:stateDefault);
-        buttons[1].setState(:stateDefault);
-        requestUpdate();
-    }
-
     function onButton0() as Void {
-        buttons[0].setState(:stateDisabled);
-        requestUpdate();
-        mNestStatus.getDeviceData();
+        mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() + 0.5);
     }
 
     function onButton1() as Void {
-        buttons[1].setState(:stateDisabled);
-        requestUpdate();
-        mNestStatus.getDeviceData();
+        mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() - 0.5);
     }
 }
 
@@ -101,7 +98,8 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
     //     return true;
     // }
     function onPreviousPage() {
-        WatchUi.popView(WatchUi.SLIDE_UP);
+        mView.mNestStatus.executeHeatTemp();
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
     // function onSelect() { return touch.invoke(); }

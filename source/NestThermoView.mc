@@ -5,7 +5,7 @@ import Toybox.WatchUi;
 import Toybox.Communications;
 
 class NestThermoView extends WatchUi.View {
-    hidden var mNestStatus;
+    public var mNestStatus;
 
     hidden var ecoOffIcon;
     hidden var ecoOnIcon;
@@ -85,6 +85,16 @@ class NestThermoView extends WatchUi.View {
             } else {
                 dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
             }
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            var hrad = Math.toRadians(360 - heatArc);
+            var ha = Math.cos(hrad);
+            var hb = Math.sin(hrad);
+            dc.drawLine(ha*(hw - 15) + hw, hb*(hh - 15) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
+            dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+            var arad = Math.toRadians(360 - ambientTemperatureArc);
+            var aa = Math.cos(arad);
+            var ab = Math.sin(arad);
+            dc.drawLine(aa*(hw - 15) + hw, ab*(hh - 15) + hh, aa*(hw - 5) + hw, ab*(hh - 5) + hh);
 
             dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
             dc.drawText(hw, hh - 40, Graphics.FONT_MEDIUM,
@@ -143,8 +153,8 @@ class NestThermoDelegate extends WatchUi.BehaviorDelegate {
     }
     function onNextPage() {
         if (System.getDeviceSettings().phoneConnected) {
-            var v = new TempChangeView();
-            WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_DOWN);
+            var v = new TempChangeView(mView.mNestStatus);
+            WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
         }
         return true;
     }

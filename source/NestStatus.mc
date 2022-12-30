@@ -63,6 +63,34 @@ class NestStatus {
             return (heatTemp * 9/5) + 32;
         }
     }
+    function setHeatTemp(value as Lang.Number) as Void {
+        if (!eco) {
+            if (scale == 'C') {
+                heatTemp = value;
+            } else {
+                heatTemp = (value - 32) * 5/9;
+            }
+            requestCallback.invoke();
+        }
+    }
+    function onReturnHeatTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode != 200) {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+            getDeviceData();
+        }
+        requestCallback.invoke();
+    }
+    function executeHeatTemp() as Void {
+        if (!eco) {
+            executeCommand({
+                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetHeat",
+                "params"  => {
+                    "heatCelsius" => heatTemp
+                }
+            }, method(:onReturnHeatTemp));
+        }
+    }
 
     // Convert temperature to the units in 'scale'.
     function getCoolTemp() as Lang.Number {
@@ -95,6 +123,21 @@ class NestStatus {
 
     function getEco() as Lang.Boolean {
         return eco;
+    }
+
+    function executeCommand(payload as Dictionary, callback) {
+        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId") + ":executeCommand";
+
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_POST,
+            :headers => {
+                "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_JSON,
+                "Authorization" => "Bearer " + Properties.getValue("accessToken")
+            },
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+
+        Communications.makeWebRequest(url, payload, options, callback);
     }
 
     // Set up the response callback function
@@ -170,6 +213,14 @@ class NestStatus {
                         if (debug) {
                             System.println("Eco Modes: " + availableEcoModes);
                             System.println("ThermostatEco: " + (eco ? "Eco" : "Off"));
+                        }
+                        if (eco) {
+                            heatTemp = te.get("heatCelsius") as Lang.Number;
+                            coolTemp = te.get("coolCelsius") as Lang.Number;
+                            if (debug) {
+                                System.println("Heat Temperature: " + heatTemp + " deg C (eco)");
+                                System.println("Cool Temperature: " + coolTemp + " deg C (eco)");
+                            }
                         }
                     }
                 }
