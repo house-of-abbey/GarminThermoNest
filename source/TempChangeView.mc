@@ -74,13 +74,13 @@ class TempChangeView extends WatchUi.View {
     function onButton0() as Void {
         buttons[0].setState(:stateDisabled);
         requestUpdate();
-        mNestStatus.makeRequest();
+        mNestStatus.getDeviceData();
     }
 
     function onButton1() as Void {
         buttons[1].setState(:stateDisabled);
         requestUpdate();
-        mNestStatus.makeRequest();
+        mNestStatus.getDeviceData();
     }
 }
 

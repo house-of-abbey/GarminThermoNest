@@ -5,6 +5,10 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Application.Properties;
 
+const clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
+const clientSecret = "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";
+const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
+
 class NestStatus {
     hidden var requestCallback;
     hidden var debug       = true  as Lang.Boolean;
@@ -83,7 +87,7 @@ class NestStatus {
     }
 
     // Set up the response callback function
-    function onReceive(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReceiveDeviceData(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (responseCode == 200) {
             if (data != null) {
                 var traits = data.get("traits") as Dictionary;
@@ -158,61 +162,143 @@ class NestStatus {
             requestCallback.invoke();
         } else {
             System.println("Response: " + responseCode);
+            System.println("Response: " + data);
         }
     }
 
-    function getAccessToken() as Void {
-        var clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
-        var clientSecret = "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";
-        var projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
+    function getDeviceData() as Void {
+        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId");
 
-        var payload = {
-            "code"          => Properties.getValue("oauthCode"),
-            "client_id"     => clientId,
-            "client_secret" => clientSecret,
-            "redirect_uri"  => "https://www.abbey1.org.uk/",
-            "grant_type"    => "authorization_code"
+        var params = {
         };
 
         var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_POST,
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
-                "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+                "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+                "Authorization" => "Bearer " + Properties.getValue("accessToken")
             },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        var responseCallback = method(:onReceive);
-
-        Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onAccessTokenMessage));
+        Communications.makeWebRequest(url, params, options, method(:onReceiveDeviceData));
     }
 
-    function onAccessTokenMessage(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (responseCode == 200) {
             System.println("Response: " + data);
-            Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("refreshToken", data.get("refresh_token"));
-            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-            System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
         } else {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
         }
     }
 
-    function getOAuthToken() as Void {
-        Authentication.registerForOAuthMessages(method(:onOAuthMessage));
+    function getDevices() {
+        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
 
-        var clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
-        var clientSecret = "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";
-        var projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
+        var params = {
+        };
+
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :headers => {
+                "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+                "Authorization" => "Bearer " + Properties.getValue("accessToken")
+            },
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+
+        Communications.makeWebRequest(url, params, options, method(:onReceiveDevices));
+    }
+
+    function onRecieveRefreshAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode == 200) {
+            System.println("Response: " + data);
+            Properties.setValue("accessToken", data.get("access_token"));
+            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            getDevices();
+        } else {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+        }
+    }
+
+    function onRecieveAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (responseCode == 200) {
+            System.println("Response: " + data);
+            Properties.setValue("accessToken", data.get("access_token"));
+            Properties.setValue("refreshToken", data.get("refresh_token"));
+            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
+            getDevices();
+        } else {
+            System.println("Response: " + responseCode);
+            System.println("Response: " + data);
+        }
+    }
+
+    function getAccessToken() as Void {
+        var c = Properties.getValue("refreshToken");
+        if (c != null && c != "") {
+            var payload = {
+                "refresh_token" => c,
+                "client_id"     => clientId,
+                "client_secret" => clientSecret,
+                "grant_type"    => "refresh_token"
+            };
+
+            var options = {
+                :method => Communications.HTTP_REQUEST_METHOD_POST,
+                :headers => {
+                    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+                },
+                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+            };
+
+            Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveRefreshAccessToken));
+        } else {
+            var payload = {
+                "code"          => Properties.getValue("oauthCode"),
+                "client_id"     => clientId,
+                "client_secret" => clientSecret,
+                "redirect_uri"  => "https://www.google.com",
+                "grant_type"    => "authorization_code"
+            };
+
+            var options = {
+                :method => Communications.HTTP_REQUEST_METHOD_POST,
+                :headers => {
+                    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+                },
+                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+            };
+
+            Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveAccessToken));
+        }
+    }
+
+    function onOAuthMessage(message as Communications.OAuthMessage) as Void {
+        if (message.data != null) {
+            Properties.setValue("oauthCode", message.data["oauthCode"]);
+            getAccessToken();
+        } else {}
+    }
+
+    function getOAuthToken() as Void {
+        var c = Properties.getValue("oauthCode");
+        if (c != null && c != "") {
+            getAccessToken();
+            return;
+        }
+
+        Communications.registerForOAuthMessages(method(:onOAuthMessage));
 
         var params = {
             "access_type"            => "offline",
             "client_id"              => clientId,
             "include_granted_scopes" => "true",
             "prompt"                 => "consent",
-            "redirect_uri"           => "https://www.abbey1.org.uk/",
+            "redirect_uri"           => "https://www.google.com",
             "response_type"          => "code",
             "scope"                  => "https://www.googleapis.com/auth/sdm.service",
             "state"                  => "pass-through value"
@@ -221,35 +307,9 @@ class NestStatus {
         Communications.makeOAuthRequest(
             "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
             params,
-            "https://www.abbey1.org.uk/",
+            "https://www.google.com",
             Communications.OAUTH_RESULT_TYPE_URL,
             { "code" => "oauthCode" }
         );
-    }
-
-    function onOAuthMessage(message) {
-        if (message.data != null) {
-            Properties.setValue("oauthCode", message.data.get("oauthCode"));
-            getAccessToken();
-        } else {}
-    }
-
-    function makeRequest() as Void {
-        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/<project-id>/devices/<device-id>";
-        url = "https://www.melrose.ruins/cgi-bin/fake-nest.json";
-
-        var params = {
-            "web-cache" => "10"
-        };
-
-        var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :headers => {
-                "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
-            },
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-        };
-
-        Communications.makeWebRequest(url, params, options, method(:onReceive));
     }
 }
