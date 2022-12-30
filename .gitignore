@@ -1,3 +1,5 @@
 bin/**
 url.txt
 .vscode/
+client_secret_*.json
+credentials.txt

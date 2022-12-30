@@ -11,21 +11,23 @@ const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
 class NestStatus {
     hidden var requestCallback;
-    hidden var debug       = true  as Lang.Boolean;
-    hidden var online      = false as Lang.Boolean;
-    hidden var name        = ""    as Lang.String; 
-    // Set this to 'C' or 'F' for temperature scale
-    hidden var scale       = '-'   as Lang.Char;
+    hidden var debug                = true  as Lang.Boolean;
+    hidden var online               = false as Lang.Boolean;
+    hidden var name                 = ""    as Lang.String;
+    // Set this to 'C' or '         F' for temperature scale
+    hidden var scale                = '-'   as Lang.Char;
     // Always Celsius
-    hidden var ambientTemp = 0.0   as Lang.Number;
+    hidden var ambientTemp          = 0.0   as Lang.Number;
     // Always Celsius
-    hidden var heatTemp    = 0.0   as Lang.Number;
+    hidden var heatTemp             = 0.0   as Lang.Number;
     // Always Celsius
-    hidden var coolTemp    = 0.0   as Lang.Number;
-    hidden var humidity    = 0.0   as Lang.Number;
-    hidden var thermoMode  = ""    as Lang.String;
-    hidden var hvac        = ""    as Lang.String;
-    hidden var eco         = false as Lang.Boolean;
+    hidden var coolTemp             = 0.0   as Lang.Number;
+    hidden var humidity             = 0.0   as Lang.Number;
+    hidden var availableThermoModes = null  as Lang.Array;
+    hidden var thermoMode           = ""    as Lang.String;
+    hidden var hvac                 = ""    as Lang.String;
+    hidden var availableEcoModes    = null  as Lang.Array;
+    hidden var eco                  = false as Lang.Boolean;
 
     function initialize(h) {
         requestCallback = h;
@@ -74,12 +76,20 @@ class NestStatus {
         return humidity;
     }
 
+    function getAvailableThermoModes() as Lang.Array {
+        return availableThermoModes;
+    }
+
     function getThermoMode() as Lang.String {
         return thermoMode;
     }
 
     function getHvac() as Lang.String {
         return hvac;
+    }
+
+    function getAvailableEcoModes() as Lang.Array {
+        return availableEcoModes;
     }
 
     function getEco() as Lang.Boolean {
@@ -138,8 +148,10 @@ class NestStatus {
                     }
                     var tm = traits.get("sdm.devices.traits.ThermostatMode") as Dictionary;
                     if (tm != null) {
+                        availableThermoModes = tm.get("availableModes") as Lang.Array;
                         thermoMode = tm.get("mode") as Lang.String;
                         if (debug) {
+                            System.println("Thermo Modes: " + availableThermoModes);
                             System.println("ThermostatMode: " + thermoMode);
                         }
                     }
@@ -152,8 +164,10 @@ class NestStatus {
                     }
                     var te = traits.get("sdm.devices.traits.ThermostatEco") as Dictionary;
                     if (te != null) {
+                        availableEcoModes = te.get("availableModes") as Lang.Array;
                         eco = (te.get("mode") as Lang.String).equals("MANUAL_ECO");
                         if (debug) {
+                            System.println("Eco Modes: " + availableEcoModes);
                             System.println("ThermostatEco: " + (eco ? "Eco" : "Off"));
                         }
                     }
@@ -239,7 +253,7 @@ class NestStatus {
 
     function getAccessToken() as Void {
         var c = Properties.getValue("refreshToken");
-        if (c != null && c != "") {
+        if (c != null && !c.equals("")) {
             var payload = {
                 "refresh_token" => c,
                 "client_id"     => clientId,
@@ -286,7 +300,7 @@ class NestStatus {
 
     function getOAuthToken() as Void {
         var c = Properties.getValue("oauthCode");
-        if (c != null && c != "") {
+        if (c != null && !c.equals("")) {
             getAccessToken();
             return;
         }
