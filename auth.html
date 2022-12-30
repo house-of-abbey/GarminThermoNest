@@ -1,0 +1,15 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temporary authentication</title>
+  </head>
+  <body>
+    <input id="code" readonly type="text" />
+    <script>
+      var params = new URLSearchParams(window.location.search);
+      document.querySelector('#code').value = params.get('code');
+    </script>
+  </body>
+</html>
