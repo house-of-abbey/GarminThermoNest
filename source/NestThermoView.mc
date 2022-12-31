@@ -29,11 +29,21 @@ class NestThermoView extends WatchUi.View {
         wifiConnection = result.get(:wifiAvailable);
         requestUpdate();
     }
+    function onRecieveWifiConnectionA(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
+        if (result.get(:wifiAvailable)) {
+            var c = Properties.getValue("oauthCode");
+            if (c != null && !c.equals("")) {
+                mNestStatus.getOAuthToken();
+                requestUpdate();
+            }
+        }
+        onRecieveWifiConnection(result);
+    }
 
     function initialize() {
         View.initialize();
         mNestStatus = new NestStatus(method(:requestCallback));
-        Communications.checkWifiConnection(method(:onRecieveWifiConnection));
+        Communications.checkWifiConnection(method(:onRecieveWifiConnectionA));
     }
 
     // Load your resources here
@@ -67,13 +77,6 @@ class NestThermoView extends WatchUi.View {
             :height                   => 48
         });
         setLayout(buttons);
-
-        var c = Properties.getValue("oauthCode");
-        if (c != null && !c.equals("")) {
-            mNestStatus.getOAuthToken();
-            buttons[0].setState(:stateDisabled);
-            requestUpdate();
-        }
     }
 
     function lerp(x, a, b, A, B) {
