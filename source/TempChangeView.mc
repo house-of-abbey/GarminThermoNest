@@ -61,7 +61,7 @@ class TempChangeView extends WatchUi.View {
                     Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        if (mNestStatus.getEco() || mNestStatus.getMode() == "OFF") {
+        if (mNestStatus.getEco() || mNestStatus.getThermoMode() == "OFF") {
             buttons[0].setState(:stateDisabled);
             buttons[1].setState(:stateDisabled);
         } else {
