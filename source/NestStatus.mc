@@ -147,6 +147,9 @@ class NestStatus {
         return thermoMode;
     }
     function setThermoMode(value as Lang.String) as Void {
+        if (value == "OFF") {
+            eco = false;
+        }
         thermoMode = value;
         requestCallback.invoke();
     }
@@ -180,6 +183,15 @@ class NestStatus {
         return eco;
     }
     function setEco(value as Lang.Boolean) as Void {
+        if (value) {
+            if (availableThermoModes.indexOf("HEATCOOL") != -1) {
+                thermoMode = "HEATCOOL";
+            } else if (availableThermoModes.indexOf("HEAT") != -1) {
+                thermoMode = "HEAT";
+            } else if (availableThermoModes.indexOf("COOL") != -1) {
+                thermoMode = "COOL";
+            }
+        }
         eco = value;
         requestCallback.invoke();
     }
@@ -201,7 +213,7 @@ class NestStatus {
         }, method(:onReturnEco));
     }
 
-    function executeCommand(payload as Dictionary, callback) {
+    private function executeCommand(payload as Dictionary, callback) {
         var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId") + ":executeCommand";
 
         var options = {
