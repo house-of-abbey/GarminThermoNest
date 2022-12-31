@@ -67,6 +67,13 @@ class NestThermoView extends WatchUi.View {
             :height                   => 48
         });
         setLayout(buttons);
+
+        var c = Properties.getValue("oauthCode");
+        if (c != null && !c.equals("")) {
+            mNestStatus.getOAuthToken();
+            buttons[0].setState(:stateDisabled);
+            requestUpdate();
+        }
     }
 
     function lerp(x, a, b, A, B) {
