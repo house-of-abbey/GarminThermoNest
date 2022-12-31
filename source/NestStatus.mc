@@ -11,8 +11,6 @@ const clientSecret = "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";
 const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
 class NestStatus {
-    public var gotDeviceData        = false as Lang.Boolean;
-
     hidden var requestCallback;
     hidden var debug                = true  as Lang.Boolean;
 
@@ -32,6 +30,9 @@ class NestStatus {
     hidden var hvac                 = ""    as Lang.String;
     hidden var availableEcoModes    = null  as Lang.Array;
     hidden var eco                  = false as Lang.Boolean;
+
+    public var gotDeviceData        = false as Lang.Boolean;
+    public var gotDeviceDataError   = false as Lang.Boolean;
 
     function initialize(h) {
         requestCallback = h;
@@ -296,11 +297,15 @@ class NestStatus {
                     }
                 }
             }
-            gotDeviceData = true;
+            gotDeviceData      = true;
+            gotDeviceDataError = false;
             requestCallback.invoke();
         } else {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            gotDeviceData      = true;
+            gotDeviceDataError = true;
+            requestCallback.invoke();
         }
     }
 
@@ -386,6 +391,8 @@ class NestStatus {
         } else {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            Properties.setValue("oauthCode", "");
+            requestCallback.invoke();
         }
     }
 
@@ -401,6 +408,8 @@ class NestStatus {
         } else {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            Properties.setValue("oauthCode", "");
+            requestCallback.invoke();
         }
     }
 

@@ -3,6 +3,7 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Communications;
+import Toybox.Application.Properties;
 
 class NestThermoView extends WatchUi.View {
     public var mNestStatus;
@@ -18,6 +19,8 @@ class NestThermoView extends WatchUi.View {
     hidden var signalDisconnectedIcon;
     hidden var thermostatOfflineIcon;
     hidden var refreshIcon;
+    hidden var loggedOutIcon;
+    hidden var errorIcon;
 
     var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[1];
 
@@ -46,6 +49,8 @@ class NestThermoView extends WatchUi.View {
         signalDisconnectedIcon = Application.loadResource(Rez.Drawables.SignalDisconnectedIcon) as Graphics.BitmapResource;
         thermostatOfflineIcon  = Application.loadResource(Rez.Drawables.ThermostatOfflineIcon ) as Graphics.BitmapResource;
         refreshIcon            = Application.loadResource(Rez.Drawables.RefreshIcon           ) as Graphics.BitmapResource;
+        loggedOutIcon          = Application.loadResource(Rez.Drawables.LoggedOutIcon         ) as Graphics.BitmapResource;
+        errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
 
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
         buttons[0] = new WatchUi.Button({
@@ -182,10 +187,19 @@ class NestThermoView extends WatchUi.View {
 
         if (System.getDeviceSettings().phoneConnected) {
             if (wifiConnection) {
-                if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
-                    dc.drawBitmap(hw - 24, 30, refreshIcon);
+                var c = Properties.getValue("oauthCode");
+                if (c != null && !c.equals("")) {
+                    if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
+                        if (!mNestStatus.gotDeviceDataError) {
+                            dc.drawBitmap(hw - 24, 30, refreshIcon);
+                        } else {
+                            dc.drawBitmap(hw - 24, 30, errorIcon);
+                        }
+                    } else {
+                        dc.drawBitmap(hw - 24, 30, thermostatOfflineIcon);
+                    }
                 } else {
-                    dc.drawBitmap(hw - 24, 30, thermostatOfflineIcon);
+                    dc.drawBitmap(hw - 24, 30, loggedOutIcon);
                 }
             } else {
                 dc.drawBitmap(hw - 24, 30, signalDisconnectedIcon);

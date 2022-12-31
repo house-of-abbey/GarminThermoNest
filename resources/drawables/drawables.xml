@@ -14,4 +14,6 @@
     <bitmap id="PhoneDisconnectedIcon" filename="phone_disconnected.svg" />
     <bitmap id="SignalDisconnectedIcon" filename="signal_disconnected.svg" />
     <bitmap id="ThermostatOfflineIcon" filename="thermostat_offline.svg" />
+    <bitmap id="LoggedOutIcon" filename="logged_out.svg" />
+    <bitmap id="ErrorIcon" filename="error.svg" />
 </drawables>
