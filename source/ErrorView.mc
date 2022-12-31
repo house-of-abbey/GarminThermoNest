@@ -25,13 +25,14 @@ class ErrorView extends WatchUi.View {
         var hh = h/2;
 
         textArea = new WatchUi.TextArea({
-            :text   => text,
-            :color  => Graphics.COLOR_WHITE,
-            :font   => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
-            :locX   => hw,
-            :locY   => hh - 42,
-            :width  => w,
-            :height => h - 84
+            :text          => text,
+            :color         => Graphics.COLOR_WHITE,
+            :font          => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
+            :justification => Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER,
+            :locX          => 0,
+            :locY          => 83,
+            :width         => w,
+            :height        => h - 166
         });
     }
 
@@ -52,10 +53,8 @@ class ErrorView extends WatchUi.View {
 }
 
 class ErrorDelegate extends WatchUi.BehaviorDelegate {
-    var mView;
-    function initialize(v) {
+    function initialize() {
         WatchUi.BehaviorDelegate.initialize();
-        mView = v;
     }
     function onBack() {
         WatchUi.popView(WatchUi.SLIDE_DOWN);

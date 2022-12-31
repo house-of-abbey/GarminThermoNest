@@ -93,6 +93,11 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
     function onButton1() {
         return mView.onButton1(); 
     }
+    function onBack() {
+        mView.mNestStatus.executeHeatTemp();
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        return true;
+    }
     function onPreviousPage() {
         mView.mNestStatus.executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);

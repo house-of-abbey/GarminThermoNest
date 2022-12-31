@@ -81,6 +81,7 @@ class NestStatus {
         if (responseCode != 200) {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             getDeviceData();
         }
         requestCallback.invoke();
@@ -118,6 +119,7 @@ class NestStatus {
         if (responseCode != 200) {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             getDeviceData();
         }
         requestCallback.invoke();
@@ -152,6 +154,7 @@ class NestStatus {
         if (responseCode != 200) {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             getDeviceData();
         }
         requestCallback.invoke();
@@ -184,6 +187,7 @@ class NestStatus {
         if (responseCode != 200) {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             getDeviceData();
         }
         requestCallback.invoke();
@@ -305,6 +309,18 @@ class NestStatus {
             System.println("Response: " + data);
             gotDeviceData      = true;
             gotDeviceDataError = true;
+
+            if (responseCode == 404) {
+                Properties.setValue("deviceId", "");
+                WatchUi.pushView(new ErrorView("Device not found."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            } else if (responseCode == 401) {
+                Properties.setValue("accessToken", "");
+                Properties.setValue("refreshToken", "");
+                WatchUi.pushView(new ErrorView("Authentication failed."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            } else {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
+
             requestCallback.invoke();
         }
     }
@@ -355,6 +371,7 @@ class NestStatus {
         } else {
             System.println("Response: " + responseCode);
             System.println("Response: " + data);
+            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
         }
     }
 
