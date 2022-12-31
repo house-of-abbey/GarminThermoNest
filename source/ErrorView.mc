@@ -1,0 +1,64 @@
+import Toybox.Graphics;
+import Toybox.Lang;
+import Toybox.System;
+import Toybox.WatchUi;
+import Toybox.Communications;
+
+class ErrorView extends WatchUi.View {
+    hidden var text as String;
+
+    hidden var errorIcon;
+    hidden var textArea;
+
+    function initialize(t as String) {
+        View.initialize();
+        text = t;
+    }
+
+    // Load your resources here
+    function onLayout(dc as Dc) as Void {
+        errorIcon = Application.loadResource(Rez.Drawables.ErrorIcon) as Graphics.BitmapResource;
+
+        var w = dc.getWidth();
+        var h = dc.getHeight();
+        var hw = w/2;
+        var hh = h/2;
+
+        textArea = new WatchUi.TextArea({
+            :text   => text,
+            :color  => Graphics.COLOR_WHITE,
+            :font   => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
+            :locX   => hw,
+            :locY   => hh - 42,
+            :width  => w,
+            :height => h - 84
+        });
+    }
+
+    // Update the view
+    function onUpdate(dc as Dc) as Void {
+        var w = dc.getWidth();
+        var h = dc.getHeight();
+        var hw = w/2;
+        var hh = h/2;
+        var bg = 0x3B444C;
+        dc.setColor(Graphics.COLOR_WHITE, bg);
+        dc.clear();
+
+        dc.drawBitmap(hw - 24, 30, errorIcon);
+
+        textArea.draw(dc);
+    }
+}
+
+class ErrorDelegate extends WatchUi.BehaviorDelegate {
+    var mView;
+    function initialize(v) {
+        WatchUi.BehaviorDelegate.initialize();
+        mView = v;
+    }
+    function onBack() {
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+        return true;
+    }
+}

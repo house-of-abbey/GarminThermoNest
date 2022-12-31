@@ -61,7 +61,7 @@ class TempChangeView extends WatchUi.View {
                     Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        if (mNestStatus.getEco()) {
+        if (mNestStatus.getEco() || mNestStatus.getMode() == "OFF") {
             buttons[0].setState(:stateDisabled);
             buttons[1].setState(:stateDisabled);
         } else {
@@ -93,14 +93,9 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
     function onButton1() {
         return mView.onButton1(); 
     }
-    // function onNextPage() {
-    //     WatchUi.pushView(view, delegate, WatchUi.SLIDE_IMMEDIATE);
-    //     return true;
-    // }
     function onPreviousPage() {
         mView.mNestStatus.executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
-    // function onSelect() { return touch.invoke(); }
 }
