@@ -147,11 +147,16 @@ class NestStatus {
         return thermoMode;
     }
     function setThermoMode(value as Lang.String) as Void {
-        if (value == "OFF") {
+        if (value.equals("OFF")) {
             eco = false;
         }
         thermoMode = value;
         requestCallback.invoke();
+    }
+    function nextAvailableThermoModes() as Void {
+        var a = availableThermoModes.indexOf(thermoMode);
+        var b = availableThermoModes.size();
+        setThermoMode(availableThermoModes[(a+1) % b] as Lang.String);
     }
     function onReturnThermoMode(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (responseCode != 200) {
@@ -195,10 +200,15 @@ class NestStatus {
         eco = value;
         requestCallback.invoke();
     }
+    function nextAvailableEcoMode() as Void {
+        setEco(!eco);
+    }
     function onReturnEco(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (responseCode != 200) {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
+            if (debug) {
+                System.println("Response: " + responseCode);
+                System.println("Response: " + data);
+            }
             WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             getDeviceData();
         }

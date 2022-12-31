@@ -13,6 +13,7 @@ class ErrorView extends WatchUi.View {
     function initialize(t as String) {
         View.initialize();
         text = t;
+        System.println(t);
     }
 
     // Load your resources here
