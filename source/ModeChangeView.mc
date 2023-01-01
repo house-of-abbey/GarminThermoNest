@@ -78,12 +78,12 @@ class ModeChangeView extends WatchUi.View {
         dc.clear();
 
         dc.drawText(
-            w/2, 40, Graphics.FONT_SMALL,
+            w/2, 50, Graphics.FONT_SMALL,
             "Set Modes",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
-            w/2, 90, Graphics.FONT_XTINY,
+            w/2, 100, Graphics.FONT_XTINY,
             "Tap Icons",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );

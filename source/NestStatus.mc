@@ -11,6 +11,7 @@ const clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleuserc
 const clientSecret = "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";
 const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
+(:glance)
 class NestStatus {
     // Explicit value assignment
     enum {
@@ -22,6 +23,7 @@ class NestStatus {
     }
 
     hidden var requestCallback;
+    public var isGlance             = false as Lang.Boolean;
     hidden var debug                = true  as Lang.Boolean;
 
     hidden var online               = false as Lang.Boolean;
@@ -99,7 +101,9 @@ class NestStatus {
             System.println("Response Data: " + data);
         }
         if (responseCode != 200) {
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
         requestCallback.invoke();
@@ -143,7 +147,9 @@ class NestStatus {
             System.println("Response Data: " + data);
         }
         if (responseCode != 200) {
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
         requestCallback.invoke();
@@ -195,7 +201,9 @@ class NestStatus {
                 System.println("onReturnThermoMode() Eco:        " + eco);
                 System.println("onReturnThermoMode() ThermoMode: " + thermoMode);
             }
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
         executeMode(Thermo);
@@ -257,7 +265,9 @@ class NestStatus {
                 System.println("onReturnEco() Eco:        " + eco);
                 System.println("onReturnEco() ThermoMode: " + thermoMode);
             }
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
         executeMode(Eco);
@@ -458,13 +468,19 @@ class NestStatus {
 
             if (responseCode == 404) {
                 Properties.setValue("deviceId", "");
-                WatchUi.pushView(new ErrorView("Device not found."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView("Device not found."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             } else if (responseCode == 401) {
                 Properties.setValue("accessToken", "");
                 Properties.setValue("refreshToken", "");
-                WatchUi.pushView(new ErrorView("Authentication failed."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView("Authentication failed."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             } else {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             }
 
             requestCallback.invoke();
@@ -516,9 +532,13 @@ class NestStatus {
                     );
                 }
             }
-            WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
+            if (!isGlance) {
+                WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
+            }
         } else {
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
         }
     }
 

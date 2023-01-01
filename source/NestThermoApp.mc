@@ -3,23 +3,30 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Application.Properties;
 
+(:glance)
 class NestThermoApp extends Application.AppBase {
     hidden var mNestStatus;
     hidden var mView;
+    hidden var mGlanceView;
 
     function initialize() {
         AppBase.initialize();
         mNestStatus = new NestStatus(method(:requestCallback));
-        mView       = new NestThermoView(mNestStatus);
     }
 
-    // function getGlanceView() {
-    //     return [ new ThermoNestGlanceView() ];
-    //     // return [ new ThermoNestGlanceView(mNestStatus) ];
-    // }
+    function getGlanceView() {
+        mNestStatus.isGlance = true;
+        mGlanceView = new NestThermoGlanceView(mNestStatus);
+        return [ mGlanceView ];
+    }
 
     function requestCallback() as Void {
-        mView.requestCallback();
+        if (mView != null) {
+            mView.requestCallback();
+        }
+        if (mGlanceView != null) {
+            mGlanceView.requestCallback();
+        }
     }
 
     // onStart() is called on application start up
@@ -35,6 +42,8 @@ class NestThermoApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? {
+        mNestStatus.isGlance = false;
+        mView = new NestThermoView(mNestStatus);
         return [ mView, new NestThermoDelegate(mView) ] as Array<Views or InputDelegates>;
     }
 

@@ -34,7 +34,6 @@ class NestThermoView extends WatchUi.View {
             var c = Properties.getValue("oauthCode");
             if (c != null && !c.equals("")) {
                 mNestStatus.getOAuthToken();
-                requestUpdate();
             }
         }
         onRecieveWifiConnection(result);
@@ -89,13 +88,12 @@ class NestThermoView extends WatchUi.View {
         var h = dc.getHeight();
         var hw = w/2;
         var hh = h/2;
-        var bg = 0x3B444C;
         dc.setColor(Graphics.COLOR_WHITE,
                     mNestStatus.getHvac().equals("HEATING")
                         ? 0xEC7800
                         : mNestStatus.getHvac().equals("COOLING")
                             ? 0x285DF7
-                            : bg);
+                            : 0x3B444C);
         dc.clear();
         dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
         dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, 240f, -60f);
@@ -108,7 +106,7 @@ class NestThermoView extends WatchUi.View {
                 var ambientTemperatureArc = mNestStatus.getScale() == 'C'
                     ? lerp(ambientTemperature, 9f, 32f, 240f, -60f)
                     : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
-                if (heat != null) {
+                if ((heat != null) && (heat != ambientTemperature)) {
                     var heatArc = mNestStatus.getScale() == 'C'
                         ? lerp(heat, 9f, 32f, 240f, -60f)
                         : lerp(heat, 48f, 90f, 240f, -60f);
@@ -128,7 +126,7 @@ class NestThermoView extends WatchUi.View {
                     var hb = Math.sin(hrad);
                     dc.drawLine(ha*(hw - 20) + hw, hb*(hh - 20) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
                 }
-                if (cool != null) {
+                if ((cool != null) && (cool != ambientTemperature)) {
                     var coolArc = mNestStatus.getScale() == 'C'
                         ? lerp(cool, 9f, 32f, 240f, -60f)
                         : lerp(cool, 48f, 90f, 240f, -60f);

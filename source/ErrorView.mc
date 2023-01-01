@@ -4,6 +4,7 @@ import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Communications;
 
+(:glance)
 class ErrorView extends WatchUi.View {
     hidden var text as String;
 
@@ -51,6 +52,7 @@ class ErrorView extends WatchUi.View {
     }
 }
 
+(:glance)
 class ErrorDelegate extends WatchUi.BehaviorDelegate {
     function initialize() {
         WatchUi.BehaviorDelegate.initialize();
