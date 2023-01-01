@@ -5,11 +5,7 @@ import Toybox.WatchUi;
 import Toybox.Communications;
 
 class ModeChangeView extends WatchUi.View {
-    var mNestStatus;
-    // hidden var modeOffIndex; // Index of "OFF" in available HVAC mode list
-    // hidden var ecoOffIndex;  // Index of "OFF" in available Eco  mode list
-    // hidden var ecoStatus = 0;
-    // hidden var modeStatus = 0;
+    hidden var mNestStatus;
     hidden var modeButton;
     hidden var ecoButton;
     hidden var heatOffIcon;
@@ -81,6 +77,17 @@ class ModeChangeView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
 
+        dc.drawText(
+            w/2, 40, Graphics.FONT_SMALL,
+            "Set Modes",
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+            w/2, 90, Graphics.FONT_XTINY,
+            "Tap Icons",
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+
         modeButton.draw(dc);
         ecoButton.draw(dc);
 
@@ -129,17 +136,15 @@ class ModeChangeView extends WatchUi.View {
     // }
 
     function onModeButton() as Void {
-        // var supportedModes = mNestStatus.getAvailableThermoModes();
         mNestStatus.nextAvailableThermoModes();
-        // modeStatus = (modeStatus + 1) % supportedModes.size();
-        // ecoStatus = ecoOffIndex;
     }
 
     function onEcoButton() as Void {
-        // var supportedModes = mNestStatus.getAvailableEcoModes();
         mNestStatus.nextAvailableEcoMode();
-        // ecoStatus = (ecoStatus + 1) % supportedModes.size();
-        // modeStatus = modeOffIndex;
+    }
+
+    function getNestStatus() as NestStatus {
+        return mNestStatus;
     }
 }
 
@@ -156,12 +161,12 @@ class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
         return mView.onEcoButton(); 
     }
     function onBack() {
-        mView.mNestStatus.executeMode(NestStatus.Start);
+        mView.getNestStatus().executeMode(NestStatus.Start);
         WatchUi.popView(WatchUi.SLIDE_UP);
         return true;
     }
     function onNextPage() {
-        mView.mNestStatus.executeMode(NestStatus.Start);
+        mView.getNestStatus().executeMode(NestStatus.Start);
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }

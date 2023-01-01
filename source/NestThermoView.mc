@@ -40,9 +40,9 @@ class NestThermoView extends WatchUi.View {
         onRecieveWifiConnection(result);
     }
 
-    function initialize() {
+    function initialize(n) {
         View.initialize();
-        mNestStatus = new NestStatus(method(:requestCallback));
+        mNestStatus = n;
         Communications.checkWifiConnection(method(:onRecieveWifiConnectionA));
     }
 

@@ -5,9 +5,9 @@ import Toybox.WatchUi;
 import Toybox.Communications;
 
 class TempChangeView extends WatchUi.View {
-    var mNestStatus;
-
-    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[2];
+    hidden var mNestStatus;
+    hidden var thermostatIcon;
+    hidden var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[2];
 
     function initialize(s) {
         View.initialize();
@@ -16,6 +16,7 @@ class TempChangeView extends WatchUi.View {
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
+        thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
         var bArrowUpIcon   = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowUpIcon   });
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
         buttons[0] = new WatchUi.Button({
@@ -62,11 +63,14 @@ class TempChangeView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
 
+        dc.drawBitmap(hw - thermostatIcon.getWidth()/2, h/3 - thermostatIcon.getHeight()/2, thermostatIcon);
         var temp = mNestStatus.getHeatTemp();
-        if (temp) {
-            dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [temp.format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        if (temp != null) {
+            dc.drawText(
+                hw, hh, Graphics.FONT_MEDIUM,
+                Lang.format("$1$°$2$", [temp.format("%2.1f"), mNestStatus.getScale()]),
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
         }
 
         if (mNestStatus.getEco() || mNestStatus.getThermoMode() == "OFF") {
@@ -87,6 +91,10 @@ class TempChangeView extends WatchUi.View {
     function onButton1() as Void {
         mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() - 0.5);
     }
+
+    function getNestStatus() as NestStatus {
+        return mNestStatus;
+    }
 }
 
 class TempChangeDelegate extends WatchUi.BehaviorDelegate {
@@ -102,12 +110,12 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
         return mView.onButton1(); 
     }
     function onBack() {
-        mView.mNestStatus.executeHeatTemp();
+        mView.getNestStatus().executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
     function onPreviousPage() {
-        mView.mNestStatus.executeHeatTemp();
+        mView.getNestStatus().executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
