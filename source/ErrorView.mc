@@ -28,7 +28,7 @@ class ErrorView extends WatchUi.View {
         textArea = new WatchUi.TextArea({
             :text          => text,
             :color         => Graphics.COLOR_WHITE,
-            :font          => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
+            :font          => Graphics.FONT_XTINY,
             :justification => Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER,
             :locX          => 0,
             :locY          => 83,
@@ -46,9 +46,7 @@ class ErrorView extends WatchUi.View {
         var bg = 0x3B444C;
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
-
         dc.drawBitmap(hw - 24, 30, errorIcon);
-
         textArea.draw(dc);
     }
 }

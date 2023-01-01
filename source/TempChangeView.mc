@@ -47,6 +47,11 @@ class TempChangeView extends WatchUi.View {
         setLayout(buttons);
     }
 
+    function onShow() {
+        // Track changes to NestStatus state
+        mNestStatus.copyState();
+    }
+
     // Update the view
     function onUpdate(dc as Dc) as Void {
         var w = dc.getWidth();
@@ -57,9 +62,12 @@ class TempChangeView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
 
-        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                    Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        var temp = mNestStatus.getHeatTemp();
+        if (temp) {
+            dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [temp.format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        }
 
         if (mNestStatus.getEco() || mNestStatus.getThermoMode() == "OFF") {
             buttons[0].setState(:stateDisabled);

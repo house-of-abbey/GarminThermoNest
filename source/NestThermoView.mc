@@ -108,15 +108,19 @@ class NestThermoView extends WatchUi.View {
                 var ambientTemperatureArc = mNestStatus.getScale() == 'C'
                     ? lerp(ambientTemperature, 9f, 32f, 240f, -60f)
                     : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
-                if (heat) {
+                if (heat != null) {
                     var heatArc = mNestStatus.getScale() == 'C'
                         ? lerp(heat, 9f, 32f, 240f, -60f)
                         : lerp(heat, 48f, 90f, 240f, -60f);
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     if (ambientTemperature > heat) {
+                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
                         dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
                     } else {
+                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
                         dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     var hrad = Math.toRadians(360 - heatArc);
@@ -124,15 +128,19 @@ class NestThermoView extends WatchUi.View {
                     var hb = Math.sin(hrad);
                     dc.drawLine(ha*(hw - 20) + hw, hb*(hh - 20) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
                 }
-                if (cool) {
+                if (cool != null) {
                     var coolArc = mNestStatus.getScale() == 'C'
                         ? lerp(cool, 9f, 32f, 240f, -60f)
                         : lerp(cool, 48f, 90f, 240f, -60f);
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     if (ambientTemperature > cool) {
+                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
                         dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
+                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
                     } else {
+                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
                         dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     var crad = Math.toRadians(360 - coolArc);
@@ -141,39 +149,39 @@ class NestThermoView extends WatchUi.View {
                     dc.drawLine(ca*(hw - 20) + hw, cb*(hh - 20) + hh, ca*(hw - 5) + hw, cb*(hh - 5) + hh);
                 }
                 dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-                var arad = Math.toRadians(360 - ambientTemperatureArc);
+                var arad = Math.toRadians(360 - ambientTemperatureArc + 1);
                 var aa = Math.cos(arad);
                 var ab = Math.sin(arad);
                 dc.drawLine(aa*(hw - 15) + hw, ab*(hh - 15) + hh, aa*(hw - 5) + hw, ab*(hh - 5) + hh);
 
                 if (mNestStatus.getEco()) {
                     dc.setColor(0x00801c, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "ECO",
+                    dc.drawText(hw, hh - 30, Graphics.FONT_MEDIUM, "ECO",
                                 Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
                 } else {
-                    if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
+                    if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                        dc.drawText(hw, hh - 30, Graphics.FONT_MEDIUM,
                                     Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
                                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                    } else if (mNestStatus.getThermoMode().equals("HEAT")) {
+                    } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                        dc.drawText(hw, hh - 30, Graphics.FONT_MEDIUM,
                                     Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
                                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                    } else if (mNestStatus.getThermoMode().equals("COOL")) {
+                    } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                        dc.drawText(hw, hh - 30, Graphics.FONT_MEDIUM,
                                     Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
                                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
                     } else {
                         dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh, Graphics.FONT_MEDIUM, "OFF",
+                        dc.drawText(hw, hh - 30, Graphics.FONT_MEDIUM, "OFF",
                                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
                     }
                 }
                 dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh + 40, Graphics.FONT_MEDIUM,
+                dc.drawText(hw, hh + 30, Graphics.FONT_MEDIUM,
                             Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
                             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             }
@@ -241,6 +249,13 @@ class NestThermoDelegate extends WatchUi.BehaviorDelegate {
     }
     function onButton0() {
         return mView.onButton0(); 
+    }
+    function onPreviousPage() {
+        if (System.getDeviceSettings().phoneConnected) {
+            var v = new ModeChangeView(mView.mNestStatus);
+            WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_UP);
+        }
+        return true;
     }
     function onNextPage() {
         if (System.getDeviceSettings().phoneConnected) {
