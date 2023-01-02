@@ -2,7 +2,6 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
-import Toybox.Communications;
 import Toybox.Application.Properties;
 
 class NestThermoView extends WatchUi.View {
@@ -24,25 +23,9 @@ class NestThermoView extends WatchUi.View {
 
     var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[1];
 
-    hidden var wifiConnection = true;
-    function onRecieveWifiConnection(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        wifiConnection = result.get(:wifiAvailable);
-        requestUpdate();
-    }
-    function onRecieveWifiConnectionA(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        if (result.get(:wifiAvailable)) {
-            var c = Properties.getValue("oauthCode");
-            if (c != null && !c.equals("")) {
-                mNestStatus.getOAuthToken();
-            }
-        }
-        onRecieveWifiConnection(result);
-    }
-
     function initialize(n) {
         View.initialize();
         mNestStatus = n;
-        Communications.checkWifiConnection(method(:onRecieveWifiConnectionA));
     }
 
     // Load your resources here
@@ -84,10 +67,27 @@ class NestThermoView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        var w = dc.getWidth();
-        var h = dc.getHeight();
-        var hw = w/2;
-        var hh = h/2;
+        var w           = dc.getWidth();
+        var h           = dc.getHeight();
+        var hw          = w/2;
+        var hh          = h/2;
+
+        // These could be constants, but then they are located a long textual distance away
+        // Between the full range arc and the outside of the watch face
+        var margin      = 14;
+        // Line width of the full range arc
+        var full_arc_w  = 4;
+        // Line width of the range arc (thicker than full_arc_w)
+        var range_arc_w = 8;
+        // Line width of a tick mark
+        var tick_w      = 4;
+        // Ticks start at: watch radius - tick_st_r
+        var tick_st_r   = 5;
+        // Temperature range ends: watch radius - tick_ren_r
+        var tick_ren_r   = 25;
+        // Ambient temperature: watch radius - tick_aen_r
+        var tick_aen_r   = 20;
+
         dc.setColor(Graphics.COLOR_WHITE,
                     mNestStatus.getHvac().equals("HEATING")
                         ? 0xEC7800
@@ -96,8 +96,8 @@ class NestThermoView extends WatchUi.View {
                             : 0x3B444C);
         dc.clear();
         dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
-        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, 240f, -60f);
-
+        dc.setPenWidth(full_arc_w);
+        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, 240f, -60f);
         if (mNestStatus.gotDeviceData) {
             var ambientTemperature = mNestStatus.getAmbientTemp();
             if (ambientTemperature != null) {
@@ -111,46 +111,43 @@ class NestThermoView extends WatchUi.View {
                         ? lerp(heat, 9f, 32f, 240f, -60f)
                         : lerp(heat, 48f, 90f, 240f, -60f);
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.setPenWidth(range_arc_w);
                     if (ambientTemperature > heat) {
-                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
-                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
-                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
                     } else {
-                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
-                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
-                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.setPenWidth(tick_w);
                     var hrad = Math.toRadians(360 - heatArc);
                     var ha = Math.cos(hrad);
                     var hb = Math.sin(hrad);
-                    dc.drawLine(ha*(hw - 20) + hw, hb*(hh - 20) + hh, ha*(hw - 5) + hw, hb*(hh - 5) + hh);
+                    dc.drawLine(ha*(hw - tick_ren_r) + hw, hb*(hh - tick_ren_r) + hh, ha*(hw - tick_st_r) + hw, hb*(hh - tick_st_r) + hh);
                 }
                 if ((cool != null) && (cool != ambientTemperature)) {
                     var coolArc = mNestStatus.getScale() == 'C'
                         ? lerp(cool, 9f, 32f, 240f, -60f)
                         : lerp(cool, 48f, 90f, 240f, -60f);
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.setPenWidth(range_arc_w);
                     if (ambientTemperature > cool) {
-                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
-                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
-                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
+                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
                     } else {
-                        dc.drawArc(hw, hh, hw -  9, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
-                        dc.drawArc(hw, hh, hw - 10, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
-                        dc.drawArc(hw, hh, hw - 11, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.setPenWidth(tick_w);
                     var crad = Math.toRadians(360 - coolArc);
                     var ca = Math.cos(crad);
                     var cb = Math.sin(crad);
-                    dc.drawLine(ca*(hw - 20) + hw, cb*(hh - 20) + hh, ca*(hw - 5) + hw, cb*(hh - 5) + hh);
+                    dc.drawLine(ca*(hw - tick_ren_r) + hw, cb*(hh - tick_ren_r) + hh, ca*(hw - tick_st_r) + hw, cb*(hh - tick_st_r) + hh);
                 }
                 dc.setColor(0xaaaaaa, Graphics.COLOR_TRANSPARENT);
+                dc.setPenWidth(tick_w);
                 var arad = Math.toRadians(360 - ambientTemperatureArc + 1);
                 var aa = Math.cos(arad);
                 var ab = Math.sin(arad);
-                dc.drawLine(aa*(hw - 15) + hw, ab*(hh - 15) + hh, aa*(hw - 5) + hw, ab*(hh - 5) + hh);
+                dc.drawLine(aa*(hw - tick_aen_r) + hw, ab*(hh - tick_aen_r) + hh, aa*(hw - tick_st_r) + hw, ab*(hh - tick_st_r) + hh);
 
                 if (mNestStatus.getEco()) {
                     dc.setColor(0x00801c, Graphics.COLOR_TRANSPARENT);
@@ -202,7 +199,7 @@ class NestThermoView extends WatchUi.View {
         }
 
         if (System.getDeviceSettings().phoneConnected) {
-            if (wifiConnection) {
+            if (mNestStatus.getWifiConnection()) {
                 var c = Properties.getValue("oauthCode");
                 if (c != null && !c.equals("")) {
                     if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
@@ -227,15 +224,21 @@ class NestThermoView extends WatchUi.View {
     }
 
     function requestCallback() as Void {
-        buttons[0].setState(:stateDefault);
+        if (buttons[0] != null) {
+            buttons[0].setState(:stateDefault);
+        }
         requestUpdate();
     }
 
     function onButton0() as Void {
-        Communications.checkWifiConnection(method(:onRecieveWifiConnection));
+        mNestStatus.checkWifiConnection();
         mNestStatus.getOAuthToken();
         buttons[0].setState(:stateDisabled);
         requestUpdate();
+    }
+
+    function getNestStatus() as NestStatus {
+        return mNestStatus;
     }
 }
 
@@ -249,15 +252,15 @@ class NestThermoDelegate extends WatchUi.BehaviorDelegate {
         return mView.onButton0(); 
     }
     function onPreviousPage() {
-        if (System.getDeviceSettings().phoneConnected) {
-            var v = new ModeChangeView(mView.mNestStatus);
+        if (System.getDeviceSettings().phoneConnected && mView.getNestStatus().getWifiConnection()) {
+            var v = new ModeChangeView(mView.getNestStatus());
             WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_UP);
         }
         return true;
     }
     function onNextPage() {
-        if (System.getDeviceSettings().phoneConnected) {
-            var v = new TempChangeView(mView.mNestStatus);
+        if (System.getDeviceSettings().phoneConnected && mView.getNestStatus().getWifiConnection()) {
+            var v = new TempChangeView(mView.getNestStatus());
             WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
         }
         return true;

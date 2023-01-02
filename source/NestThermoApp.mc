@@ -11,6 +11,7 @@ class NestThermoApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
+        System.println("NestThermoApp.initialize()");
         mNestStatus = new NestStatus(method(:requestCallback));
     }
 

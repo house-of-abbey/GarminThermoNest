@@ -16,25 +16,9 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
     hidden var errorIcon;
     hidden var refreshIcon;
 
-    hidden var wifiConnection = true;
-    function onRecieveWifiConnection(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        wifiConnection = result.get(:wifiAvailable);
-        requestUpdate();
-    }
-    function onRecieveWifiConnectionA(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        if (result.get(:wifiAvailable)) {
-            var c = Properties.getValue("oauthCode");
-            if (c != null && !c.equals("")) {
-                mNestStatus.getOAuthToken();
-            }
-        }
-        onRecieveWifiConnection(result);
-    }
-
     function initialize(n) {
         GlanceView.initialize();
         mNestStatus = n;
-        Communications.checkWifiConnection(method(:onRecieveWifiConnectionA));
     }
 
     function onLayout(dc as Dc) as Void {
@@ -48,7 +32,7 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
 
     function onUpdate(dc) {
         if (System.getDeviceSettings().phoneConnected) {
-            if (wifiConnection) {
+            if (mNestStatus.getWifiConnection()) {
                 var c = Properties.getValue("oauthCode");
                 if (c != null && !c.equals("")) {
                     if (!mNestStatus.gotDeviceDataError) {

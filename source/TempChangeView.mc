@@ -24,6 +24,8 @@ class TempChangeView extends WatchUi.View {
         thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
         var bArrowUpIcon   = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowUpIcon   });
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
+        // A two element array containing the width and height of the Bitmap object
+        var dim = bArrowUpIcon.getDimensions();
         buttons[0] = new WatchUi.Button({
             :stateDefault             => bArrowUpIcon,
             :stateHighlighted         => bArrowUpIcon,
@@ -32,11 +34,13 @@ class TempChangeView extends WatchUi.View {
             :stateHighlightedSelected => bArrowUpIcon,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onButton0,
-            :locX                     => dc.getWidth()/2 - 24,
-            :locY                     => 30,
-            :width                    => 48,
-            :height                   => 48
+            :locX                     => (dc.getWidth() - dim[0]) / 2,
+            :locY                     => 20,
+            :width                    => dim[0],
+            :height                   => dim[1]
         });
+        // A two element array containing the width and height of the Bitmap object
+        dim = bArrowDownIcon.getDimensions();
         buttons[1] = new WatchUi.Button({
             :stateDefault             => bArrowDownIcon,
             :stateHighlighted         => bArrowDownIcon,
@@ -45,10 +49,10 @@ class TempChangeView extends WatchUi.View {
             :stateHighlightedSelected => bArrowDownIcon,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onButton1,
-            :locX                     => dc.getWidth()/2 - 24,
-            :locY                     => dc.getHeight() - 78,
-            :width                    => 48,
-            :height                   => 48
+            :locX                     => (dc.getWidth() - dim[0]) / 2,
+            :locY                     => (dc.getHeight() - dim[1] - 20),
+            :width                    => dim[0],
+            :height                   => dim[1]
         });
         buttons[2] = new WatchUi.Button({
             :stateDefault             => Graphics.COLOR_TRANSPARENT,

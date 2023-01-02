@@ -7,9 +7,9 @@ import Toybox.Application.Properties;
 import Toybox.Time;
 import Toybox.Math;
 
-const clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
+const clientId     = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
 const clientSecret = "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";
-const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
+const projectId    = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
 (:glance)
 class NestStatus {
@@ -24,7 +24,7 @@ class NestStatus {
 
     hidden var requestCallback;
     public var isGlance             = false as Lang.Boolean;
-    hidden var debug                = true  as Lang.Boolean;
+    hidden var debug                = false as Lang.Boolean;
 
     hidden var online               = false as Lang.Boolean;
     hidden var name                 = ""    as Lang.String;
@@ -52,8 +52,36 @@ class NestStatus {
     public var gotDeviceData        = false as Lang.Boolean;
     public var gotDeviceDataError   = false as Lang.Boolean;
 
+    // Do we have an Internet connection?
+    hidden var wifiConnection = true;
+
     function initialize(h) {
         requestCallback = h;
+        // Performs OAuth too
+        Communications.checkWifiConnection(method(:onReceiveWifiConnectionA));
+    }
+
+    function onReceiveWifiConnection(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
+        wifiConnection = result.get(:wifiAvailable);
+        requestCallback.invoke();
+    }
+    // Perform OAuth in addition to checking the connectivity
+    function onReceiveWifiConnectionA(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
+        if (result.get(:wifiAvailable)) {
+            var c = Properties.getValue("oauthCode");
+            if (c != null && !c.equals("")) {
+                getOAuthToken();
+            }
+        }
+        onReceiveWifiConnection(result);
+    }
+    // Returning existing value without update
+    function getWifiConnection() as Lang.Boolean {
+        return wifiConnection;
+    }
+    // Perform an asynchronous check to update 'wifiConnection'.
+    function checkWifiConnection() as Void {
+        Communications.checkWifiConnection(method(:onReceiveWifiConnection));
     }
 
     function getOnline() as Lang.Boolean {
@@ -118,7 +146,9 @@ class NestStatus {
                     }
                 }, method(:onReturnHeatTemp));
             } else {
-                System.println("Skipping executeHeatTemp() as no change.");
+                if (debug) {
+                    System.println("Skipping executeHeatTemp() as no change.");
+                }
             }
         }
     }
@@ -164,7 +194,9 @@ class NestStatus {
                     }
                 }, method(:onReturnCoolTemp));
             } else {
-                System.println("Skipping executeCoolTemp() as no change.");
+                if (debug) {
+                    System.println("Skipping executeCoolTemp() as no change.");
+                }
             }
         }
     }
@@ -192,15 +224,10 @@ class NestStatus {
     }
     function onReturnThermoMode(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("In onReturnThermoMode()");
             System.println("onReturnThermoMode() Response Code: " + responseCode);
             System.println("onReturnThermoMode() Response Data: " + data);
         }
         if (responseCode != 200) {
-            if (debug) {
-                System.println("onReturnThermoMode() Eco:        " + eco);
-                System.println("onReturnThermoMode() ThermoMode: " + thermoMode);
-            }
             if (!isGlance) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
@@ -209,9 +236,6 @@ class NestStatus {
         executeMode(Thermo);
     }
     function executeThermoMode() as Void {
-        if (debug) {
-            System.println("In executeThermoMode()");
-        }
         if (!thermoMode.equals(_thermoMode)) {
             executeCommand({
                 "command" => "sdm.devices.commands.ThermostatMode.SetMode",
@@ -220,7 +244,9 @@ class NestStatus {
                 }
             }, method(:onReturnThermoMode));
         } else {
-            System.println("Skipping executeThermoMode() as no change.");
+            if (debug) {
+                System.println("Skipping executeThermoMode() as no change.");
+            }
             executeMode(NoThermo);
         }
     }
@@ -256,15 +282,10 @@ class NestStatus {
     }
     function onReturnEco(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("In onReturnEco()");
             System.println("onReturnEco() Response Code: " + responseCode);
             System.println("onReturnEco() Response Data: " + data);
         }
         if (responseCode != 200) {
-            if (debug) {
-                System.println("onReturnEco() Eco:        " + eco);
-                System.println("onReturnEco() ThermoMode: " + thermoMode);
-            }
             if (!isGlance) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
@@ -273,9 +294,6 @@ class NestStatus {
         executeMode(Eco);
     }
     function executeEco() as Void {
-        if (debug) {
-            System.println("In executeEco()");
-        }
         if (eco != _eco) {
             executeCommand({
                 "command" => "sdm.devices.commands.ThermostatEco.SetMode",
@@ -284,62 +302,33 @@ class NestStatus {
                 }
             }, method(:onReturnEco));
         } else {
-            System.println("Skipping executeEco() as no change.");
+            if (debug) {
+                System.println("Skipping executeEco() as no change.");
+            }
             executeMode(NoEco);
         }
     }
 
     // Spawn sub-tasks from here and retain control of execution of asynchronous elements.
     function executeMode(r) as Void {
-        if (debug) {
-            System.println(" executeMode(" + r + ")");
-        }
         switch (r) {
             case Start:
-                if (debug) {
-                    System.println("In executeMode() ******");
-                    System.println("To Be values:");
-                    System.println(" executeMode() Eco:        " + eco);
-                    System.println(" executeMode() ThermoMode: " + thermoMode);
-                }
-                System.println("executeMode(): Before executeThermoMode()");
                 // Changing ThermoMode also turns off Eco Mode, then setting Eco mode off errors.
                 executeThermoMode();
-                System.println("executeMode(): After executeThermoMode()");
                 break;
             case NoThermo:
-                if (debug) {
-                    System.println("Intermediate Values:");
-                    System.println(" executeMode() Eco:        " + eco);
-                    System.println(" executeMode() ThermoMode: " + thermoMode);
-                }
                 executeEco();
                 break;
             case Thermo:
-                if (debug) {
-                    System.println("Intermediate Values:");
-                    System.println(" executeMode() Eco:        " + eco);
-                    System.println(" executeMode() ThermoMode: " + thermoMode);
-                }
                 // At this point Eco is always OFF as we set the ThermoMode.
-                System.println("executeMode(): Before executeEco()");
                 if (eco) {
                     executeEco();
                 }
-                System.println("executeMode(): After executeEco()");
                 break;
             case NoEco: // Fall through
             case Eco:
                 // The end
-                if (debug) {
-                    System.println("Final Values:");
-                    System.println(" executeMode() Eco:        " + eco);
-                    System.println(" executeMode() ThermoMode: " + thermoMode);
-                }
                 requestCallback.invoke();
-                if (debug) {
-                    System.println("Leaving executeMode() ******");
-                }
                 break;
         }
     }
@@ -366,8 +355,11 @@ class NestStatus {
             },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
-
-        Communications.makeWebRequest(url, payload, options, callback);
+        if (System.getDeviceSettings().phoneConnected && wifiConnection) {
+            Communications.makeWebRequest(url, payload, options, callback);
+        } else {
+            System.println("Note - executeCommand(): No Internet connection, skipping API call.");
+        }
     }
 
     // Set up the response callback function
@@ -488,13 +480,10 @@ class NestStatus {
     }
 
     function getDeviceData() as Void {
-        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId");
-
-        var params = {
-        };
-
+        var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId");
+        var params  = {};
         var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :method  => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
                 "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
                 "Authorization" => "Bearer " + Properties.getValue("accessToken")
@@ -502,7 +491,11 @@ class NestStatus {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, params, options, method(:onReceiveDeviceData));
+        if (System.getDeviceSettings().phoneConnected && wifiConnection) {
+            Communications.makeWebRequest(url, params, options, method(:onReceiveDeviceData));
+        } else {
+            System.println("Note - getDeviceData(): No Internet connection, skipping API call.");
+        }
     }
 
     function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
@@ -547,13 +540,10 @@ class NestStatus {
         if (c != null && !c.equals("")) {
             getDeviceData();
         } else {
-            var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
-
-            var params = {
-            };
-
-            var options = {
-                :method => Communications.HTTP_REQUEST_METHOD_GET,
+            var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
+            var params  = {};
+            var options  = {
+                :method  => Communications.HTTP_REQUEST_METHOD_GET,
                 :headers => {
                     "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
                     "Authorization" => "Bearer " + Properties.getValue("accessToken")
@@ -561,7 +551,11 @@ class NestStatus {
                 :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
             };
 
-            Communications.makeWebRequest(url, params, options, method(:onReceiveDevices));
+            if (System.getDeviceSettings().phoneConnected && wifiConnection) {
+                Communications.makeWebRequest(url, params, options, method(:onReceiveDevices));
+            } else {
+                System.println("Note - getDevices(): No Internet connection, skipping API call.");
+            }
         }
     }
 
@@ -622,7 +616,7 @@ class NestStatus {
                     },
                     :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
                 };
-
+                // This follows a check for Internet access
                 Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveRefreshAccessToken));
             } else {
                 getDevices();
@@ -643,7 +637,7 @@ class NestStatus {
                 },
                 :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
             };
-
+            // This follows a check for Internet access
             Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveAccessToken));
         }
     }
