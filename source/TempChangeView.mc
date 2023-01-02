@@ -7,8 +7,10 @@ import Toybox.Communications;
 class TempChangeView extends WatchUi.View {
     var mNestStatus;
 
-    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[4];
-    var settingCool as Lang.Boolean;
+    hidden var thermostatIcon;
+
+    hidden var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[4];
+    hidden var settingCool as Lang.Boolean;
 
     function initialize(s) {
         View.initialize();
@@ -19,6 +21,7 @@ class TempChangeView extends WatchUi.View {
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
+        thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
         var bArrowUpIcon   = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowUpIcon   });
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
         buttons[0] = new WatchUi.Button({
@@ -76,6 +79,11 @@ class TempChangeView extends WatchUi.View {
         setLayout(buttons);
     }
 
+    function onShow() {
+        // Track changes to NestStatus state
+        mNestStatus.copyState();
+    }
+
     // Update the view
     function onUpdate(dc as Dc) as Void {
         var w = dc.getWidth();
@@ -85,6 +93,16 @@ class TempChangeView extends WatchUi.View {
         var bg = 0x3B444C;
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
+
+        dc.drawBitmap(hw - thermostatIcon.getWidth()/2, h/3 - thermostatIcon.getHeight()/2, thermostatIcon);
+        var temp = mNestStatus.getHeatTemp();
+        if (temp != null) {
+            dc.drawText(
+                hw, hh, Graphics.FONT_MEDIUM,
+                Lang.format("$1$°$2$", [temp.format("%2.1f"), mNestStatus.getScale()]),
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
+        }
 
         if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
             buttons[0].setState(:stateDisabled);
@@ -155,6 +173,10 @@ class TempChangeView extends WatchUi.View {
         settingCool = true;
         System.println(settingCool);
     }
+
+    function getNestStatus() as NestStatus {
+        return mNestStatus;
+    }
 }
 
 class TempChangeDelegate extends WatchUi.BehaviorDelegate {
@@ -176,14 +198,14 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
         return mView.onButton3(); 
     }
     function onBack() {
-        mView.mNestStatus.executeCoolTemp();
-        mView.mNestStatus.executeHeatTemp();
+        mView.getNestStatus().executeCoolTemp();
+        mView.getNestStatus().executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
     function onPreviousPage() {
-        mView.mNestStatus.executeCoolTemp();
-        mView.mNestStatus.executeHeatTemp();
+        mView.getNestStatus().executeCoolTemp();
+        mView.getNestStatus().executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }

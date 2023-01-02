@@ -4,6 +4,7 @@ import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Communications;
 
+(:glance)
 class ErrorView extends WatchUi.View {
     hidden var text as String;
 
@@ -13,6 +14,7 @@ class ErrorView extends WatchUi.View {
     function initialize(t as String) {
         View.initialize();
         text = t;
+        System.println(t);
     }
 
     // Load your resources here
@@ -27,7 +29,7 @@ class ErrorView extends WatchUi.View {
         textArea = new WatchUi.TextArea({
             :text          => text,
             :color         => Graphics.COLOR_WHITE,
-            :font          => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
+            :font          => Graphics.FONT_XTINY,
             :justification => Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER,
             :locX          => 0,
             :locY          => 83,
@@ -45,13 +47,12 @@ class ErrorView extends WatchUi.View {
         var bg = 0x3B444C;
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
-
         dc.drawBitmap(hw - 24, 30, errorIcon);
-
         textArea.draw(dc);
     }
 }
 
+(:glance)
 class ErrorDelegate extends WatchUi.BehaviorDelegate {
     function initialize() {
         WatchUi.BehaviorDelegate.initialize();

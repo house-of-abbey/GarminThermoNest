@@ -1,19 +1,19 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="EcoOffIcon" filename="nest_eco_leaf_off.svg" />
-    <bitmap id="EcoOnIcon" filename="nest_eco_leaf_on.svg" />
-    <bitmap id="HeatOffIcon" filename="mode_heat_off.svg" />
-    <bitmap id="HeatOnIcon" filename="mode_heat_on.svg" />
-    <bitmap id="CoolOnIcon" filename="mode_cool_on.svg" />
-    <bitmap id="HeatCoolIcon" filename="mode_heat_cool.svg" />
-    <bitmap id="ThermostatIcon" filename="nest_thermostat.svg" />
-    <bitmap id="RefreshIcon" filename="refresh.svg" />
-    <bitmap id="RefreshDisabledIcon" filename="refresh_disabled.svg" />
-    <bitmap id="ArrowDownIcon" filename="arrow_down.svg" />
-    <bitmap id="ArrowUpIcon" filename="arrow_up.svg" />
-    <bitmap id="PhoneDisconnectedIcon" filename="phone_disconnected.svg" />
-    <bitmap id="SignalDisconnectedIcon" filename="signal_disconnected.svg" />
-    <bitmap id="ThermostatOfflineIcon" filename="thermostat_offline.svg" />
-    <bitmap id="LoggedOutIcon" filename="logged_out.svg" />
-    <bitmap id="ErrorIcon" filename="error.svg" />
+    <bitmap id="LauncherIcon"           filename="nest_home_70.png" />
+    <bitmap id="EcoOffIcon"             filename="nest_eco_leaf_off.svg" />
+    <bitmap id="EcoOnIcon"              filename="nest_eco_leaf_on.svg" />
+    <bitmap id="HeatOffIcon"            filename="mode_heat_off.svg" />
+    <bitmap id="HeatOnIcon"             filename="mode_heat_on.svg" />
+    <bitmap id="CoolOnIcon"             filename="mode_cool_on.svg" />
+    <bitmap id="HeatCoolIcon"           filename="mode_heat_cool.svg" />
+    <bitmap id="ThermostatIcon"         filename="nest_thermostat.svg" />
+    <bitmap id="RefreshIcon"            filename="refresh.svg"             scope="glance" />
+    <bitmap id="RefreshDisabledIcon"    filename="refresh_disabled.svg" />
+    <bitmap id="ArrowDownIcon"          filename="arrow_down.svg" />
+    <bitmap id="ArrowUpIcon"            filename="arrow_up.svg" />
+    <bitmap id="PhoneDisconnectedIcon"  filename="phone_disconnected.svg"  scope="glance" />
+    <bitmap id="SignalDisconnectedIcon" filename="signal_disconnected.svg" scope="glance" />
+    <bitmap id="ThermostatOfflineIcon"  filename="thermostat_offline.svg"  scope="glance" />
+    <bitmap id="LoggedOutIcon"          filename="logged_out.svg"          scope="glance" />
+    <bitmap id="ErrorIcon"              filename="error.svg"               scope="glance" />
 </drawables>

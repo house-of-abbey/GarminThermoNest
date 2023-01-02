@@ -5,13 +5,25 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.Application.Properties;
 import Toybox.Time;
+import Toybox.Math;
 
 const clientId = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
 const clientSecret = "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";
 const projectId = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
+(:glance)
 class NestStatus {
+    // Explicit value assignment
+    enum {
+        Start    = 0,
+        Thermo   = 1,
+        NoThermo = 2,
+        Eco      = 3,
+        NoEco    = 4
+    }
+
     hidden var requestCallback;
+    public var isGlance             = false as Lang.Boolean;
     hidden var debug                = true  as Lang.Boolean;
 
     hidden var online               = false as Lang.Boolean;
@@ -30,6 +42,12 @@ class NestStatus {
     hidden var hvac                 = ""    as Lang.String;
     hidden var availableEcoModes    = null  as Lang.Array;
     hidden var eco                  = false as Lang.Boolean;
+
+    // Copies before edit for a diff
+    hidden var _heatTemp             = 0.0   as Lang.Number;
+    hidden var _coolTemp             = 0.0   as Lang.Number;
+    hidden var _thermoMode           = ""    as Lang.String;
+    hidden var _eco                  = false as Lang.Boolean;
 
     public var gotDeviceData        = false as Lang.Boolean;
     public var gotDeviceDataError   = false as Lang.Boolean;
@@ -78,22 +96,30 @@ class NestStatus {
         }
     }
     function onReturnHeatTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("Response Code: " + responseCode);
+            System.println("Response Data: " + data);
+        }
         if (responseCode != 200) {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
         requestCallback.invoke();
     }
     function executeHeatTemp() as Void {
-        if (!eco) {
-            executeCommand({
-                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetHeat",
-                "params"  => {
-                    "heatCelsius" => heatTemp
-                }
-            }, method(:onReturnHeatTemp));
+        if (!eco && (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL"))) {
+            if (heatTemp != _heatTemp) {
+                executeCommand({
+                    "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetHeat",
+                    "params"  => {
+                        "heatCelsius" => heatTemp
+                    }
+                }, method(:onReturnHeatTemp));
+            } else {
+                System.println("Skipping executeHeatTemp() as no change.");
+            }
         }
     }
 
@@ -116,22 +142,30 @@ class NestStatus {
         }
     }
     function onReturnCoolTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("Response Code: " + responseCode);
+            System.println("Response Data: " + data);
+        }
         if (responseCode != 200) {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
         requestCallback.invoke();
     }
     function executeCoolTemp() as Void {
-        if (!eco) {
-            executeCommand({
-                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetCool",
-                "params"  => {
-                    "CoolCelsius" => coolTemp
-                }
-            }, method(:onReturnCoolTemp));
+        if (!eco && (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL"))) {
+            if (coolTemp != _coolTemp) {
+                executeCommand({
+                    "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetCool",
+                    "params"  => {
+                        "CoolCelsius" => coolTemp
+                    }
+                }, method(:onReturnCoolTemp));
+            } else {
+                System.println("Skipping executeCoolTemp() as no change.");
+            }
         }
     }
 
@@ -147,28 +181,48 @@ class NestStatus {
         return thermoMode;
     }
     function setThermoMode(value as Lang.String) as Void {
-        if (value == "OFF") {
+        if (value.equals("OFF")) {
             eco = false;
         }
         thermoMode = value;
         requestCallback.invoke();
     }
+    function nextAvailableThermoModes() as Void {
+        setThermoMode((availableThermoModes as Lang.Array)[(availableThermoModes.indexOf(thermoMode)+1) % availableThermoModes.size()]);
+    }
     function onReturnThermoMode(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("In onReturnThermoMode()");
+            System.println("onReturnThermoMode() Response Code: " + responseCode);
+            System.println("onReturnThermoMode() Response Data: " + data);
+        }
         if (responseCode != 200) {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (debug) {
+                System.println("onReturnThermoMode() Eco:        " + eco);
+                System.println("onReturnThermoMode() ThermoMode: " + thermoMode);
+            }
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
-        requestCallback.invoke();
+        executeMode(Thermo);
     }
     function executeThermoMode() as Void {
-        executeCommand({
-            "command" => "sdm.devices.commands.ThermostatMode.SetMode",
-            "params"  => {
-                "mode" => thermoMode
-            }
-        }, method(:onReturnThermoMode));
+        if (debug) {
+            System.println("In executeThermoMode()");
+        }
+        if (!thermoMode.equals(_thermoMode)) {
+            executeCommand({
+                "command" => "sdm.devices.commands.ThermostatMode.SetMode",
+                "params"  => {
+                    "mode" => thermoMode
+                }
+            }, method(:onReturnThermoMode));
+        } else {
+            System.println("Skipping executeThermoMode() as no change.");
+            executeMode(NoThermo);
+        }
     }
 
     function getHvac() as Lang.String {
@@ -195,22 +249,110 @@ class NestStatus {
         eco = value;
         requestCallback.invoke();
     }
+    function nextAvailableEcoMode() as Void {
+        if (availableEcoModes.indexOf("MANUAL_ECO") != -1) {
+            setEco(!eco);
+        }
+    }
     function onReturnEco(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("In onReturnEco()");
+            System.println("onReturnEco() Response Code: " + responseCode);
+            System.println("onReturnEco() Response Data: " + data);
+        }
         if (responseCode != 200) {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (debug) {
+                System.println("onReturnEco() Eco:        " + eco);
+                System.println("onReturnEco() ThermoMode: " + thermoMode);
+            }
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             getDeviceData();
         }
-        requestCallback.invoke();
+        executeMode(Eco);
     }
     function executeEco() as Void {
-        executeCommand({
-            "command" => "sdm.devices.commands.ThermostatEco.SetMode",
-            "params"  => {
-                "mode" => eco ? "MANUAL_ECO" : "OFF"
-            }
-        }, method(:onReturnEco));
+        if (debug) {
+            System.println("In executeEco()");
+        }
+        if (eco != _eco) {
+            executeCommand({
+                "command" => "sdm.devices.commands.ThermostatEco.SetMode",
+                "params"  => {
+                    "mode" => eco ? "MANUAL_ECO" : "OFF"
+                }
+            }, method(:onReturnEco));
+        } else {
+            System.println("Skipping executeEco() as no change.");
+            executeMode(NoEco);
+        }
+    }
+
+    // Spawn sub-tasks from here and retain control of execution of asynchronous elements.
+    function executeMode(r) as Void {
+        if (debug) {
+            System.println(" executeMode(" + r + ")");
+        }
+        switch (r) {
+            case Start:
+                if (debug) {
+                    System.println("In executeMode() ******");
+                    System.println("To Be values:");
+                    System.println(" executeMode() Eco:        " + eco);
+                    System.println(" executeMode() ThermoMode: " + thermoMode);
+                }
+                System.println("executeMode(): Before executeThermoMode()");
+                // Changing ThermoMode also turns off Eco Mode, then setting Eco mode off errors.
+                executeThermoMode();
+                System.println("executeMode(): After executeThermoMode()");
+                break;
+            case NoThermo:
+                if (debug) {
+                    System.println("Intermediate Values:");
+                    System.println(" executeMode() Eco:        " + eco);
+                    System.println(" executeMode() ThermoMode: " + thermoMode);
+                }
+                executeEco();
+                break;
+            case Thermo:
+                if (debug) {
+                    System.println("Intermediate Values:");
+                    System.println(" executeMode() Eco:        " + eco);
+                    System.println(" executeMode() ThermoMode: " + thermoMode);
+                }
+                // At this point Eco is always OFF as we set the ThermoMode.
+                System.println("executeMode(): Before executeEco()");
+                if (eco) {
+                    executeEco();
+                }
+                System.println("executeMode(): After executeEco()");
+                break;
+            case NoEco: // Fall through
+            case Eco:
+                // The end
+                if (debug) {
+                    System.println("Final Values:");
+                    System.println(" executeMode() Eco:        " + eco);
+                    System.println(" executeMode() ThermoMode: " + thermoMode);
+                }
+                requestCallback.invoke();
+                if (debug) {
+                    System.println("Leaving executeMode() ******");
+                }
+                break;
+        }
+    }
+
+    // Copy the state at the onShow() of an edit View for comparison later in order to reduce
+    // unnecessary API requests. This is then compared by the execute functions in order to
+    // decide if they make changes via the API.
+    //
+    function copyState() {
+        _heatTemp   = heatTemp;
+        _coolTemp   = coolTemp;
+        _thermoMode = thermoMode;
+        _eco        = eco;
     }
 
     private function executeCommand(payload as Dictionary, callback) {
@@ -238,44 +380,44 @@ class NestStatus {
                     if (con != null) {
                         online = (con.get("status") as Lang.String).equals("ONLINE");
                         if (debug) {
-                            System.println("Status: " + (online ? "On line" : "Off line"));
+                            System.println(" Status: " + (online ? "On line" : "Off line"));
                         }
                     }
                     var info = traits.get("sdm.devices.traits.Info") as Dictionary;
                     if (info != null) {
                         name = info.get("customName") as Lang.String;
                         if (debug) {
-                            System.println("Name: '" + name + "'");
+                            System.println(" Name: '" + name + "'");
                         }
                     }
                     var settings = traits.get("sdm.devices.traits.Settings") as Dictionary;
                     if (settings != null) {
                         scale = (settings.get("temperatureScale") as Lang.String).equals("CELSIUS") ? 'C' : 'F';
                         if (debug) {
-                            System.println("Scale: '" + scale + "'");
+                            System.println(" Scale: '" + scale + "'");
                         }
                     }
                     var e = traits.get("sdm.devices.traits.Temperature") as Dictionary;
                     if (e != null) {
-                        ambientTemp = e.get("ambientTemperatureCelsius") as Lang.Number;
+                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Number);
                         if (debug) {
-                            System.println("Temperature: " + ambientTemp + " deg C");
+                            System.println(" Temperature: " + ambientTemp + " deg C");
                         }
                     }
                     var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Dictionary;
                     if (ttsp != null) {
-                        heatTemp = ttsp.get("heatCelsius") as Lang.Number;
-                        coolTemp = ttsp.get("coolCelsius") as Lang.Number;
+                        heatTemp = round(ttsp.get("heatCelsius") as Lang.Number);
+                        coolTemp = round(ttsp.get("coolCelsius") as Lang.Number);
                         if (debug) {
-                            System.println("Heat Temperature: " + heatTemp + " deg C");
-                            System.println("Cool Temperature: " + coolTemp + " deg C");
+                            System.println(" Heat Temperature: " + heatTemp + " deg C");
+                            System.println(" Cool Temperature: " + coolTemp + " deg C");
                         }
                     }
                     var h = traits.get("sdm.devices.traits.Humidity") as Dictionary;
                     if (h != null) {
                         humidity = h.get("ambientHumidityPercent") as Lang.Number;
                         if (debug) {
-                            System.println("Humidity: " + humidity + " %");
+                            System.println(" Humidity: " + humidity + " %");
                         }
                     }
                     var tm = traits.get("sdm.devices.traits.ThermostatMode") as Dictionary;
@@ -283,15 +425,15 @@ class NestStatus {
                         availableThermoModes = tm.get("availableModes") as Lang.Array;
                         thermoMode = tm.get("mode") as Lang.String;
                         if (debug) {
-                            System.println("Thermo Modes: " + availableThermoModes);
-                            System.println("ThermostatMode: " + thermoMode);
+                            System.println(" Thermo Modes: " + availableThermoModes);
+                            System.println(" ThermostatMode: " + thermoMode);
                         }
                     }
                     var th = traits.get("sdm.devices.traits.ThermostatHvac") as Dictionary;
                     if (th != null) {
                         hvac = th.get("status") as Lang.String;
                         if (debug) {
-                            System.println("ThermostatHvac: " + hvac);
+                            System.println(" ThermostatHvac: " + hvac);
                         }
                     }
                     var te = traits.get("sdm.devices.traits.ThermostatEco") as Dictionary;
@@ -299,15 +441,15 @@ class NestStatus {
                         availableEcoModes = te.get("availableModes") as Lang.Array;
                         eco = (te.get("mode") as Lang.String).equals("MANUAL_ECO");
                         if (debug) {
-                            System.println("Eco Modes: " + availableEcoModes);
-                            System.println("ThermostatEco: " + (eco ? "Eco" : "Off"));
+                            System.println(" Eco Modes: " + availableEcoModes);
+                            System.println(" ThermostatEco: " + (eco ? "Eco" : "Off"));
                         }
                         if (eco) {
-                            heatTemp = te.get("heatCelsius") as Lang.Number;
-                            coolTemp = te.get("coolCelsius") as Lang.Number;
+                            heatTemp = round(te.get("heatCelsius") as Lang.Number);
+                            coolTemp = round(te.get("coolCelsius") as Lang.Number);
                             if (debug) {
-                                System.println("Heat Temperature: " + heatTemp + " deg C (eco)");
-                                System.println("Cool Temperature: " + coolTemp + " deg C (eco)");
+                                System.println(" Heat Temperature: " + heatTemp + " deg C (eco)");
+                                System.println(" Cool Temperature: " + coolTemp + " deg C (eco)");
                             }
                         }
                     }
@@ -317,20 +459,28 @@ class NestStatus {
             gotDeviceDataError = false;
             requestCallback.invoke();
         } else {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
+            if (debug) {
+                System.println("Response Code: " + responseCode);
+                System.println("Response Data: " + data);
+            }
             gotDeviceData      = true;
             gotDeviceDataError = true;
 
             if (responseCode == 404) {
                 Properties.setValue("deviceId", "");
-                WatchUi.pushView(new ErrorView("Device not found."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView("Device not found."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             } else if (responseCode == 401) {
                 Properties.setValue("accessToken", "");
                 Properties.setValue("refreshToken", "");
-                WatchUi.pushView(new ErrorView("Authentication failed."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView("Authentication failed."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             } else {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             }
 
             requestCallback.invoke();
@@ -356,8 +506,11 @@ class NestStatus {
     }
 
     function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("Response Code: " + responseCode);
+            System.println("Response Data: " + data);
+        }
         if (responseCode == 200) {
-            System.println("Response: " + data);
             var devices = data.get("devices") as Lang.Array;
             var menu = new WatchUi.Menu2({ :title => "Devices" });
             var o = 21 + projectId.length();
@@ -379,11 +532,13 @@ class NestStatus {
                     );
                 }
             }
-            WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
+            if (!isGlance) {
+                WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
+            }
         } else {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
-            WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
         }
     }
 
@@ -411,32 +566,38 @@ class NestStatus {
     }
 
     function onRecieveRefreshAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("Response Code: " + responseCode);
+            System.println("Response Data: " + data);
+        }
         if (responseCode == 200) {
-            System.println("Response: " + data);
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
-            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            if (debug) {
+                System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            }
             getDevices();
         } else {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
             Properties.setValue("oauthCode", "");
             requestCallback.invoke();
         }
     }
 
     function onRecieveAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
+        if (debug) {
+            System.println("Response: Code" + responseCode);
+            System.println("Response: Data" + data);
+        }
         if (responseCode == 200) {
-            System.println("Response: " + data);
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
             Properties.setValue("refreshToken", data.get("refresh_token"));
-            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-            System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
+            if (debug) {
+                System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+                System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
+            }
             getDevices();
         } else {
-            System.println("Response: " + responseCode);
-            System.println("Response: " + data);
             Properties.setValue("oauthCode", "");
             requestCallback.invoke();
         }
@@ -534,6 +695,14 @@ class NestStatus {
         //     Communications.OAUTH_RESULT_TYPE_URL,
         //     { "code" => "oauthCode" }
         // );
+    }
+
+    hidden function round(n as Lang.Number) as Lang.Number or Null {
+        if (n == null) {
+            return null;
+        } else {
+            return Math.round(n*2) / 2;
+        }
     }
 }
 
