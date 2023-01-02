@@ -116,9 +116,13 @@ class NestStatus {
     function setHeatTemp(value as Lang.Number) as Void {
         if (!eco) {
             if (scale == 'C') {
-                heatTemp = value;
+                if (9f <= value && value <= 32f) {
+                    heatTemp = value;
+                }
             } else {
-                heatTemp = (value - 32) * 5/9;
+                if (48f <= value && value <= 90f) {
+                    heatTemp = (value - 32) * 5/9;
+                }
             }
             requestCallback.invoke();
         }
@@ -164,9 +168,13 @@ class NestStatus {
     function setCoolTemp(value as Lang.Number) as Void {
         if (!eco) {
             if (scale == 'C') {
-                coolTemp = value;
+                if (9f <= value && value <= 32f) {
+                    coolTemp = value;
+                }
             } else {
-                coolTemp = (value - 32) * 5/9;
+                if (48f <= value && value <= 90f) {
+                    coolTemp = (value - 32) * 5/9;
+                }
             }
             requestCallback.invoke();
         }

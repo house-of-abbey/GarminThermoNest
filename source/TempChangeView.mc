@@ -16,7 +16,6 @@ class TempChangeView extends WatchUi.View {
         View.initialize();
         mNestStatus = s;
         settingCool = mNestStatus.getThermoMode().equals("COOL");
-        System.println(settingCool);
     }
 
     // Load your resources here
@@ -170,12 +169,10 @@ class TempChangeView extends WatchUi.View {
 
     function onButton2() as Void {
         settingCool = false;
-        System.println(settingCool);
     }
 
     function onButton3() as Void {
         settingCool = true;
-        System.println(settingCool);
     }
 
     function getNestStatus() as NestStatus {
