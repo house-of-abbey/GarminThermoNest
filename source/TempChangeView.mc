@@ -7,11 +7,14 @@ import Toybox.Communications;
 class TempChangeView extends WatchUi.View {
     var mNestStatus;
 
-    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[2];
+    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[4];
+    var settingCool as Lang.Boolean;
 
     function initialize(s) {
         View.initialize();
         mNestStatus = s;
+        settingCool = mNestStatus.getThermoMode().equals("COOL");
+        System.println(settingCool);
     }
 
     // Load your resources here
@@ -44,6 +47,32 @@ class TempChangeView extends WatchUi.View {
             :width                    => 48,
             :height                   => 48
         });
+        buttons[2] = new WatchUi.Button({
+            :stateDefault             => Graphics.COLOR_TRANSPARENT,
+            :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
+            :stateSelected            => Graphics.COLOR_TRANSPARENT,
+            :stateDisabled            => Graphics.COLOR_TRANSPARENT,
+            :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
+            :background               => Graphics.COLOR_TRANSPARENT,
+            :behavior                 => :onButton2,
+            :locX                     => dc.getWidth()/2 - 50,
+            :locY                     => dc.getHeight()/2 - 45,
+            :width                    => 100,
+            :height                   => 40
+        });
+        buttons[3] = new WatchUi.Button({
+            :stateDefault             => Graphics.COLOR_TRANSPARENT,
+            :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
+            :stateSelected            => Graphics.COLOR_TRANSPARENT,
+            :stateDisabled            => Graphics.COLOR_TRANSPARENT,
+            :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
+            :background               => Graphics.COLOR_TRANSPARENT,
+            :behavior                 => :onButton3,
+            :locX                     => dc.getWidth()/2 - 50,
+            :locY                     => dc.getHeight()/2 + 5,
+            :width                    => 100,
+            :height                   => 40
+        });
         setLayout(buttons);
     }
 
@@ -57,27 +86,74 @@ class TempChangeView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
 
-        dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                    Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-        if (mNestStatus.getEco() || mNestStatus.getThermoMode() == "OFF") {
+        if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
             buttons[0].setState(:stateDisabled);
             buttons[1].setState(:stateDisabled);
         } else {
+            if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
+                dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(hw, hh - 25, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+                dc.setColor(settingCool ? Graphics.COLOR_WHITE : Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(hw, hh + 25, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+                buttons[2].setState(:stateDefault);
+                buttons[3].setState(:stateDefault);
+                buttons[0].draw(dc);
+                buttons[1].draw(dc);
+            } else if (mNestStatus.getThermoMode().equals("HEAT")) {
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+                buttons[2].setState(:stateDisabled);
+                buttons[3].setState(:stateDisabled);
+            } else if (mNestStatus.getThermoMode().equals("COOL")) {
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+                buttons[2].setState(:stateDisabled);
+                buttons[3].setState(:stateDisabled);
+            }
+
             buttons[0].setState(:stateDefault);
             buttons[1].setState(:stateDefault);
+            buttons[0].draw(dc);
+            buttons[1].draw(dc);
         }
-        buttons[0].draw(dc);
-        buttons[1].draw(dc);
     }
 
     function onButton0() as Void {
-        mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() + 0.5);
+        if (settingCool) {
+            mNestStatus.setCoolTemp(mNestStatus.getCoolTemp() + 0.5);
+        } else {
+            mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() + 0.5);
+        }
     }
 
     function onButton1() as Void {
-        mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() - 0.5);
+        if (settingCool) {
+            mNestStatus.setCoolTemp(mNestStatus.getCoolTemp() - 0.5);
+        } else {
+            mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() - 0.5);
+        }
+    }
+
+    function onButton2() as Void {
+        settingCool = false;
+        System.println(settingCool);
+    }
+
+    function onButton3() as Void {
+        settingCool = true;
+        System.println(settingCool);
     }
 }
 
@@ -93,12 +169,20 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
     function onButton1() {
         return mView.onButton1(); 
     }
+    function onButton2() {
+        return mView.onButton2(); 
+    }
+    function onButton3() {
+        return mView.onButton3(); 
+    }
     function onBack() {
+        mView.mNestStatus.executeCoolTemp();
         mView.mNestStatus.executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
     }
     function onPreviousPage() {
+        mView.mNestStatus.executeCoolTemp();
         mView.mNestStatus.executeHeatTemp();
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         return true;
