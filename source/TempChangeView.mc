@@ -5,11 +5,12 @@ import Toybox.WatchUi;
 import Toybox.Communications;
 
 class TempChangeView extends WatchUi.View {
-    var mNestStatus;
-
+    hidden var mNestStatus;
+    hidden var incTempButton;
+    hidden var decTempButton;
+    hidden var heatTempButton;
+    hidden var coolTempButton;
     hidden var thermostatIcon;
-
-    hidden var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[4];
     hidden var settingCool as Lang.Boolean;
 
     function initialize(s) {
@@ -25,14 +26,14 @@ class TempChangeView extends WatchUi.View {
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
         // A two element array containing the width and height of the Bitmap object
         var dim = bArrowUpIcon.getDimensions();
-        buttons[0] = new WatchUi.Button({
+        incTempButton = new WatchUi.Button({
             :stateDefault             => bArrowUpIcon,
             :stateHighlighted         => bArrowUpIcon,
             :stateSelected            => bArrowUpIcon,
             :stateDisabled            => bArrowUpIcon,
             :stateHighlightedSelected => bArrowUpIcon,
             :background               => Graphics.COLOR_TRANSPARENT,
-            :behavior                 => :onButton0,
+            :behavior                 => :onIncTempButton,
             :locX                     => (dc.getWidth() - dim[0]) / 2,
             :locY                     => 20,
             :width                    => dim[0],
@@ -40,46 +41,46 @@ class TempChangeView extends WatchUi.View {
         });
         // A two element array containing the width and height of the Bitmap object
         dim = bArrowDownIcon.getDimensions();
-        buttons[1] = new WatchUi.Button({
+        decTempButton = new WatchUi.Button({
             :stateDefault             => bArrowDownIcon,
             :stateHighlighted         => bArrowDownIcon,
             :stateSelected            => bArrowDownIcon,
             :stateDisabled            => bArrowDownIcon,
             :stateHighlightedSelected => bArrowDownIcon,
             :background               => Graphics.COLOR_TRANSPARENT,
-            :behavior                 => :onButton1,
+            :behavior                 => :onDecTempButton,
             :locX                     => (dc.getWidth() - dim[0]) / 2,
             :locY                     => (dc.getHeight() - dim[1] - 20),
             :width                    => dim[0],
             :height                   => dim[1]
         });
-        buttons[2] = new WatchUi.Button({
+        heatTempButton = new WatchUi.Button({
             :stateDefault             => Graphics.COLOR_TRANSPARENT,
             :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
             :stateSelected            => Graphics.COLOR_TRANSPARENT,
             :stateDisabled            => Graphics.COLOR_TRANSPARENT,
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
-            :behavior                 => :onButton2,
+            :behavior                 => :onHeatTempButton,
             :locX                     => dc.getWidth()/2 - 50,
             :locY                     => dc.getHeight()/2 - 45,
             :width                    => 100,
             :height                   => 40
         });
-        buttons[3] = new WatchUi.Button({
+        coolTempButton = new WatchUi.Button({
             :stateDefault             => Graphics.COLOR_TRANSPARENT,
             :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
             :stateSelected            => Graphics.COLOR_TRANSPARENT,
             :stateDisabled            => Graphics.COLOR_TRANSPARENT,
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
-            :behavior                 => :onButton3,
+            :behavior                 => :onCoolTempButton,
             :locX                     => dc.getWidth()/2 - 50,
             :locY                     => dc.getHeight()/2 + 5,
             :width                    => 100,
             :height                   => 40
         });
-        setLayout(buttons);
+        setLayout([incTempButton, decTempButton, heatTempButton, coolTempButton]);
     }
 
     function onShow() {
@@ -108,8 +109,8 @@ class TempChangeView extends WatchUi.View {
         }
 
         if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
-            buttons[0].setState(:stateDisabled);
-            buttons[1].setState(:stateDisabled);
+            incTempButton.setState(:stateDisabled);
+            decTempButton.setState(:stateDisabled);
         } else {
             if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
                 dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -122,36 +123,36 @@ class TempChangeView extends WatchUi.View {
                             Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
                             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-                buttons[2].setState(:stateDefault);
-                buttons[3].setState(:stateDefault);
-                buttons[0].draw(dc);
-                buttons[1].draw(dc);
+                heatTempButton.setState(:stateDefault);
+                coolTempButton.setState(:stateDefault);
+                incTempButton.draw(dc);
+                decTempButton.draw(dc);
             } else if (mNestStatus.getThermoMode().equals("HEAT")) {
                 dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
                             Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
                             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-                buttons[2].setState(:stateDisabled);
-                buttons[3].setState(:stateDisabled);
+                heatTempButton.setState(:stateDisabled);
+                coolTempButton.setState(:stateDisabled);
             } else if (mNestStatus.getThermoMode().equals("COOL")) {
                 dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
                             Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
                             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-                buttons[2].setState(:stateDisabled);
-                buttons[3].setState(:stateDisabled);
+                heatTempButton.setState(:stateDisabled);
+                coolTempButton.setState(:stateDisabled);
             }
 
-            buttons[0].setState(:stateDefault);
-            buttons[1].setState(:stateDefault);
-            buttons[0].draw(dc);
-            buttons[1].draw(dc);
+            incTempButton.setState(:stateDefault);
+            decTempButton.setState(:stateDefault);
+            incTempButton.draw(dc);
+            decTempButton.draw(dc);
         }
     }
 
-    function onButton0() as Void {
+    function onIncTempButton() as Void {
         if (settingCool) {
             mNestStatus.setCoolTemp(mNestStatus.getCoolTemp() + 0.5);
         } else {
@@ -159,7 +160,7 @@ class TempChangeView extends WatchUi.View {
         }
     }
 
-    function onButton1() as Void {
+    function onDecTempButton() as Void {
         if (settingCool) {
             mNestStatus.setCoolTemp(mNestStatus.getCoolTemp() - 0.5);
         } else {
@@ -167,11 +168,11 @@ class TempChangeView extends WatchUi.View {
         }
     }
 
-    function onButton2() as Void {
+    function onHeatTempButton() as Void {
         settingCool = false;
     }
 
-    function onButton3() as Void {
+    function onCoolTempButton() as Void {
         settingCool = true;
     }
 
@@ -186,17 +187,17 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
         WatchUi.BehaviorDelegate.initialize();
         mView = v;
     }
-    function onButton0() {
-        return mView.onButton0(); 
+    function onIncTempButton() {
+        return mView.onIncTempButton(); 
     }
-    function onButton1() {
-        return mView.onButton1(); 
+    function onDecTempButton() {
+        return mView.onDecTempButton(); 
     }
-    function onButton2() {
-        return mView.onButton2(); 
+    function onHeatTempButton() {
+        return mView.onHeatTempButton(); 
     }
-    function onButton3() {
-        return mView.onButton3(); 
+    function onCoolTempButton() {
+        return mView.onCoolTempButton(); 
     }
     function onBack() {
         mView.getNestStatus().executeCoolTemp();

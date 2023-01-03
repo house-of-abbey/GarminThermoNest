@@ -5,7 +5,8 @@ import Toybox.WatchUi;
 import Toybox.Application.Properties;
 
 class NestThermoView extends WatchUi.View {
-    public var mNestStatus;
+    hidden var mNestStatus;
+    hidden var refreshButton;
 
     hidden var ecoOffIcon;
     hidden var ecoOnIcon;
@@ -20,8 +21,6 @@ class NestThermoView extends WatchUi.View {
     hidden var refreshIcon;
     hidden var loggedOutIcon;
     hidden var errorIcon;
-
-    var buttons as Array<WatchUi.Button> = new Array<WatchUi.Button>[1];
 
     function initialize(n) {
         View.initialize();
@@ -47,20 +46,20 @@ class NestThermoView extends WatchUi.View {
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
         // A two element array containing the width and height of the Bitmap object
         var dim = bRefreshDisabledIcon.getDimensions();
-        buttons[0] = new WatchUi.Button({
+        refreshButton = new WatchUi.Button({
             :stateDefault             => Graphics.COLOR_TRANSPARENT,
             :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
             :stateSelected            => Graphics.COLOR_TRANSPARENT,
             :stateDisabled            => bRefreshDisabledIcon,
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
-            :behavior                 => :onButton0,
+            :behavior                 => :onRefreshButton,
             :locX                     => (dc.getWidth() - dim[0]) / 2,
             :locY                     => 30,
             :width                    => dim[0],
             :height                   => dim[1]
         });
-        setLayout(buttons);
+        setLayout([refreshButton]);
     }
 
     function lerp(x, a, b, A, B) {
@@ -184,9 +183,9 @@ class NestThermoView extends WatchUi.View {
             }
 
             if (mNestStatus.getEco()) {
-                dc.drawBitmap(hw - 53, h - 80, ecoOnIcon);
+                dc.drawBitmap(hw - ecoOnIcon.getWidth() - 5, h - 80, ecoOnIcon);
             } else {
-                dc.drawBitmap(hw - 53, h - 80, ecoOffIcon);
+                dc.drawBitmap(hw - ecoOffIcon.getWidth() - 5, h - 80, ecoOffIcon);
             }
 
             if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
@@ -200,42 +199,45 @@ class NestThermoView extends WatchUi.View {
             }
         }
 
-        if (System.getDeviceSettings().phoneConnected) {
-            if (mNestStatus.getWifiConnection()) {
-                var c = Properties.getValue("oauthCode");
-                if (c != null && !c.equals("")) {
-                    if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
-                        if (!mNestStatus.gotDeviceDataError) {
-                            dc.drawBitmap(hw - 24, 30, refreshIcon);
+        refreshButton.draw(dc);
+        // Overdraw the button when enabled
+        if (refreshButton.getState() != :stateDisabled) {
+            if (System.getDeviceSettings().phoneConnected) {
+                if (mNestStatus.getWifiConnection()) {
+                    var c = Properties.getValue("oauthCode");
+                    if (c != null && !c.equals("")) {
+                        if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
+                            if (mNestStatus.gotDeviceDataError) {
+                                dc.drawBitmap(hw - errorIcon.getWidth()/2, 30, errorIcon);
+                            } else {
+                                dc.drawBitmap(hw - refreshIcon.getWidth()/2, 30, refreshIcon);
+                            }
                         } else {
-                            dc.drawBitmap(hw - 24, 30, errorIcon);
+                            dc.drawBitmap(hw - thermostatOfflineIcon.getWidth()/2, 30, thermostatOfflineIcon);
                         }
                     } else {
-                        dc.drawBitmap(hw - 24, 30, thermostatOfflineIcon);
+                        dc.drawBitmap(hw - loggedOutIcon.getWidth()/2, 30, loggedOutIcon);
                     }
                 } else {
-                    dc.drawBitmap(hw - 24, 30, loggedOutIcon);
+                    dc.drawBitmap(hw - signalDisconnectedIcon.getWidth()/2, 30, signalDisconnectedIcon);
                 }
             } else {
-                dc.drawBitmap(hw - 24, 30, signalDisconnectedIcon);
+                dc.drawBitmap(hw - phoneDisconnectedIcon.getWidth()/2, 30, phoneDisconnectedIcon);
             }
-        } else {
-            dc.drawBitmap(hw - 24, 30, phoneDisconnectedIcon);
         }
-        buttons[0].draw(dc);
     }
 
     function requestCallback() as Void {
-        if (buttons[0] != null) {
-            buttons[0].setState(:stateDefault);
+        if (refreshButton != null) {
+            refreshButton.setState(:stateDefault);
         }
         requestUpdate();
     }
 
-    function onButton0() as Void {
+    function onRefreshButton() as Void {
         mNestStatus.checkWifiConnection();
         mNestStatus.getOAuthToken();
-        buttons[0].setState(:stateDisabled);
+        refreshButton.setState(:stateDisabled);
         requestUpdate();
     }
 
@@ -250,8 +252,8 @@ class NestThermoDelegate extends WatchUi.BehaviorDelegate {
         WatchUi.BehaviorDelegate.initialize();
         mView = v;
     }
-    function onButton0() {
-        return mView.onButton0(); 
+    function onRefreshButton() {
+        return mView.onRefreshButton(); 
     }
     function onPreviousPage() {
         if (System.getDeviceSettings().phoneConnected && mView.getNestStatus().getWifiConnection()) {

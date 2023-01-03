@@ -50,7 +50,7 @@ class NestStatus {
     hidden var _eco                  = false as Lang.Boolean;
 
     public var gotDeviceData        = false as Lang.Boolean;
-    public var gotDeviceDataError   = false as Lang.Boolean;
+    public var gotDeviceDataError   = true  as Lang.Boolean;
 
     // Do we have an Internet connection?
     hidden var wifiConnection = true;
@@ -474,6 +474,9 @@ class NestStatus {
             } else if (responseCode == 401) {
                 Properties.setValue("accessToken", "");
                 Properties.setValue("refreshToken", "");
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView("Authentication issue, access and refresh tokens deleted."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             } else {
                 // This method might be called before authorisation has completed.
                 if (!isGlance && (data != null)) {
