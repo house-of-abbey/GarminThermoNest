@@ -45,6 +45,8 @@ class NestThermoView extends WatchUi.View {
         errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
 
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
+        // A two element array containing the width and height of the Bitmap object
+        var dim = bRefreshDisabledIcon.getDimensions();
         buttons[0] = new WatchUi.Button({
             :stateDefault             => Graphics.COLOR_TRANSPARENT,
             :stateHighlighted         => Graphics.COLOR_TRANSPARENT,
@@ -53,10 +55,10 @@ class NestThermoView extends WatchUi.View {
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onButton0,
-            :locX                     => dc.getWidth()/2 - 24,
+            :locX                     => (dc.getWidth() - dim[0]) / 2,
             :locY                     => 30,
-            :width                    => 48,
-            :height                   => 48
+            :width                    => dim[0],
+            :height                   => dim[1]
         });
         setLayout(buttons);
     }

@@ -11,7 +11,7 @@ class NestThermoApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
-        System.println("NestThermoApp.initialize()");
+        // Glance and App each need their own and cannot be shared
         mNestStatus = new NestStatus(method(:requestCallback));
     }
 

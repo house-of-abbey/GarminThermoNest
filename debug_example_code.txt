@@ -1,0 +1,21 @@
+    hidden var wl as WebLog;
+
+        wl = new WebLog();
+
+
+    hidden function logAuth(prefix as String) as Void {
+        if (prefix.length() > 0) {
+            prefix += " ";
+        }
+        wl.println(prefix + "oauthCode:         " + Properties.getValue("oauthCode"));
+        wl.println(prefix + "accessToken:       " + Properties.getValue("accessToken"));
+        wl.println(prefix + "accessTokenExpire: " + Properties.getValue("accessTokenExpire"));
+        wl.println(prefix + "refreshToken:      " + Properties.getValue("refreshToken"));
+    }
+
+                wl.println("Authentication failed, deleting access and refresh tokens.");
+                logAuth("onReceiveDeviceData()");
+
+
+Logs: https://joseph.abbey1.org.uk/test
+Clear with: https://joseph.abbey1.org.uk/test_clear.php

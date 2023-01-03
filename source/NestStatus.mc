@@ -129,8 +129,8 @@ class NestStatus {
     }
     function onReturnHeatTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("Response Code: " + responseCode);
-            System.println("Response Data: " + data);
+            System.println("onReturnHeatTemp() Response Code: " + responseCode);
+            System.println("onReturnHeatTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
@@ -181,8 +181,8 @@ class NestStatus {
     }
     function onReturnCoolTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("Response Code: " + responseCode);
-            System.println("Response Data: " + data);
+            System.println("onReturnCoolTemp() Response Code: " + responseCode);
+            System.println("onReturnCoolTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
@@ -460,8 +460,8 @@ class NestStatus {
             requestCallback.invoke();
         } else {
             if (debug) {
-                System.println("Response Code: " + responseCode);
-                System.println("Response Data: " + data);
+                System.println("onReceiveDeviceData() Response Code: " + responseCode);
+                System.println("onReceiveDeviceData() Response Data: " + data);
             }
             gotDeviceData      = true;
             gotDeviceDataError = true;
@@ -474,12 +474,15 @@ class NestStatus {
             } else if (responseCode == 401) {
                 Properties.setValue("accessToken", "");
                 Properties.setValue("refreshToken", "");
-                if (!isGlance) {
-                    WatchUi.pushView(new ErrorView("Authentication failed."), new ErrorDelegate(), WatchUi.SLIDE_UP);
-                }
             } else {
-                if (!isGlance) {
+                // This method might be called before authorisation has completed.
+                if (!isGlance && (data != null)) {
                     WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                } else {
+                    if (debug) {
+                        System.println("onReceiveDeviceData() Response Code: " + responseCode);
+                        System.println("onReceiveDeviceData() Response Data: " + data);
+                    }
                 }
             }
 
@@ -489,7 +492,6 @@ class NestStatus {
 
     function getDeviceData() as Void {
         var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId");
-        var params  = {};
         var options = {
             :method  => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
@@ -500,7 +502,7 @@ class NestStatus {
         };
 
         if (System.getDeviceSettings().phoneConnected && wifiConnection) {
-            Communications.makeWebRequest(url, params, options, method(:onReceiveDeviceData));
+            Communications.makeWebRequest(url, null, options, method(:onReceiveDeviceData));
         } else {
             System.println("Note - getDeviceData(): No Internet connection, skipping API call.");
         }
@@ -508,8 +510,8 @@ class NestStatus {
 
     function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("Response Code: " + responseCode);
-            System.println("Response Data: " + data);
+            System.println("onReceiveDevices() Response Code: " + responseCode);
+            System.println("onReceiveDevices() Response Data: " + data);
         }
         if (responseCode == 200) {
             var devices = data.get("devices") as Lang.Array;
@@ -537,8 +539,13 @@ class NestStatus {
                 WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
             }
         } else {
-            if (!isGlance) {
+            if (!isGlance && (data != null)) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            } else {
+                if (debug) {
+                    System.println("onReceiveDeviceData() Response Code: " + responseCode);
+                    System.println("onReceiveDeviceData() Response Data: " + data);
+                }
             }
         }
     }
@@ -549,7 +556,6 @@ class NestStatus {
             getDeviceData();
         } else {
             var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
-            var params  = {};
             var options  = {
                 :method  => Communications.HTTP_REQUEST_METHOD_GET,
                 :headers => {
@@ -560,7 +566,7 @@ class NestStatus {
             };
 
             if (System.getDeviceSettings().phoneConnected && wifiConnection) {
-                Communications.makeWebRequest(url, params, options, method(:onReceiveDevices));
+                Communications.makeWebRequest(url, null, options, method(:onReceiveDevices));
             } else {
                 System.println("Note - getDevices(): No Internet connection, skipping API call.");
             }
@@ -569,38 +575,40 @@ class NestStatus {
 
     function onRecieveRefreshAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("Response Code: " + responseCode);
-            System.println("Response Data: " + data);
+            System.println("onRecieveRefreshAccessToken() Response Code: " + responseCode);
+            System.println("onRecieveRefreshAccessToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
             if (debug) {
-                System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+                System.println("onRecieveRefreshAccessToken() accessToken: " + Properties.getValue("accessToken"));
             }
             getDevices();
         } else {
-            Properties.setValue("oauthCode", "");
+            Properties.setValue("accessToken", "");
+            Properties.setValue("refreshToken", "");
             requestCallback.invoke();
         }
     }
 
     function onRecieveAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
         if (debug) {
-            System.println("Response: Code" + responseCode);
-            System.println("Response: Data" + data);
+            System.println("onRecieveAccessToken() Response Code: " + responseCode);
+            System.println("onRecieveAccessToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
             Properties.setValue("refreshToken", data.get("refresh_token"));
             if (debug) {
-                System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-                System.println(Lang.format("refreshToken: $1$", [Properties.getValue("refreshToken")]));
+                System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
+                System.println("onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
             }
             getDevices();
+            Properties.setValue("oauthCode", "Succeeded and deleted");
         } else {
-            Properties.setValue("oauthCode", "");
+            Properties.setValue("oauthCode", "FAILED, please try again");
             requestCallback.invoke();
         }
     }
@@ -610,6 +618,7 @@ class NestStatus {
         if (c != null && !c.equals("")) {
             var e = Properties.getValue("accessTokenExpire");
             if (e == null || Time.today().value() > e) {
+                // Access token expired, use refresh token to get a new one
                 var payload = {
                     "refresh_token" => c,
                     "client_id"     => clientId,
