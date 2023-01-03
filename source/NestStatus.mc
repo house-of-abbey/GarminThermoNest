@@ -583,7 +583,7 @@ class NestStatus {
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
+            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Number));
             if (debug) {
                 System.println("onRecieveRefreshAccessToken() accessToken: " + Properties.getValue("accessToken"));
             }
@@ -602,7 +602,7 @@ class NestStatus {
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("accessTokenExpire", Time.today().value() + (data.get("expires_in") as Number));
+            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Number));
             Properties.setValue("refreshToken", data.get("refresh_token"));
             if (debug) {
                 System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
@@ -620,7 +620,7 @@ class NestStatus {
         var c = Properties.getValue("refreshToken");
         if (c != null && !c.equals("")) {
             var e = Properties.getValue("accessTokenExpire");
-            if (e == null || Time.today().value() > e) {
+            if (e == null || Time.now().value() > e) {
                 // Access token expired, use refresh token to get a new one
                 var payload = {
                     "refresh_token" => c,

@@ -35,29 +35,31 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
             if (mNestStatus.getWifiConnection()) {
                 var c = Properties.getValue("oauthCode");
                 if (c != null && !c.equals("")) {
-                    if (!mNestStatus.gotDeviceDataError) {
+                    if (mNestStatus.gotDeviceDataError) {
+                        dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
+                        return;
+                    } else {
                         if (mNestStatus.gotDeviceData) {
                             if (!mNestStatus.getOnline()) {
-                                dc.drawBitmap(10, dc.getHeight()/2 - 24, thermostatOfflineIcon);
+                                dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
                                 return;
                             }
+                            // Else drop through without a return
                         } else {
-                            dc.drawBitmap(10, dc.getHeight()/2 - 24, refreshIcon);
+                            dc.drawBitmap(10, (dc.getHeight()-refreshIcon.getHeight())/2, refreshIcon);
                             return;
                         }
-                    } else {
-                        dc.drawBitmap(10, dc.getHeight()/2 - 24, errorIcon);
                     }
                 } else {
-                    dc.drawBitmap(10, dc.getHeight()/2 - 24, loggedOutIcon);
+                    dc.drawBitmap(10, (dc.getHeight()-loggedOutIcon.getHeight())/2, loggedOutIcon);
                     return;
                 }
             } else {
-                dc.drawBitmap(10, dc.getHeight()/2 - 24, signalDisconnectedIcon);
+                dc.drawBitmap(10, (dc.getHeight()-signalDisconnectedIcon.getHeight())/2, signalDisconnectedIcon);
                 return;
             }
         } else {
-            dc.drawBitmap(10, dc.getHeight()/2 - 24, phoneDisconnectedIcon);
+            dc.drawBitmap(10, (dc.getHeight()-phoneDisconnectedIcon.getHeight())/2, phoneDisconnectedIcon);
             return;
         }
 
