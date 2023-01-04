@@ -6,7 +6,7 @@ import Toybox.Communications;
 import Toybox.Application.Properties;
 
 (:glance)
-class NestThermoGlanceView extends WatchUi.GlanceView {
+class ThermoNestGlanceView extends WatchUi.GlanceView {
     hidden var mNestStatus;
 
     hidden var phoneDisconnectedIcon;
@@ -14,7 +14,7 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
     hidden var thermostatOfflineIcon;
     hidden var loggedOutIcon;
     hidden var errorIcon;
-    hidden var refreshIcon;
+    hidden var hourglassIcon;
 
     function initialize(n) {
         GlanceView.initialize();
@@ -27,7 +27,7 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
         thermostatOfflineIcon  = Application.loadResource(Rez.Drawables.ThermostatOfflineIcon ) as Graphics.BitmapResource;
         loggedOutIcon          = Application.loadResource(Rez.Drawables.LoggedOutIcon         ) as Graphics.BitmapResource;
         errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
-        refreshIcon            = Application.loadResource(Rez.Drawables.RefreshIcon           ) as Graphics.BitmapResource;
+        hourglassIcon          = Application.loadResource(Rez.Drawables.HourglassIcon         ) as Graphics.BitmapResource;
     }
 
     function onUpdate(dc) {
@@ -35,20 +35,20 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
             if (mNestStatus.getWifiConnection()) {
                 var c = Properties.getValue("oauthCode");
                 if (c != null && !c.equals("")) {
-                    if (mNestStatus.gotDeviceDataError) {
-                        dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
-                        return;
-                    } else {
-                        if (mNestStatus.gotDeviceData) {
+                    if (mNestStatus.gotDeviceData) {
+                        if (mNestStatus.gotDeviceDataError) {
+                            dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
+                            return;
+                        } else {
                             if (!mNestStatus.getOnline()) {
                                 dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
                                 return;
                             }
-                            // Else drop through without a return
-                        } else {
-                            dc.drawBitmap(10, (dc.getHeight()-refreshIcon.getHeight())/2, refreshIcon);
-                            return;
+                            // Else drop through without a return and no icon
                         }
+                    } else {
+                        dc.drawBitmap(10, (dc.getHeight()-hourglassIcon.getHeight())/2, hourglassIcon);
+                        return;
                     }
                 } else {
                     dc.drawBitmap(10, (dc.getHeight()-loggedOutIcon.getHeight())/2, loggedOutIcon);
@@ -62,6 +62,7 @@ class NestThermoGlanceView extends WatchUi.GlanceView {
             dc.drawBitmap(10, (dc.getHeight()-phoneDisconnectedIcon.getHeight())/2, phoneDisconnectedIcon);
             return;
         }
+
 
         var heat = mNestStatus.getHeatTemp();
         var cool = mNestStatus.getCoolTemp();

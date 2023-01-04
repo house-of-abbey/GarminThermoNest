@@ -50,7 +50,7 @@ class NestStatus {
     hidden var _eco                  = false as Lang.Boolean;
 
     public var gotDeviceData        = false as Lang.Boolean;
-    public var gotDeviceDataError   = true  as Lang.Boolean;
+    public var gotDeviceDataError   = false as Lang.Boolean;
 
     // Do we have an Internet connection?
     hidden var wifiConnection = true;

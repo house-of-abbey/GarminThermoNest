@@ -4,7 +4,7 @@ import Toybox.System;
 import Toybox.WatchUi;
 import Toybox.Application.Properties;
 
-class NestThermoView extends WatchUi.View {
+class ThermoNestView extends WatchUi.View {
     hidden var mNestStatus;
     hidden var refreshButton;
 
@@ -19,6 +19,7 @@ class NestThermoView extends WatchUi.View {
     hidden var signalDisconnectedIcon;
     hidden var thermostatOfflineIcon;
     hidden var refreshIcon;
+    hidden var hourglassIcon;
     hidden var loggedOutIcon;
     hidden var errorIcon;
 
@@ -40,6 +41,7 @@ class NestThermoView extends WatchUi.View {
         signalDisconnectedIcon = Application.loadResource(Rez.Drawables.SignalDisconnectedIcon) as Graphics.BitmapResource;
         thermostatOfflineIcon  = Application.loadResource(Rez.Drawables.ThermostatOfflineIcon ) as Graphics.BitmapResource;
         refreshIcon            = Application.loadResource(Rez.Drawables.RefreshIcon           ) as Graphics.BitmapResource;
+        hourglassIcon          = Application.loadResource(Rez.Drawables.HourglassIcon         ) as Graphics.BitmapResource;
         loggedOutIcon          = Application.loadResource(Rez.Drawables.LoggedOutIcon         ) as Graphics.BitmapResource;
         errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
 
@@ -206,14 +208,16 @@ class NestThermoView extends WatchUi.View {
                 if (mNestStatus.getWifiConnection()) {
                     var c = Properties.getValue("oauthCode");
                     if (c != null && !c.equals("")) {
-                        if (mNestStatus.getOnline() || !mNestStatus.gotDeviceData) {
+                        if (mNestStatus.gotDeviceData) {
                             if (mNestStatus.gotDeviceDataError) {
                                 dc.drawBitmap(hw - errorIcon.getWidth()/2, 30, errorIcon);
+                            } else if (!mNestStatus.getOnline()) {
+                                dc.drawBitmap(hw - thermostatOfflineIcon.getWidth()/2, 30, thermostatOfflineIcon);
                             } else {
                                 dc.drawBitmap(hw - refreshIcon.getWidth()/2, 30, refreshIcon);
                             }
                         } else {
-                            dc.drawBitmap(hw - thermostatOfflineIcon.getWidth()/2, 30, thermostatOfflineIcon);
+                            dc.drawBitmap(hw - hourglassIcon.getWidth()/2, 30, hourglassIcon);
                         }
                     } else {
                         dc.drawBitmap(hw - loggedOutIcon.getWidth()/2, 30, loggedOutIcon);
@@ -246,7 +250,7 @@ class NestThermoView extends WatchUi.View {
     }
 }
 
-class NestThermoDelegate extends WatchUi.BehaviorDelegate {
+class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
     var mView;
     function initialize(v) {
         WatchUi.BehaviorDelegate.initialize();

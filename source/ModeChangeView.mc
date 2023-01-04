@@ -26,12 +26,12 @@ class ModeChangeView extends WatchUi.View {
         // modeOffIndex = getIndexOfMode("OFF", mNestStatus.getAvailableThermoModes());
         // ecoOffIndex  = getIndexOfMode("OFF", mNestStatus.getAvailableEcoModes()   );
 
-        heatOffIcon  = Application.loadResource(Rez.Drawables.HeatOffIcon ) as Graphics.BitmapResource;
-        heatOnIcon   = Application.loadResource(Rez.Drawables.HeatOnIcon  ) as Graphics.BitmapResource;
-        coolOnIcon   = Application.loadResource(Rez.Drawables.CoolOnIcon  ) as Graphics.BitmapResource;
-        heatCoolIcon = Application.loadResource(Rez.Drawables.HeatCoolIcon) as Graphics.BitmapResource;
-        ecoOffIcon   = Application.loadResource(Rez.Drawables.EcoOffIcon  ) as Graphics.BitmapResource;
-        ecoOnIcon    = Application.loadResource(Rez.Drawables.EcoOnIcon   ) as Graphics.BitmapResource;
+        heatOffIcon  = Application.loadResource(Rez.Drawables.HeatOffLgIcon ) as Graphics.BitmapResource;
+        heatOnIcon   = Application.loadResource(Rez.Drawables.HeatOnLgIcon  ) as Graphics.BitmapResource;
+        coolOnIcon   = Application.loadResource(Rez.Drawables.CoolOnLgIcon  ) as Graphics.BitmapResource;
+        heatCoolIcon = Application.loadResource(Rez.Drawables.HeatCoolLgIcon) as Graphics.BitmapResource;
+        ecoOffIcon   = Application.loadResource(Rez.Drawables.EcoOffLgIcon  ) as Graphics.BitmapResource;
+        ecoOnIcon    = Application.loadResource(Rez.Drawables.EcoOnLgIcon   ) as Graphics.BitmapResource;
 
         var w = dc.getWidth();
         var h = dc.getHeight();
@@ -78,18 +78,18 @@ class ModeChangeView extends WatchUi.View {
         dc.clear();
 
         dc.drawText(
-            w/2, 50, Graphics.FONT_SMALL,
+            w/2, h/4, Graphics.FONT_SMALL,
             "Set Modes",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+        modeButton.draw(dc);
+        ecoButton.draw(dc);
+        dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.drawText(
-            w/2, 100, Graphics.FONT_XTINY,
+            w/2, h*3/4, Graphics.FONT_XTINY,
             "Tap Icons",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-
-        modeButton.draw(dc);
-        ecoButton.draw(dc);
 
         var posx = w/4-heatOffIcon.getWidth()/2;
         var posy = h/2-heatOffIcon.getHeight()/2;
