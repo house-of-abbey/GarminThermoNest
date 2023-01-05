@@ -522,6 +522,8 @@ class NestStatus {
             var o = 21 + projectId.length();
             for (var i = 0; i < devices.size(); i++) {
                 var device = devices[i];
+                // API documentation says not to rely on this value remaining unchanged.
+                // See https://developers.google.com/nest/device-access/traits#device-types
                 if (device.get("type").equals("sdm.devices.types.THERMOSTAT")) {
                     var n = device.get("traits").get("sdm.devices.traits.Info").get("customName");
                     var r = (device.get("parentRelations") as Lang.Array<Lang.Dictionary>)[0].get("displayName");

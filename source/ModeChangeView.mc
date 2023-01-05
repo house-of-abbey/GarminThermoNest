@@ -14,10 +14,14 @@ class ModeChangeView extends WatchUi.View {
     hidden var heatCoolIcon;
     hidden var ecoOffIcon;
     hidden var ecoOnIcon;
+    hidden var setModeLabel as String;
+    hidden var tapIconLabel as String;
 
     function initialize(s) {
         View.initialize();
-        mNestStatus = s;
+        mNestStatus  = s;
+        setModeLabel = WatchUi.loadResource($.Rez.Strings.setMode) as String;
+        tapIconLabel = WatchUi.loadResource($.Rez.Strings.tapIcon) as String;
     }
 
     // Load your resources here
@@ -79,7 +83,7 @@ class ModeChangeView extends WatchUi.View {
 
         dc.drawText(
             w/2, h/4, Graphics.FONT_SMALL,
-            "Set Modes",
+            setModeLabel, // "Set Modes"
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         modeButton.draw(dc);
@@ -87,7 +91,7 @@ class ModeChangeView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.drawText(
             w/2, h*3/4, Graphics.FONT_XTINY,
-            "Tap Icons",
+            tapIconLabel, // "Tap Icons"
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
