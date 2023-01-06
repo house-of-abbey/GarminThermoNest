@@ -1,0 +1,30 @@
+//-----------------------------------------------------------------------------------
+//
+// Distributed under MIT Licence
+//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//
+//-----------------------------------------------------------------------------------
+//
+// ThermoNest is a Garmin IQ application written in Monkey C and routinely tested on
+// a Venu 2 device. The source code is provided at:
+//            https://github.com/house-of-abbey/GarminThermoNest.
+//
+// J D Abbey & P A Abbey, 28 December 2022
+//
+//
+// Description:
+//
+// Somewhere to store personal credentials that should not be shared. Rename this
+// file ClientId.mc to avoid committing it back to GitHub. That file name is in
+// .gitignore.
+//
+//-----------------------------------------------------------------------------------
+
+(:glance)
+class ClientId {
+    // Create your Google Cloud Project and add the ID here:
+    static const projectId    = "";
+    // Then create your "OAuth 2.0 Client ID" and place the results in here:
+    static const clientId     = "";
+    static const clientSecret = "";
+}

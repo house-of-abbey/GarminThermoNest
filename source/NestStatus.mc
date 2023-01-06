@@ -33,11 +33,6 @@ import Toybox.Application.Properties;
 import Toybox.Time;
 import Toybox.Math;
 
-const clientId     = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
-const clientSecret = "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";
-// This is our personal project ID, if you clone the source, please use your own Google Cloud Project
-const projectId    = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
-
 (:glance)
 class NestStatus {
     // Explicit value assignment
@@ -361,7 +356,7 @@ class NestStatus {
     }
 
     private function executeCommand(payload as Dictionary, callback) {
-        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId") + ":executeCommand";
+        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices/" + Properties.getValue("deviceId") + ":executeCommand";
 
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_POST,
@@ -502,7 +497,7 @@ class NestStatus {
     }
 
     function getDeviceData() as Void {
-        var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices/" + Properties.getValue("deviceId");
+        var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices/" + Properties.getValue("deviceId");
         var options = {
             :method  => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
@@ -527,7 +522,7 @@ class NestStatus {
         if (responseCode == 200) {
             var devices = data.get("devices") as Lang.Array;
             var menu = new WatchUi.Menu2({ :title => "Devices" });
-            var o = 21 + projectId.length();
+            var o = 21 + ClientId.projectId.length();
             for (var i = 0; i < devices.size(); i++) {
                 var device = devices[i];
                 // API documentation says not to rely on this value remaining unchanged.
@@ -568,7 +563,7 @@ class NestStatus {
         if (c != null && !c.equals("")) {
             getDeviceData();
         } else {
-            var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + projectId + "/devices";
+            var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices";
             var options  = {
                 :method  => Communications.HTTP_REQUEST_METHOD_GET,
                 :headers => {
@@ -634,8 +629,8 @@ class NestStatus {
                 // Access token expired, use refresh token to get a new one
                 var payload = {
                     "refresh_token" => c,
-                    "client_id"     => clientId,
-                    "client_secret" => clientSecret,
+                    "client_id"     => ClientId.clientId,
+                    "client_secret" => ClientId.clientSecret,
                     "grant_type"    => "refresh_token"
                 };
 
@@ -654,8 +649,8 @@ class NestStatus {
         } else {
             var payload = {
                 "code"          => Properties.getValue("oauthCode"),
-                "client_id"     => clientId,
-                "client_secret" => clientSecret,
+                "client_id"     => ClientId.clientId,
+                "client_secret" => ClientId.clientSecret,
                 "redirect_uri"  => "https://house-of-abbey.github.io/GarminThermoNest/auth",
                 "grant_type"    => "authorization_code"
             };
@@ -688,9 +683,9 @@ class NestStatus {
 
         // for the time being, we cannot use the oauth api because google does not allow signin in a webview
         // instead we will do it manually
-        Communications.openWebPage("https://nestservices.google.com/partnerconnections/" + projectId + "/auth", {
+        Communications.openWebPage("https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth", {
             "access_type"            => "offline",
-            "client_id"              => clientId,
+            "client_id"              => ClientId.clientId,
             "include_granted_scopes" => "true",
             "prompt"                 => "consent",
             "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
