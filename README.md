@@ -1,2 +1,3 @@
 # GarminThermoNest
-An app for garmin watches that allows you to controll your thermostat.
+
+An application for Garmin IQ watches that allows you to control your Nest thermostat.

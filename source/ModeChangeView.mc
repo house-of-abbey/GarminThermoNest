@@ -1,3 +1,24 @@
+//-----------------------------------------------------------------------------------
+//
+// Distributed under MIT Licence
+//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//
+//-----------------------------------------------------------------------------------
+//
+// ThermoNest is a Garmin IQ application written in Monkey C and routinely tested on
+// a Venu 2 device. The source code is provided at:
+//            https://github.com/house-of-abbey/GarminThermoNest.
+//
+// J D Abbey & P A Abbey, 28 December 2022
+//
+//
+// Description:
+//
+// ModeChangeView provides the screen view to change both the thermostats HVAC mode
+// and the eco mode.
+//
+//-----------------------------------------------------------------------------------
+
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;

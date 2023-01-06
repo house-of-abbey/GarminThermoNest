@@ -1,3 +1,25 @@
+//-----------------------------------------------------------------------------------
+//
+// Distributed under MIT Licence
+//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//
+//-----------------------------------------------------------------------------------
+//
+// ThermoNest is a Garmin IQ application written in Monkey C and routinely tested on
+// a Venu 2 device. The source code is provided at:
+//            https://github.com/house-of-abbey/GarminThermoNest.
+//
+// J D Abbey & P A Abbey, 28 December 2022
+//
+//
+// Description:
+//
+// ErrorView provides a means to present application errors to the user. These
+// should not happen of course... but they do, so best make sure errors can be
+// reported.
+//
+//-----------------------------------------------------------------------------------
+
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.System;

@@ -1,3 +1,29 @@
+//-----------------------------------------------------------------------------------
+//
+// Distributed under MIT Licence
+//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//
+//-----------------------------------------------------------------------------------
+//
+// ThermoNest is a Garmin IQ application written in Monkey C and routinely tested on
+// a Venu 2 device. The source code is provided at:
+//            https://github.com/house-of-abbey/GarminThermoNest.
+//
+// J D Abbey & P A Abbey, 28 December 2022
+//
+//
+// Description:
+//
+// NestStatus provides the background services for interacting with the Nest API and
+// the Google Cloud Project hosting the REST API access we paid for. In the main it
+// provides a cache of the online status locally, but is also used to update the
+// desired settings and post new settings back to the REST API.
+//
+// References:
+//  * https://developers.google.com/nest/device-access/api/thermostat.
+//
+//-----------------------------------------------------------------------------------
+
 import Toybox.System;
 import Toybox.Communications;
 import Toybox.Authentication;
@@ -9,6 +35,7 @@ import Toybox.Math;
 
 const clientId     = "663092493602-gkj7tshigspr28717gl3spred11oufpf.apps.googleusercontent.com";
 const clientSecret = "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";
+// This is our personal project ID, if you clone the source, please use your own Google Cloud Project
 const projectId    = "0d2f1cec-7a7f-4435-99c9-6ed664080826";
 
 (:glance)
