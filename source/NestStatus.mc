@@ -57,31 +57,12 @@ class NestStatus {
 
     function initialize(h) {
         requestCallback = h;
-        // Performs OAuth too
-        Communications.checkWifiConnection(method(:onReceiveWifiConnectionA));
-    }
-
-    function onReceiveWifiConnection(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        wifiConnection = result.get(:wifiAvailable);
-        requestCallback.invoke();
-    }
-    // Perform OAuth in addition to checking the connectivity
-    function onReceiveWifiConnectionA(result as { :errorCode as Communications.WifiConnectionStatus, :wifiAvailable as Lang.Boolean }) as Void {
-        if (result.get(:wifiAvailable)) {
+        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var c = Properties.getValue("oauthCode");
             if (c != null && !c.equals("")) {
                 getOAuthToken();
             }
         }
-        onReceiveWifiConnection(result);
-    }
-    // Returning existing value without update
-    function getWifiConnection() as Lang.Boolean {
-        return wifiConnection;
-    }
-    // Perform an asynchronous check to update 'wifiConnection'.
-    function checkWifiConnection() as Void {
-        Communications.checkWifiConnection(method(:onReceiveWifiConnection));
     }
 
     function getOnline() as Lang.Boolean {

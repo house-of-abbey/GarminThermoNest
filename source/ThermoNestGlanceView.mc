@@ -32,7 +32,8 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
 
     function onUpdate(dc) {
         if (System.getDeviceSettings().phoneConnected) {
-            if (mNestStatus.getWifiConnection()) {
+            // if (mNestStatus.getWifiConnection()) { // Only tests for WiFi not LTE
+            if (System.getDeviceSettings().connectionAvailable) {
                 var c = Properties.getValue("oauthCode");
                 if (c != null && !c.equals("")) {
                     if (mNestStatus.gotDeviceData) {

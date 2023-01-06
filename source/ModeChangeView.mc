@@ -27,9 +27,6 @@ class ModeChangeView extends WatchUi.View {
     // Load your resources here
     function onLayout(dc as Dc) as Void {
 
-        // modeOffIndex = getIndexOfMode("OFF", mNestStatus.getAvailableThermoModes());
-        // ecoOffIndex  = getIndexOfMode("OFF", mNestStatus.getAvailableEcoModes()   );
-
         heatOffIcon  = Application.loadResource(Rez.Drawables.HeatOffLgIcon ) as Graphics.BitmapResource;
         heatOnIcon   = Application.loadResource(Rez.Drawables.HeatOnLgIcon  ) as Graphics.BitmapResource;
         coolOnIcon   = Application.loadResource(Rez.Drawables.CoolOnLgIcon  ) as Graphics.BitmapResource;
@@ -128,16 +125,6 @@ class ModeChangeView extends WatchUi.View {
         }
 
     }
-
-    // private function getIndexOfMode(item as Lang.String, arr as Lang.Array) {
-    //     for (var i = 0; i < arr.size(); i++) {
-    //         if (item.equals(arr[i])) {
-    //             return i;
-    //         }
-    //     }
-    //     // Error
-    //     return arr.size()+1;
-    // }
 
     function onModeButton() as Void {
         mNestStatus.nextAvailableThermoModes();

@@ -205,7 +205,7 @@ class ThermoNestView extends WatchUi.View {
         // Overdraw the button when enabled
         if (refreshButton.getState() != :stateDisabled) {
             if (System.getDeviceSettings().phoneConnected) {
-                if (mNestStatus.getWifiConnection()) {
+                if (System.getDeviceSettings().connectionAvailable) {
                     var c = Properties.getValue("oauthCode");
                     if (c != null && !c.equals("")) {
                         if (mNestStatus.gotDeviceData) {
@@ -239,7 +239,6 @@ class ThermoNestView extends WatchUi.View {
     }
 
     function onRefreshButton() as Void {
-        mNestStatus.checkWifiConnection();
         mNestStatus.getOAuthToken();
         refreshButton.setState(:stateDisabled);
         requestUpdate();
@@ -260,14 +259,14 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         return mView.onRefreshButton(); 
     }
     function onPreviousPage() {
-        if (System.getDeviceSettings().phoneConnected && mView.getNestStatus().getWifiConnection()) {
+        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var v = new ModeChangeView(mView.getNestStatus());
             WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_UP);
         }
         return true;
     }
     function onNextPage() {
-        if (System.getDeviceSettings().phoneConnected && mView.getNestStatus().getWifiConnection()) {
+        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var v = new TempChangeView(mView.getNestStatus());
             WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
         }
