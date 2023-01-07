@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Eszközazonosító – Az eszközelérési projektből lekért kiválasztott eszközazonosító. Ügyeljen arra, hogy azonosítsa a Nest Thermostat eszközazonosítóját.
  </string>

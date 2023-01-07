@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   ID อุปกรณ์ - ID อุปกรณ์ที่เลือกดึงมาจากโครงการการเข้าถึงอุปกรณ์ของคุณ ตรวจสอบว่าคุณระบุรหัสอุปกรณ์ของ Nest Thermostat
  </string>

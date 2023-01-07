@@ -13,7 +13,6 @@
 -->
 
 <properties>
-  <property id="appVersion"        type="string">0.0.17</property>
   <property id="deviceId"          type="string"></property>
   <property id="oauthCode"         type="string"></property>
   <property id="accessToken"       type="string"></property>

@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   设备 ID - 从您的设备访问项目中检索到的所选设备 ID。请务必识别 Nest Thermostat 的设备 ID。
  </string>

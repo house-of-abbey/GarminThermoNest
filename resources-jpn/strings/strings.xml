@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   デバイス ID - デバイス アクセス プロジェクトから取得した、選択したデバイス ID。 Nest Thermostat のデバイス ID を確認してください。
  </string>

@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   ID thiết bị - ID thiết bị đã chọn được truy xuất từ ​​dự án truy cập thiết bị của bạn. Đảm bảo bạn xác định được ID thiết bị của Nest Thermostat.
  </string>

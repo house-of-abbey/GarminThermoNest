@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   ID zařízení – ID vybraného zařízení získané z vašeho projektu přístupu k zařízení. Ujistěte se, že jste identifikovali ID zařízení termostatu Nest.
  </string>

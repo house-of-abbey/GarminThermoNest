@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   מזהה מכשיר - מזהה המכשיר הנבחר מאוחזר מפרויקט הגישה למכשיר שלך. ודא שאתה מזהה את מזהה המכשיר של Nest Thermostat שלך.
  </string>

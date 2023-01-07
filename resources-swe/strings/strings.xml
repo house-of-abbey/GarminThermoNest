@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Enhets-ID - Det valda enhets-ID:t hämtat från ditt enhetsåtkomstprojekt. Se till att du identifierar enhets-ID för din Nest Thermostat.
  </string>

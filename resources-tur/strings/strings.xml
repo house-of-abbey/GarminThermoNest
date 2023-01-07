@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Cihaz Kimliği - Cihaz erişim projenizden alınan seçilen cihaz kimliği. Nest Termostatınızın cihaz kimliğini tanımladığınızdan emin olun.
  </string>

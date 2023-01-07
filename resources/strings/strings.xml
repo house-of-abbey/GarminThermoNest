@@ -17,7 +17,6 @@
 
 <strings>
     <string id="AppName">ThermoNest</string>
-    <string id="AppVersionTitle">Alpha</string>
 
     <string id="deviceIdTitle">Device ID - The chosen device ID retrieved from your device access project. Make sure you identify the device ID of your Nest Thermostat.</string>
     <string id="deviceIdPrompt">Filled in by in application selection.</string>

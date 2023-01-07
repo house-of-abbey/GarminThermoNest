@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   معرف الجهاز - معرف الجهاز المختار الذي تم استرداده من مشروع الوصول إلى جهازك. تأكد من تحديد معرف الجهاز الخاص بك من Nest Thermostat.
  </string>

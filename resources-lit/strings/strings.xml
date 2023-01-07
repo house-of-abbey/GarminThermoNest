@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Įrenginio ID – pasirinktas įrenginio ID, gautas iš įrenginio prieigos projekto. Įsitikinkite, kad nustatėte „Nest“ termostato įrenginio ID.
  </string>

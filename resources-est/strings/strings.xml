@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Seadme ID – valitud seadme ID, mis on hangitud teie seadme juurdepääsuprojektist. Veenduge, et tuvastaksite oma Nesti termostaadi seadme ID.
  </string>

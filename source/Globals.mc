@@ -21,6 +21,9 @@
 
 (:glance)
 class Globals {
+    // Enable printing of messages to the debug console (don't make this a Property
+    // as the messages can't be read from a watch!)
+    static const debug        = false;
     // Multi-dot navigation drawable on each View
     static const navRadius    = 5;
     static const navMarginX   = 30;

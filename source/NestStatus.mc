@@ -20,7 +20,9 @@
 // desired settings and post new settings back to the REST API.
 //
 // References:
-//  * https://developers.google.com/nest/device-access/api/thermostat.
+//  * https://developers.google.com/nest/device-access/registration
+//  * https://developers.google.com/nest/device-access/api/thermostat
+//  * https://developers.google.com/nest/device-access/traits
 //
 //-----------------------------------------------------------------------------------
 
@@ -46,7 +48,6 @@ class NestStatus {
 
     hidden var requestCallback;
     public var isGlance             = false as Lang.Boolean;
-    hidden var debug                = false as Lang.Boolean;
 
     hidden var online               = false as Lang.Boolean;
     hidden var name                 = ""    as Lang.String;
@@ -131,7 +132,7 @@ class NestStatus {
         }
     }
     function onReturnHeatTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onReturnHeatTemp() Response Code: " + responseCode);
             System.println("onReturnHeatTemp() Response Data: " + data);
         }
@@ -153,7 +154,7 @@ class NestStatus {
                     }
                 }, method(:onReturnHeatTemp));
             } else {
-                if (debug) {
+                if (Globals.debug) {
                     System.println("Skipping executeHeatTemp() as no change.");
                 }
             }
@@ -183,7 +184,7 @@ class NestStatus {
         }
     }
     function onReturnCoolTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onReturnCoolTemp() Response Code: " + responseCode);
             System.println("onReturnCoolTemp() Response Data: " + data);
         }
@@ -205,7 +206,7 @@ class NestStatus {
                     }
                 }, method(:onReturnCoolTemp));
             } else {
-                if (debug) {
+                if (Globals.debug) {
                     System.println("Skipping executeCoolTemp() as no change.");
                 }
             }
@@ -234,7 +235,7 @@ class NestStatus {
         setThermoMode((availableThermoModes as Lang.Array)[(availableThermoModes.indexOf(thermoMode)+1) % availableThermoModes.size()]);
     }
     function onReturnThermoMode(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onReturnThermoMode() Response Code: " + responseCode);
             System.println("onReturnThermoMode() Response Data: " + data);
         }
@@ -255,7 +256,7 @@ class NestStatus {
                 }
             }, method(:onReturnThermoMode));
         } else {
-            if (debug) {
+            if (Globals.debug) {
                 System.println("Skipping executeThermoMode() as no change.");
             }
             executeMode(NoThermo);
@@ -292,7 +293,7 @@ class NestStatus {
         }
     }
     function onReturnEco(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onReturnEco() Response Code: " + responseCode);
             System.println("onReturnEco() Response Data: " + data);
         }
@@ -313,7 +314,7 @@ class NestStatus {
                 }
             }, method(:onReturnEco));
         } else {
-            if (debug) {
+            if (Globals.debug) {
                 System.println("Skipping executeEco() as no change.");
             }
             executeMode(NoEco);
@@ -369,7 +370,9 @@ class NestStatus {
         if (System.getDeviceSettings().phoneConnected && wifiConnection) {
             Communications.makeWebRequest(url, payload, options, callback);
         } else {
-            System.println("Note - executeCommand(): No Internet connection, skipping API call.");
+            if (Globals.debug) {
+                System.println("Note - executeCommand(): No Internet connection, skipping API call.");
+            }
         }
     }
 
@@ -382,28 +385,28 @@ class NestStatus {
                     var con = traits.get("sdm.devices.traits.Connectivity") as Dictionary;
                     if (con != null) {
                         online = (con.get("status") as Lang.String).equals("ONLINE");
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Status: " + (online ? "On line" : "Off line"));
                         }
                     }
                     var info = traits.get("sdm.devices.traits.Info") as Dictionary;
                     if (info != null) {
                         name = info.get("customName") as Lang.String;
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Name: '" + name + "'");
                         }
                     }
                     var settings = traits.get("sdm.devices.traits.Settings") as Dictionary;
                     if (settings != null) {
                         scale = (settings.get("temperatureScale") as Lang.String).equals("CELSIUS") ? 'C' : 'F';
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Scale: '" + scale + "'");
                         }
                     }
                     var e = traits.get("sdm.devices.traits.Temperature") as Dictionary;
                     if (e != null) {
                         ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Number);
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Temperature: " + ambientTemp + " deg C");
                         }
                     }
@@ -411,7 +414,7 @@ class NestStatus {
                     if (ttsp != null) {
                         heatTemp = round(ttsp.get("heatCelsius") as Lang.Number);
                         coolTemp = round(ttsp.get("coolCelsius") as Lang.Number);
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Heat Temperature: " + heatTemp + " deg C");
                             System.println(" Cool Temperature: " + coolTemp + " deg C");
                         }
@@ -419,7 +422,7 @@ class NestStatus {
                     var h = traits.get("sdm.devices.traits.Humidity") as Dictionary;
                     if (h != null) {
                         humidity = h.get("ambientHumidityPercent") as Lang.Number;
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Humidity: " + humidity + " %");
                         }
                     }
@@ -427,7 +430,7 @@ class NestStatus {
                     if (tm != null) {
                         availableThermoModes = tm.get("availableModes") as Lang.Array;
                         thermoMode = tm.get("mode") as Lang.String;
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Thermo Modes: " + availableThermoModes);
                             System.println(" ThermostatMode: " + thermoMode);
                         }
@@ -435,7 +438,7 @@ class NestStatus {
                     var th = traits.get("sdm.devices.traits.ThermostatHvac") as Dictionary;
                     if (th != null) {
                         hvac = th.get("status") as Lang.String;
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" ThermostatHvac: " + hvac);
                         }
                     }
@@ -443,14 +446,14 @@ class NestStatus {
                     if (te != null) {
                         availableEcoModes = te.get("availableModes") as Lang.Array;
                         eco = (te.get("mode") as Lang.String).equals("MANUAL_ECO");
-                        if (debug) {
+                        if (Globals.debug) {
                             System.println(" Eco Modes: " + availableEcoModes);
                             System.println(" ThermostatEco: " + (eco ? "Eco" : "Off"));
                         }
                         if (eco) {
                             heatTemp = round(te.get("heatCelsius") as Lang.Number);
                             coolTemp = round(te.get("coolCelsius") as Lang.Number);
-                            if (debug) {
+                            if (Globals.debug) {
                                 System.println(" Heat Temperature: " + heatTemp + " deg C (eco)");
                                 System.println(" Cool Temperature: " + coolTemp + " deg C (eco)");
                             }
@@ -462,7 +465,7 @@ class NestStatus {
             gotDeviceDataError = false;
             requestCallback.invoke();
         } else {
-            if (debug) {
+            if (Globals.debug) {
                 System.println("onReceiveDeviceData() Response Code: " + responseCode);
                 System.println("onReceiveDeviceData() Response Data: " + data);
             }
@@ -485,7 +488,7 @@ class NestStatus {
                 if (!isGlance && (data != null)) {
                     WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 } else {
-                    if (debug) {
+                    if (Globals.debug) {
                         System.println("onReceiveDeviceData() Response Code: " + responseCode);
                         System.println("onReceiveDeviceData() Response Data: " + data);
                     }
@@ -510,12 +513,14 @@ class NestStatus {
         if (System.getDeviceSettings().phoneConnected && wifiConnection) {
             Communications.makeWebRequest(url, null, options, method(:onReceiveDeviceData));
         } else {
-            System.println("Note - getDeviceData(): No Internet connection, skipping API call.");
+            if (Globals.debug) {
+                System.println("Note - getDeviceData(): No Internet connection, skipping API call.");
+            }
         }
     }
 
     function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onReceiveDevices() Response Code: " + responseCode);
             System.println("onReceiveDevices() Response Data: " + data);
         }
@@ -550,7 +555,7 @@ class NestStatus {
             if (!isGlance && (data != null)) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             } else {
-                if (debug) {
+                if (Globals.debug) {
                     System.println("onReceiveDeviceData() Response Code: " + responseCode);
                     System.println("onReceiveDeviceData() Response Data: " + data);
                 }
@@ -576,20 +581,22 @@ class NestStatus {
             if (System.getDeviceSettings().phoneConnected && wifiConnection) {
                 Communications.makeWebRequest(url, null, options, method(:onReceiveDevices));
             } else {
-                System.println("Note - getDevices(): No Internet connection, skipping API call.");
+                if (Globals.debug) {
+                    System.println("Note - getDevices(): No Internet connection, skipping API call.");
+                }
             }
         }
     }
 
     function onRecieveRefreshAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onRecieveRefreshAccessToken() Response Code: " + responseCode);
             System.println("onRecieveRefreshAccessToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Number));
-            if (debug) {
+            if (Globals.debug) {
                 System.println("onRecieveRefreshAccessToken() accessToken: " + Properties.getValue("accessToken"));
             }
             getDevices();
@@ -601,7 +608,7 @@ class NestStatus {
     }
 
     function onRecieveAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
-        if (debug) {
+        if (Globals.debug) {
             System.println("onRecieveAccessToken() Response Code: " + responseCode);
             System.println("onRecieveAccessToken() Response Data: " + data);
         }
@@ -609,7 +616,7 @@ class NestStatus {
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Number));
             Properties.setValue("refreshToken", data.get("refresh_token"));
-            if (debug) {
+            if (Globals.debug) {
                 System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
                 System.println("onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
             }
@@ -734,7 +741,9 @@ class DevicesMenuInputDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item) {
         Properties.setValue("deviceId", item.getId());
-        System.println("deviceId: " + Properties.getValue("deviceId"));
+        if (Globals.debug) {
+            System.println("deviceId: " + Properties.getValue("deviceId"));
+        }
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
         mNestStatus.getDeviceData();
     }

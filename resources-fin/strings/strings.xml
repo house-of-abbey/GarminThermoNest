@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Laitetunnus – Laitekäyttöprojektistasi haettu valittu laitetunnus. Varmista, että tunnistat Nest-termostaatin laitetunnuksen.
  </string>

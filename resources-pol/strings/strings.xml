@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Identyfikator urządzenia — wybrany identyfikator urządzenia pobrany z projektu dostępu do urządzenia. Upewnij się, że zidentyfikowałeś identyfikator urządzenia termostatu Nest.
  </string>

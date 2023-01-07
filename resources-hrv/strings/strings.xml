@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   ID uređaja - odabrani ID uređaja dohvaćen iz vašeg projekta pristupa uređaju. Provjerite jeste li identificirali ID uređaja svog Nest Thermostata.
  </string>
@@ -36,7 +33,7 @@
   Zalijepi rezultat s web stranice.
  </string>
  <string id="tokenGroupTitle">
-  Autorizacijski tokeni - njima upravlja aplikacija, ali ovdje je omogućena vidljivost.
+  Tokeni autorizacije - njima upravlja aplikacija, ali ovdje je omogućena vidljivost.
  </string>
  <string id="accessTokenTitle">
   Pristupni token - OAuth2 autorizacijski pristupni token za vaš Google Nest SDM API projekt. Izvedeno iz OAuth koda i traje 1 sat.

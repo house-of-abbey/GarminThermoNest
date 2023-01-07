@@ -52,9 +52,11 @@ class ThermoNestApp extends Application.AppBase {
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
-        System.println(Lang.format("appVersion: $1$", [Properties.getValue("appVersion")]));
-        System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-        System.println(Lang.format("deviceId: $1$", [Properties.getValue("deviceId")]));
+        if (Globals.debug) {
+            System.println(Lang.format("appVersion: $1$",  [Properties.getValue("appVersion")]));
+            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            System.println(Lang.format("deviceId: $1$",    [Properties.getValue("deviceId")]));
+        }
     }
 
     // onStop() is called when your application is exiting
@@ -69,9 +71,11 @@ class ThermoNestApp extends Application.AppBase {
     }
 
     function onSettingsChanged() {
-        System.println(Lang.format("appVersion: $1$", [Properties.getValue("appVersion")]));
-        System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-        System.println(Lang.format("deviceId: $1$", [Properties.getValue("deviceId")]));
+        if (Globals.debug) {
+            System.println(Lang.format("appVersion: $1$",  [Properties.getValue("appVersion")]));
+            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
+            System.println(Lang.format("deviceId: $1$",    [Properties.getValue("deviceId")]));
+        }
     }
 }
 

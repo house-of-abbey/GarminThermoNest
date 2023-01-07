@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Ідентифікатор пристрою – вибраний ідентифікатор пристрою, отриманий із вашого проекту доступу до пристрою. Переконайтеся, що ви ідентифікували ідентифікатор пристрою Nest Thermostat.
  </string>

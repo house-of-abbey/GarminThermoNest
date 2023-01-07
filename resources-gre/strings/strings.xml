@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   Αναγνωριστικό συσκευής - Το επιλεγμένο αναγνωριστικό συσκευής που ανακτήθηκε από το έργο πρόσβασης στη συσκευή σας. Βεβαιωθείτε ότι έχετε αναγνωρίσει το αναγνωριστικό συσκευής του Θερμοστάτη Nest.
  </string>

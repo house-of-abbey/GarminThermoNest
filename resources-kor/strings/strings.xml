@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   장치 ID - 장치 액세스 프로젝트에서 검색된 선택한 장치 ID입니다. Nest Thermostat의 기기 ID를 확인하세요.
  </string>

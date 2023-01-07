@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   ID del dispositivo: la ID del dispositivo elegido recuperada de su proyecto de acceso al dispositivo. Asegúrate de identificar el ID del dispositivo de tu termostato Nest.
  </string>

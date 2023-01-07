@@ -20,9 +20,6 @@
  <string id="AppName">
   ThermoNest
  </string>
- <string id="AppVersionTitle">
-  Alpha
- </string>
  <string id="deviceIdTitle">
   ID dispozitiv - ID-ul dispozitivului ales extras din proiectul dvs. de acces la dispozitiv. Asigurați-vă că identificați ID-ul dispozitivului termostatului dvs. Nest.
  </string>
