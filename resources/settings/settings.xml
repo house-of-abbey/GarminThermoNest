@@ -17,42 +17,70 @@
 -->
 
 <settings>
-  <setting propertyKey="@Properties.appVersion" title="@Strings.AppVersionTitle">
-    <settingConfig type="alphaNumeric" readonly="true" />
+  <setting
+    propertyKey="@Properties.appVersion"
+    title="@Strings.AppVersionTitle"
+  >
+    <settingConfig
+      type="alphaNumeric"
+      readonly="true"
+    />
   </setting>
 
-  <group id="deviceIdGroup" title="@Strings.deviceIdTitle" description="@Strings.deviceIdDesc">
-    <setting propertyKey="@Properties.deviceId" title="@Strings.deviceIdTitle"
-      prompt="@Strings.deviceIdPrompt">
-      <settingConfig type="alphaNumeric" />
-    </setting>
-  </group>
+  <setting
+    propertyKey="@Properties.deviceId"
+    title="@Strings.deviceIdTitle"
+    prompt="@Strings.deviceIdPrompt"
+  >
+    <settingConfig
+      type="alphaNumeric"
+    />
+  </setting>
 
-  <group id="oauthCodeGroup" title="@Strings.oauthCodeTitle" description="@Strings.oauthCodeDesc">
-    <setting propertyKey="@Properties.oauthCode" title="@Strings.oauthCodeTitle"
-      prompt="@Strings.oauthCodePrompt">
-      <settingConfig type="alphaNumeric" />
-    </setting>
-  </group>
+  <setting
+    propertyKey="@Properties.oauthCode"
+    title="@Strings.oauthCodeTitle"
+    prompt="@Strings.oauthCodePrompt"
+  >
+    <settingConfig
+      type="alphaNumeric"
+    />
+  </setting>
 
-  <group id="accessTokenGroup" title="@Strings.accessTokenTitle" description="@Strings.accessTokenDesc">
-    <setting propertyKey="@Properties.accessToken" title="@Strings.accessTokenTitle"
-      prompt="@Strings.appManagedPrompt">
-      <settingConfig type="alphaNumeric" />
-    </setting>
-  </group>
+  <group
+    id="tokenGroup"
+    title="@Strings.tokenGroupTitle"
+  >
 
-  <group id="accessTokenExpireGroup" title="@Strings.accessTokenExpireTitle" description="@Strings.accessTokenExpireDesc">
-    <setting propertyKey="@Properties.accessTokenExpire" title="@Strings.accessTokenExpireTitle"
-      prompt="@Strings.appManagedPrompt">
-      <settingConfig type="numeric" />
+    <setting
+      propertyKey="@Properties.accessToken"
+      title="@Strings.accessTokenTitle"
+      prompt="@Strings.appManagedPrompt"
+    >
+      <settingConfig
+        type="alphaNumeric"
+      />
     </setting>
-  </group>
 
-  <group id="refreshTokenGroup" title="@Strings.refreshTokenTitle" description="@Strings.refreshTokenDesc">
-    <setting propertyKey="@Properties.refreshToken" title="@Strings.refreshTokenTitle"
-      prompt="@Strings.appManagedPrompt">
-      <settingConfig type="alphaNumeric" />
+    <setting
+      propertyKey="@Properties.accessTokenExpire"
+      title="@Strings.accessTokenExpireTitle"
+      prompt="@Strings.appManagedPrompt"
+    >
+      <settingConfig
+        type="numeric"
+      />
     </setting>
+
+    <setting
+      propertyKey="@Properties.refreshToken"
+      title="@Strings.refreshTokenTitle"
+      prompt="@Strings.appManagedPrompt"
+    >
+      <settingConfig
+        type="alphaNumeric"
+      />
+    </setting>
+
   </group>
 </settings>

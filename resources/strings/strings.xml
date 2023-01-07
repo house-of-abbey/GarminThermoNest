@@ -10,29 +10,25 @@
 
    J D Abbey & P A Abbey, 28 December 2022
 
+   References:
+    * https://developer.garmin.com/connect-iq/core-topics/resources/
+
 -->
 
 <strings>
     <string id="AppName">ThermoNest</string>
     <string id="AppVersionTitle">Alpha</string>
 
-    <string id="deviceIdTitle">Device ID</string>
-    <string id="deviceIdDesc">The chosen device ID retrieved from your device access project. Make sure you identify the device ID of your Nest Thermostat.</string>
-    <string id="deviceIdPrompt">Filled in by in App selection.</string>
+    <string id="deviceIdTitle">Device ID - The chosen device ID retrieved from your device access project. Make sure you identify the device ID of your Nest Thermostat.</string>
+    <string id="deviceIdPrompt">Filled in by in application selection.</string>
 
-    <string id="oauthCodeTitle">OAuth Code</string>
-    <string id="oauthCodeDesc">OAuth2 Authorisation Code for your Google Nest SDM API project.</string>
+    <string id="oauthCodeTitle">OAuth Code - OAuth2 Authorisation Code for your Google Nest SDM API project.</string>
     <string id="oauthCodePrompt">Paste result from web page.</string>
 
-    <string id="accessTokenTitle">Access Token</string>
-    <string id="accessTokenDesc">OAuth2 Authorisation Access Token for your Google Nest SDM API project. Derived from OAuth Code and lasts 1 hour.</string>
-
-    <string id="accessTokenExpireTitle">Access Token Expire</string>
-    <string id="accessTokenExpireDesc">A UTC time value for when the access token expires.</string>
-
-    <string id="refreshTokenTitle">Refresh Token</string>
-    <string id="refreshTokenDesc">OAuth2 Authorisation Refresh Token for your Google Nest SDM API project. Used to refresh the access token once it has expired.</string>
-
+    <string id="tokenGroupTitle">Authorisation Tokens - The application manages these, but visibility is provided here.</string>
+    <string id="accessTokenTitle">Access Token - OAuth2 Authorisation Access Token for your Google Nest SDM API project. Derived from OAuth Code and lasts 1 hour.</string>
+    <string id="accessTokenExpireTitle">Access Token Expire - A UTC time value for when the access token expires.</string>
+    <string id="refreshTokenTitle">Refresh Token - OAuth2 Authorisation Refresh Token for your Google Nest SDM API project. Used to refresh the access token once it has expired.</string>
     <string id="appManagedPrompt">Managed by the App.</string>
 
     <!-- To enable language localisation -->
