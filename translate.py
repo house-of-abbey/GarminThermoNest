@@ -19,6 +19,7 @@
 #
 # References:
 #  * https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+#  * https://realpython.com/beautiful-soup-web-scraper-python/
 #
 ####################################################################################
 

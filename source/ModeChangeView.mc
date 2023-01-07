@@ -27,6 +27,7 @@ import Toybox.Communications;
 
 class ModeChangeView extends WatchUi.View {
     hidden var mNestStatus;
+    hidden var mViewNav;
     hidden var modeButton;
     hidden var ecoButton;
     hidden var heatOffIcon;
@@ -54,6 +55,15 @@ class ModeChangeView extends WatchUi.View {
         heatCoolIcon = Application.loadResource(Rez.Drawables.HeatCoolLgIcon) as Graphics.BitmapResource;
         ecoOffIcon   = Application.loadResource(Rez.Drawables.EcoOffLgIcon  ) as Graphics.BitmapResource;
         ecoOnIcon    = Application.loadResource(Rez.Drawables.EcoOnLgIcon   ) as Graphics.BitmapResource;
+        mViewNav               = new ViewNav({
+            :identifier => "ModePane",
+            :locX       => Globals.navMarginX,
+            :locY       => dc.getHeight()/2,
+            :radius     => Globals.navRadius,
+            :panes      => Globals.navPanes,
+            :nth        => 1, // 1-based numbering
+            :visible    => true
+        });
 
         var w = dc.getWidth();
         var h = dc.getHeight();
@@ -89,6 +99,7 @@ class ModeChangeView extends WatchUi.View {
     function onShow() {
         // Track changes to NestStatus state
         mNestStatus.copyState();
+        mViewNav.animate();
     }
 
     // Update the view
@@ -96,6 +107,8 @@ class ModeChangeView extends WatchUi.View {
         var bg = 0x3B444C;
         var w = dc.getWidth();
         var h = dc.getHeight();
+
+        dc.setAntiAlias(true);
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
 
@@ -145,6 +158,11 @@ class ModeChangeView extends WatchUi.View {
                 break;
         }
 
+        mViewNav.draw(dc);
+    }
+
+    function onHide() as Void {
+        mViewNav.resetAnimation();
     }
 
     function onModeButton() as Void {

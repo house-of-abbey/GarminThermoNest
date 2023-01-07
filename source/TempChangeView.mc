@@ -27,6 +27,7 @@ import Toybox.Communications;
 
 class TempChangeView extends WatchUi.View {
     hidden var mNestStatus;
+    var mViewNav;
     hidden var incTempButton;
     hidden var decTempButton;
     hidden var heatTempButton;
@@ -101,12 +102,22 @@ class TempChangeView extends WatchUi.View {
             :width                    => 100,
             :height                   => 40
         });
-        setLayout([incTempButton, decTempButton, heatTempButton, coolTempButton]);
+        mViewNav = new ViewNav({
+            :identifier => "TempPane",
+            :locX       => Globals.navMarginX,
+            :locY       => dc.getHeight()/2,
+            :radius     => Globals.navRadius,
+            :panes      => Globals.navPanes,
+            :nth        => 3, // 1-based numbering
+            :visible    => true
+        });
+        setLayout([mViewNav, incTempButton, decTempButton, heatTempButton, coolTempButton]);
     }
 
     function onShow() {
         // Track changes to NestStatus state
         mNestStatus.copyState();
+        mViewNav.animate();
     }
 
     // Update the view
@@ -116,6 +127,8 @@ class TempChangeView extends WatchUi.View {
         var hw = w/2;
         var hh = h/2;
         var bg = 0x3B444C;
+
+        dc.setAntiAlias(true);
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
 
@@ -171,6 +184,11 @@ class TempChangeView extends WatchUi.View {
             incTempButton.draw(dc);
             decTempButton.draw(dc);
         }
+        mViewNav.draw(dc);
+    }
+
+    function onHide() as Void {
+        mViewNav.resetAnimation();
     }
 
     function onIncTempButton() as Void {

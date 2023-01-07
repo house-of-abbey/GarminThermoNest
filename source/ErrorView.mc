@@ -68,6 +68,7 @@ class ErrorView extends WatchUi.View {
         var bg = 0x3B444C;
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
+        dc.setAntiAlias(true);
         dc.drawBitmap(hw - 24, 30, errorIcon);
         textArea.draw(dc);
     }

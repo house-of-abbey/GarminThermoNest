@@ -26,6 +26,7 @@ import Toybox.Application.Properties;
 
 class ThermoNestView extends WatchUi.View {
     hidden var mNestStatus;
+    hidden var mViewNav;
     hidden var refreshButton;
 
     hidden var ecoOffIcon;
@@ -64,8 +65,18 @@ class ThermoNestView extends WatchUi.View {
         hourglassIcon          = Application.loadResource(Rez.Drawables.HourglassIcon         ) as Graphics.BitmapResource;
         loggedOutIcon          = Application.loadResource(Rez.Drawables.LoggedOutIcon         ) as Graphics.BitmapResource;
         errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
+        mViewNav               = new ViewNav({
+            :identifier => "StatusPane",
+            :locX       => Globals.navMarginX,
+            :locY       => dc.getHeight()/2,
+            :radius     => Globals.navRadius,
+            :panes      => Globals.navPanes,
+            :nth        => 2, // 1-based numbering
+            :visible    => true
+        });
 
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
+        
         // A two element array containing the width and height of the Bitmap object
         var dim = bRefreshDisabledIcon.getDimensions();
         refreshButton = new WatchUi.Button({
@@ -84,6 +95,11 @@ class ThermoNestView extends WatchUi.View {
         setLayout([refreshButton]);
     }
 
+    function onShow() as Void {
+        mViewNav.animate();
+    }
+
+    // Linear IntERPolatation
     function lerp(x, a, b, A, B) {
         return (x - a) / (b - a) * (B - A) + A;
     }
@@ -94,7 +110,6 @@ class ThermoNestView extends WatchUi.View {
         var h           = dc.getHeight();
         var hw          = w/2;
         var hh          = h/2;
-
         // These could be constants, but then they are located a long textual distance away
         // Between the full range arc and the outside of the watch face
         var margin      = 14;
@@ -111,6 +126,7 @@ class ThermoNestView extends WatchUi.View {
         // Ambient temperature: watch radius - tick_aen_r
         var tick_aen_r   = 20;
 
+        dc.setAntiAlias(true);
         dc.setColor(Graphics.COLOR_WHITE,
                     mNestStatus.getHvac().equals("HEATING")
                         ? 0xEC7800
@@ -249,6 +265,12 @@ class ThermoNestView extends WatchUi.View {
                 dc.drawBitmap(hw - phoneDisconnectedIcon.getWidth()/2, 30, phoneDisconnectedIcon);
             }
         }
+
+        mViewNav.draw(dc);
+    }
+
+    function onHide() as Void {
+        mViewNav.resetAnimation();
     }
 
     function requestCallback() as Void {
