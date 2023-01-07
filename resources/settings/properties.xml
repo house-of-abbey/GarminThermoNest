@@ -13,10 +13,10 @@
 -->
 
 <properties>
-  <property id="appVersion" type="string">0.0.17</property>
-  <property id="deviceId" type="string"></property>
-  <property id="oauthCode" type="string"></property>
-  <property id="accessToken" type="string"></property>
+  <property id="appVersion"        type="string">0.0.17</property>
+  <property id="deviceId"          type="string"></property>
+  <property id="oauthCode"         type="string"></property>
+  <property id="accessToken"       type="string"></property>
   <property id="accessTokenExpire" type="number">0</property>
-  <property id="refreshToken" type="string"></property>
+  <property id="refreshToken"      type="string"></property>
 </properties>
