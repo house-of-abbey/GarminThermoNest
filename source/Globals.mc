@@ -25,8 +25,8 @@ class Globals {
     // as the messages can't be read from a watch!)
     static const debug        = false;
     // Multi-dot navigation drawable on each View
-    static const navRadius    = 5;
-    static const navMarginX   = 30;
+    static const navRadius    = 8;
+    static const navMarginX   = 40;
     static const navPanes     = 3;
     static const navDelay     = 1000; // ms
     static const navPeriod    = 0.5;  // s

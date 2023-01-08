@@ -142,47 +142,49 @@ class TempChangeView extends WatchUi.View {
             );
         }
 
-        if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
-            incTempButton.setState(:stateDisabled);
-            decTempButton.setState(:stateDisabled);
-        } else {
-            if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
-                dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh - 25, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        if (mNestStatus.gotDeviceData) {
+            if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
+                incTempButton.setState(:stateDisabled);
+                decTempButton.setState(:stateDisabled);
+            } else {
+                if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
+                    dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh - 25, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-                dc.setColor(settingCool ? Graphics.COLOR_WHITE : Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh + 25, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    dc.setColor(settingCool ? Graphics.COLOR_WHITE : Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh + 25, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-                heatTempButton.setState(:stateDefault);
-                coolTempButton.setState(:stateDefault);
+                    heatTempButton.setState(:stateDefault);
+                    coolTempButton.setState(:stateDefault);
+                    incTempButton.draw(dc);
+                    decTempButton.draw(dc);
+                } else if (mNestStatus.getThermoMode().equals("HEAT")) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+                    heatTempButton.setState(:stateDisabled);
+                    coolTempButton.setState(:stateDisabled);
+                } else if (mNestStatus.getThermoMode().equals("COOL")) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
+                                Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
+                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+                    heatTempButton.setState(:stateDisabled);
+                    coolTempButton.setState(:stateDisabled);
+                }
+
+                incTempButton.setState(:stateDefault);
+                decTempButton.setState(:stateDefault);
                 incTempButton.draw(dc);
                 decTempButton.draw(dc);
-            } else if (mNestStatus.getThermoMode().equals("HEAT")) {
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-                heatTempButton.setState(:stateDisabled);
-                coolTempButton.setState(:stateDisabled);
-            } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-                heatTempButton.setState(:stateDisabled);
-                coolTempButton.setState(:stateDisabled);
             }
-
-            incTempButton.setState(:stateDefault);
-            decTempButton.setState(:stateDefault);
-            incTempButton.draw(dc);
-            decTempButton.draw(dc);
         }
         mViewNav.draw(dc);
     }

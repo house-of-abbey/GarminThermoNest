@@ -126,36 +126,38 @@ class ModeChangeView extends WatchUi.View {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
-        var posx = w/4-heatOffIcon.getWidth()/2;
-        var posy = h/2-heatOffIcon.getHeight()/2;
-        if (mNestStatus.getEco()) {
-            dc.drawBitmap(posx, posy, ecoOnIcon);
-        } else {
-            dc.drawBitmap(posx, posy, ecoOffIcon);
-        }
+        if (mNestStatus.gotDeviceData) {
+            var posx = w/4-heatOffIcon.getWidth()/2;
+            var posy = h/2-heatOffIcon.getHeight()/2;
+            if (mNestStatus.getEco()) {
+                dc.drawBitmap(posx, posy, ecoOnIcon);
+            } else {
+                dc.drawBitmap(posx, posy, ecoOffIcon);
+            }
 
-        posx = w*3/4-heatOffIcon.getWidth()/2;
-        //mNestStatus.setThermoMode(supportedModes[modeStatus]);
-        switch (mNestStatus.getThermoMode() as Lang.String) {
-            case "OFF":
-                dc.drawBitmap(posx, posy, heatOffIcon);
-                break;
+            posx = w*3/4-heatOffIcon.getWidth()/2;
+            //mNestStatus.setThermoMode(supportedModes[modeStatus]);
+            switch (mNestStatus.getThermoMode() as Lang.String) {
+                case "OFF":
+                    dc.drawBitmap(posx, posy, heatOffIcon);
+                    break;
 
-            case "HEAT":
-                dc.drawBitmap(posx, posy, heatOnIcon);
-                break;
+                case "HEAT":
+                    dc.drawBitmap(posx, posy, heatOnIcon);
+                    break;
 
-            case "COOL":
-                dc.drawBitmap(posx, posy, coolOnIcon);
-                break;
+                case "COOL":
+                    dc.drawBitmap(posx, posy, coolOnIcon);
+                    break;
 
-            case "HEATCOOL":
-                dc.drawBitmap(posx, posy, heatCoolIcon);
-                break;
+                case "HEATCOOL":
+                    dc.drawBitmap(posx, posy, heatCoolIcon);
+                    break;
 
-            default:
-                System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + mNestStatus.getThermoMode() + "'");
-                break;
+                default:
+                    System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + mNestStatus.getThermoMode() + "'");
+                    break;
+            }
         }
 
         mViewNav.draw(dc);

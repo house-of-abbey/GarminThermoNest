@@ -31,12 +31,14 @@ const margin        = 14;
 const full_arc_w    = 4;
 // Line width of the range arc (thicker than full_arc_w)
 const range_arc_w   = 8;
-// Line width of a tick mark
-const tick_w        = 4;
+// Heat & cool line width of a tick mark
+const hct_tick_w    = 4;
+// Ambient temperature line width of a tick mark
+const at_tick_w     = 8;
 // Ticks start at: watch radius - tick_st_r
 const tick_st_r     = 5;
 // Temperature range ends: watch radius - tick_ren_r
-const tick_ren_r    = 25;
+const tick_ren_r    = 30;
 // Ambient temperature: watch radius - tick_aen_r
 const tick_aen_r    = 20;
 // Vertical space of top centre icon for connectivity/refresh icon
@@ -134,6 +136,21 @@ class ThermoNestView extends WatchUi.View {
         return (x - a) / (b - a) * (B - A) + A;
     }
 
+    // Draw a tick on ther arc of the watch face.
+    // Parameters:
+    //  * theta - angle of rotation in degrees from 6 o'clock
+    //  * start - distance towards the circle centre from the watch circumference to start drawing the tick
+    //  * end   - distance towards the circle centre from the watch circumference to end drawing the tick
+    //
+    function drawTick(dc as Dc, theta as Lang.Number, start as Lang.Number, end as Lang.Number) {
+        var crad = Math.toRadians(360 - theta);
+        var ca = Math.cos(crad);
+        var cb = Math.sin(crad);
+        var hw = dc.getWidth() / 2;
+        var hh = dc.getHeight() / 2;
+        dc.drawLine(ca*(hw - end) + hw, cb*(hh - end) + hh, ca*(hw - start) + hw, cb*(hh - start) + hh);
+    }
+
     // Update the view
     function onUpdate(dc as Dc) as Void {
         var w           = dc.getWidth();
@@ -158,50 +175,59 @@ class ThermoNestView extends WatchUi.View {
                 var heat = mNestStatus.getHeatTemp();
                 var cool = mNestStatus.getCoolTemp();
                 var ambientTemperatureArc = mNestStatus.getScale() == 'C'
-                    ? lerp(ambientTemperature, 9f, 32f, 240f, -60f)
+                    ? lerp(ambientTemperature,  9f, 32f, 240f, -60f)
                     : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
-                if ((heat != null) && (heat != ambientTemperature)) {
-                    var heatArc = mNestStatus.getScale() == 'C'
-                        ? lerp(heat, 9f, 32f, 240f, -60f)
+                var heatArc = (heat == null)
+                    ? 0
+                    : mNestStatus.getScale() == 'C'
+                        ? lerp(heat,  9f, 32f, 240f, -60f)
                         : lerp(heat, 48f, 90f, 240f, -60f);
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                var coolArc = (cool == null)
+                    ? 0
+                    : mNestStatus.getScale() == 'C'
+                        ? lerp(cool,  9f, 32f, 240f, -60f)
+                        : lerp(cool, 48f, 90f, 240f, -60f);
+
+                if (heat != null) {
                     dc.setPenWidth(range_arc_w);
-                    if (ambientTemperature > heat) {
-                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
-                    } else {
+                    if (ambientTemperature < heat) {
+                        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
                         dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
+                    } else {
+                        if (cool != null) {
+                            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                        } else {
+                            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                        }
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.setPenWidth(tick_w);
-                    var hrad = Math.toRadians(360 - heatArc);
-                    var ha = Math.cos(hrad);
-                    var hb = Math.sin(hrad);
-                    dc.drawLine(ha*(hw - tick_ren_r) + hw, hb*(hh - tick_ren_r) + hh, ha*(hw - tick_st_r) + hw, hb*(hh - tick_st_r) + hh);
+                    dc.setPenWidth(hct_tick_w);
+                    drawTick(dc, heatArc, tick_st_r, tick_ren_r);
                 }
-                if ((cool != null) && (cool != ambientTemperature)) {
-                    var coolArc = mNestStatus.getScale() == 'C'
-                        ? lerp(cool, 9f, 32f, 240f, -60f)
-                        : lerp(cool, 48f, 90f, 240f, -60f);
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+
+                if (cool != null) {
                     dc.setPenWidth(range_arc_w);
-                    if (ambientTemperature > cool) {
+                    if (cool < ambientTemperature) {
+                        dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
                         dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
                     } else {
-                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        if (heat != null) {
+                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                        } else {
+                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                        }
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.setPenWidth(tick_w);
-                    var crad = Math.toRadians(360 - coolArc);
-                    var ca = Math.cos(crad);
-                    var cb = Math.sin(crad);
-                    dc.drawLine(ca*(hw - tick_ren_r) + hw, cb*(hh - tick_ren_r) + hh, ca*(hw - tick_st_r) + hw, cb*(hh - tick_st_r) + hh);
+                    dc.setPenWidth(hct_tick_w);
+                    drawTick(dc, coolArc, tick_st_r, tick_ren_r);
                 }
+
                 dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
-                dc.setPenWidth(tick_w);
-                var arad = Math.toRadians(360 - ambientTemperatureArc + 1);
-                var aa = Math.cos(arad);
-                var ab = Math.sin(arad);
-                dc.drawLine(aa*(hw - tick_aen_r) + hw, ab*(hh - tick_aen_r) + hh, aa*(hw - tick_st_r) + hw, ab*(hh - tick_st_r) + hh);
+                dc.setPenWidth(at_tick_w);
+                drawTick(dc, ambientTemperatureArc, tick_st_r, tick_aen_r);
 
                 if (mNestStatus.getEco()) {
                     dc.setColor(ecoGreenColor, Graphics.COLOR_TRANSPARENT);
