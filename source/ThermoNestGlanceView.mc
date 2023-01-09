@@ -18,17 +18,16 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.Graphics;
-import Toybox.Lang;
-import Toybox.System;
-import Toybox.WatchUi;
-import Toybox.Communications;
-import Toybox.Application.Properties;
+using Toybox.Graphics;
+using Toybox.Lang;
+using Toybox.System;
+using Toybox.WatchUi;
+using Toybox.Communications;
+using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestGlanceView extends WatchUi.GlanceView {
     hidden var mNestStatus;
-
     hidden var phoneDisconnectedIcon;
     hidden var signalDisconnectedIcon;
     hidden var thermostatOfflineIcon;
@@ -41,7 +40,7 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         mNestStatus = n;
     }
 
-    function onLayout(dc as Dc) as Void {
+    function onLayout(dc as Graphics.Dc) as Void {
         phoneDisconnectedIcon  = Application.loadResource(Rez.Drawables.PhoneDisconnectedIcon ) as Graphics.BitmapResource;
         signalDisconnectedIcon = Application.loadResource(Rez.Drawables.SignalDisconnectedIcon) as Graphics.BitmapResource;
         thermostatOfflineIcon  = Application.loadResource(Rez.Drawables.ThermostatOfflineIcon ) as Graphics.BitmapResource;
@@ -98,12 +97,14 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
             text = "OFF";
         }
 
-        dc.setColor(Graphics.COLOR_WHITE,
-                    mNestStatus.getHvac().equals("HEATING")
-                        ? 0xEC7800
-                        : mNestStatus.getHvac().equals("COOLING")
-                            ? 0x285DF7
-                            : 0x3B444C);
+        dc.setColor(
+            Graphics.COLOR_WHITE,
+            mNestStatus.getHvac().equals("HEATING")
+                ? Globals.heatingColor
+                : mNestStatus.getHvac().equals("COOLING")
+                    ? Globals.coolingColor
+                    : Globals.offColor
+        );
         dc.clear();
         dc.drawText(
             10, dc.getHeight()/2, Graphics.FONT_SMALL,

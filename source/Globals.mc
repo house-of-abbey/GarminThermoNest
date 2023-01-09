@@ -19,6 +19,8 @@
 //
 //-----------------------------------------------------------------------------------
 
+using Toybox.Graphics;
+
 (:glance)
 class Globals {
     // Enable printing of messages to the debug console (don't make this a Property
@@ -30,4 +32,8 @@ class Globals {
     static const navPanes     = 3;
     static const navDelay     = 1000; // ms
     static const navPeriod    = 0.5;  // s
+
+    static const heatingColor  = 0xEC7800;
+    static const coolingColor  = 0x285DF7;
+    static const offColor      = Graphics.COLOR_BLACK;
 }

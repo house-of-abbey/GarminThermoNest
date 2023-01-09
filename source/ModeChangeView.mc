@@ -19,11 +19,10 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.Graphics;
-import Toybox.Lang;
-import Toybox.System;
-import Toybox.WatchUi;
-import Toybox.Communications;
+using Toybox.Graphics;
+using Toybox.Lang;
+using Toybox.System;
+using Toybox.WatchUi;
 
 class ModeChangeView extends WatchUi.View {
     hidden var mNestStatus;
@@ -36,26 +35,25 @@ class ModeChangeView extends WatchUi.View {
     hidden var heatCoolIcon;
     hidden var ecoOffIcon;
     hidden var ecoOnIcon;
-    hidden var setModeLabel as String;
-    hidden var tapIconLabel as String;
+    hidden var setModeLabel as Lang.String;
+    hidden var tapIconLabel as Lang.String;
 
     function initialize(s) {
         View.initialize();
         mNestStatus  = s;
-        setModeLabel = WatchUi.loadResource($.Rez.Strings.setMode) as String;
-        tapIconLabel = WatchUi.loadResource($.Rez.Strings.tapIcon) as String;
+        setModeLabel = WatchUi.loadResource($.Rez.Strings.setMode) as Lang.String;
+        tapIconLabel = WatchUi.loadResource($.Rez.Strings.tapIcon) as Lang.String;
     }
 
     // Load your resources here
-    function onLayout(dc as Dc) as Void {
-
+    function onLayout(dc as Graphics.Dc) as Void {
         heatOffIcon  = Application.loadResource(Rez.Drawables.HeatOffLgIcon ) as Graphics.BitmapResource;
         heatOnIcon   = Application.loadResource(Rez.Drawables.HeatOnLgIcon  ) as Graphics.BitmapResource;
         coolOnIcon   = Application.loadResource(Rez.Drawables.CoolOnLgIcon  ) as Graphics.BitmapResource;
         heatCoolIcon = Application.loadResource(Rez.Drawables.HeatCoolLgIcon) as Graphics.BitmapResource;
         ecoOffIcon   = Application.loadResource(Rez.Drawables.EcoOffLgIcon  ) as Graphics.BitmapResource;
         ecoOnIcon    = Application.loadResource(Rez.Drawables.EcoOnLgIcon   ) as Graphics.BitmapResource;
-        mViewNav               = new ViewNav({
+        mViewNav     = new ViewNav({
             :identifier => "ModePane",
             :locX       => Globals.navMarginX,
             :locY       => dc.getHeight()/2,
@@ -93,7 +91,7 @@ class ModeChangeView extends WatchUi.View {
             :width                    => w/4,
             :height                   => h/2
         });
-        setLayout([modeButton, ecoButton] as Array<WatchUi.Button>);
+        setLayout([modeButton, ecoButton] as Lang.Array<WatchUi.Button>);
     }
 
     function onShow() {
@@ -103,13 +101,12 @@ class ModeChangeView extends WatchUi.View {
     }
 
     // Update the view
-    function onUpdate(dc as Dc) as Void {
-        var bg = 0x3B444C;
+    function onUpdate(dc as Graphics.Dc) as Void {
         var w = dc.getWidth();
         var h = dc.getHeight();
 
         dc.setAntiAlias(true);
-        dc.setColor(Graphics.COLOR_WHITE, bg);
+        dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.clear();
 
         dc.drawText(
@@ -119,7 +116,7 @@ class ModeChangeView extends WatchUi.View {
         );
         modeButton.draw(dc);
         ecoButton.draw(dc);
-        dc.setColor(Graphics.COLOR_WHITE, bg);
+        dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.drawText(
             w/2, h*3/4, Graphics.FONT_XTINY,
             tapIconLabel, // "Tap Icons"
@@ -155,7 +152,9 @@ class ModeChangeView extends WatchUi.View {
                     break;
 
                 default:
-                    System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + mNestStatus.getThermoMode() + "'");
+                    if (Globals.debug) {
+                        System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + mNestStatus.getThermoMode() + "'");
+                    }
                     break;
             }
         }

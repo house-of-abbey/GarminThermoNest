@@ -19,15 +19,15 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.Graphics;
-import Toybox.Lang;
-import Toybox.System;
-import Toybox.WatchUi;
-import Toybox.Communications;
+using Toybox.Graphics;
+using Toybox.Lang;
+using Toybox.System;
+using Toybox.WatchUi;
+using Toybox.Communications;
 
 class TempChangeView extends WatchUi.View {
     hidden var mNestStatus;
-    var mViewNav;
+    hidden var mViewNav;
     hidden var incTempButton;
     hidden var decTempButton;
     hidden var heatTempButton;
@@ -42,7 +42,7 @@ class TempChangeView extends WatchUi.View {
     }
 
     // Load your resources here
-    function onLayout(dc as Dc) as Void {
+    function onLayout(dc as Graphics.Dc) as Void {
         thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
         var bArrowUpIcon   = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowUpIcon   });
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
@@ -121,15 +121,14 @@ class TempChangeView extends WatchUi.View {
     }
 
     // Update the view
-    function onUpdate(dc as Dc) as Void {
+    function onUpdate(dc as Graphics.Dc) as Void {
         var w = dc.getWidth();
         var h = dc.getHeight();
         var hw = w/2;
         var hh = h/2;
-        var bg = 0x3B444C;
 
         dc.setAntiAlias(true);
-        dc.setColor(Graphics.COLOR_WHITE, bg);
+        dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.clear();
 
         dc.drawBitmap(hw - thermostatIcon.getWidth()/2, h/3 - thermostatIcon.getHeight()/2, thermostatIcon);
@@ -149,32 +148,42 @@ class TempChangeView extends WatchUi.View {
             } else {
                 if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
                     dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh - 25, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    dc.drawText(
+                        hw,
+                        hh - 25, Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
 
                     dc.setColor(settingCool ? Graphics.COLOR_WHITE : Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh + 25, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    dc.drawText(
+                        hw,
+                        hh + 25, Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
 
                     heatTempButton.setState(:stateDefault);
                     coolTempButton.setState(:stateDefault);
-                    incTempButton.draw(dc);
-                    decTempButton.draw(dc);
                 } else if (mNestStatus.getThermoMode().equals("HEAT")) {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    dc.drawText(
+                        hw,
+                        hh, Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
 
                     heatTempButton.setState(:stateDisabled);
                     coolTempButton.setState(:stateDisabled);
                 } else if (mNestStatus.getThermoMode().equals("COOL")) {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh, Graphics.FONT_MEDIUM,
-                                Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    dc.drawText(
+                        hw,
+                        hh, Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
 
                     heatTempButton.setState(:stateDisabled);
                     coolTempButton.setState(:stateDisabled);

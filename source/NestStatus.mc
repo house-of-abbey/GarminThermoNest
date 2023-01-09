@@ -26,14 +26,14 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.System;
-import Toybox.Communications;
-import Toybox.Authentication;
-import Toybox.Lang;
-import Toybox.WatchUi;
-import Toybox.Application.Properties;
-import Toybox.Time;
-import Toybox.Math;
+using Toybox.System;
+using Toybox.Communications;
+using Toybox.Authentication;
+using Toybox.Lang;
+using Toybox.WatchUi;
+using Toybox.Application.Properties;
+using Toybox.Time;
+using Toybox.Math;
 
 (:glance)
 class NestStatus {
@@ -131,14 +131,14 @@ class NestStatus {
             requestCallback.invoke();
         }
     }
-    function onReturnHeatTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReturnHeatTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReturnHeatTemp() Response Code: " + responseCode);
             System.println("onReturnHeatTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             getDeviceData();
         }
@@ -183,14 +183,14 @@ class NestStatus {
             requestCallback.invoke();
         }
     }
-    function onReturnCoolTemp(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReturnCoolTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReturnCoolTemp() Response Code: " + responseCode);
             System.println("onReturnCoolTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             getDeviceData();
         }
@@ -234,14 +234,14 @@ class NestStatus {
     function nextAvailableThermoModes() as Void {
         setThermoMode((availableThermoModes as Lang.Array)[(availableThermoModes.indexOf(thermoMode)+1) % availableThermoModes.size()]);
     }
-    function onReturnThermoMode(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReturnThermoMode(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReturnThermoMode() Response Code: " + responseCode);
             System.println("onReturnThermoMode() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             getDeviceData();
         }
@@ -292,14 +292,14 @@ class NestStatus {
             setEco(!eco);
         }
     }
-    function onReturnEco(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReturnEco(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReturnEco() Response Code: " + responseCode);
             System.println("onReturnEco() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             getDeviceData();
         }
@@ -356,7 +356,7 @@ class NestStatus {
         _eco        = eco;
     }
 
-    private function executeCommand(payload as Dictionary, callback) {
+    private function executeCommand(payload as Lang.Dictionary, callback) {
         var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices/" + Properties.getValue("deviceId") + ":executeCommand";
 
         var options = {
@@ -377,40 +377,40 @@ class NestStatus {
     }
 
     // Set up the response callback function
-    function onReceiveDeviceData(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReceiveDeviceData(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (responseCode == 200) {
             if (data != null) {
-                var traits = data.get("traits") as Dictionary;
+                var traits = data.get("traits") as Lang.Dictionary;
                 if (traits != null) {
-                    var con = traits.get("sdm.devices.traits.Connectivity") as Dictionary;
+                    var con = traits.get("sdm.devices.traits.Connectivity") as Lang.Dictionary;
                     if (con != null) {
                         online = (con.get("status") as Lang.String).equals("ONLINE");
                         if (Globals.debug) {
                             System.println(" Status: " + (online ? "On line" : "Off line"));
                         }
                     }
-                    var info = traits.get("sdm.devices.traits.Info") as Dictionary;
+                    var info = traits.get("sdm.devices.traits.Info") as Lang.Dictionary;
                     if (info != null) {
                         name = info.get("customName") as Lang.String;
                         if (Globals.debug) {
                             System.println(" Name: '" + name + "'");
                         }
                     }
-                    var settings = traits.get("sdm.devices.traits.Settings") as Dictionary;
+                    var settings = traits.get("sdm.devices.traits.Settings") as Lang.Dictionary;
                     if (settings != null) {
                         scale = (settings.get("temperatureScale") as Lang.String).equals("CELSIUS") ? 'C' : 'F';
                         if (Globals.debug) {
                             System.println(" Scale: '" + scale + "'");
                         }
                     }
-                    var e = traits.get("sdm.devices.traits.Temperature") as Dictionary;
+                    var e = traits.get("sdm.devices.traits.Temperature") as Lang.Dictionary;
                     if (e != null) {
                         ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Number);
                         if (Globals.debug) {
                             System.println(" Temperature: " + ambientTemp + " deg C");
                         }
                     }
-                    var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Dictionary;
+                    var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Lang.Dictionary;
                     if (ttsp != null) {
                         heatTemp = round(ttsp.get("heatCelsius") as Lang.Number);
                         coolTemp = round(ttsp.get("coolCelsius") as Lang.Number);
@@ -419,14 +419,14 @@ class NestStatus {
                             System.println(" Cool Temperature: " + coolTemp + " deg C");
                         }
                     }
-                    var h = traits.get("sdm.devices.traits.Humidity") as Dictionary;
+                    var h = traits.get("sdm.devices.traits.Humidity") as Lang.Dictionary;
                     if (h != null) {
                         humidity = h.get("ambientHumidityPercent") as Lang.Number;
                         if (Globals.debug) {
                             System.println(" Humidity: " + humidity + " %");
                         }
                     }
-                    var tm = traits.get("sdm.devices.traits.ThermostatMode") as Dictionary;
+                    var tm = traits.get("sdm.devices.traits.ThermostatMode") as Lang.Dictionary;
                     if (tm != null) {
                         availableThermoModes = tm.get("availableModes") as Lang.Array;
                         thermoMode = tm.get("mode") as Lang.String;
@@ -435,14 +435,14 @@ class NestStatus {
                             System.println(" ThermostatMode: " + thermoMode);
                         }
                     }
-                    var th = traits.get("sdm.devices.traits.ThermostatHvac") as Dictionary;
+                    var th = traits.get("sdm.devices.traits.ThermostatHvac") as Lang.Dictionary;
                     if (th != null) {
                         hvac = th.get("status") as Lang.String;
                         if (Globals.debug) {
                             System.println(" ThermostatHvac: " + hvac);
                         }
                     }
-                    var te = traits.get("sdm.devices.traits.ThermostatEco") as Dictionary;
+                    var te = traits.get("sdm.devices.traits.ThermostatEco") as Lang.Dictionary;
                     if (te != null) {
                         availableEcoModes = te.get("availableModes") as Lang.Array;
                         eco = (te.get("mode") as Lang.String).equals("MANUAL_ECO");
@@ -486,7 +486,7 @@ class NestStatus {
             } else {
                 // This method might be called before authorisation has completed.
                 if (!isGlance && (data != null)) {
-                    WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 } else {
                     if (Globals.debug) {
                         System.println("onReceiveDeviceData() Response Code: " + responseCode);
@@ -519,7 +519,7 @@ class NestStatus {
         }
     }
 
-    function onReceiveDevices(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onReceiveDevices(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReceiveDevices() Response Code: " + responseCode);
             System.println("onReceiveDevices() Response Data: " + data);
@@ -539,7 +539,7 @@ class NestStatus {
                         n = r + " Thermostat";
                     }
                     menu.addItem(
-                        new MenuItem(
+                        new WatchUi.MenuItem(
                             n,
                             r,
                             device.get("name").substring(o, null),
@@ -553,7 +553,7 @@ class NestStatus {
             }
         } else {
             if (!isGlance && (data != null)) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Dictionary).get("message") as String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             } else {
                 if (Globals.debug) {
                     System.println("onReceiveDeviceData() Response Code: " + responseCode);
@@ -588,14 +588,14 @@ class NestStatus {
         }
     }
 
-    function onRecieveRefreshAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onRecieveRefreshAccessToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onRecieveRefreshAccessToken() Response Code: " + responseCode);
             System.println("onRecieveRefreshAccessToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Number));
+            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
             if (Globals.debug) {
                 System.println("onRecieveRefreshAccessToken() accessToken: " + Properties.getValue("accessToken"));
             }
@@ -607,14 +607,14 @@ class NestStatus {
         }
     }
 
-    function onRecieveAccessToken(responseCode as Number, data as Null or Dictionary or String) as Void {
+    function onRecieveAccessToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onRecieveAccessToken() Response Code: " + responseCode);
             System.println("onRecieveAccessToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Number));
+            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
             Properties.setValue("refreshToken", data.get("refresh_token"));
             if (Globals.debug) {
                 System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
@@ -690,16 +690,20 @@ class NestStatus {
 
         // for the time being, we cannot use the oauth api because google does not allow signin in a webview
         // instead we will do it manually
-        Communications.openWebPage("https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth", {
-            "access_type"            => "offline",
-            "client_id"              => ClientId.clientId,
-            "include_granted_scopes" => "true",
-            "prompt"                 => "consent",
-            "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
-            "response_type"          => "code",
-            "scope"                  => "https://www.googleapis.com/auth/sdm.service",
-            "state"                  => "pass-through value"
-        }, {});
+        Communications.openWebPage(
+            "https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth",
+            {
+                "access_type"            => "offline",
+                "client_id"              => ClientId.clientId,
+                "include_granted_scopes" => "true",
+                "prompt"                 => "consent",
+                "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
+                "response_type"          => "code",
+                "scope"                  => "https://www.googleapis.com/auth/sdm.service",
+                "state"                  => "pass-through value"
+            },
+            {}
+        );
 
         // Communications.registerForOAuthMessages(method(:onOAuthMessage));
 
@@ -719,7 +723,9 @@ class NestStatus {
         //     params,
         //     "https://house-of-abbey.github.io/GarminThermoNest/auth",
         //     Communications.OAUTH_RESULT_TYPE_URL,
-        //     { "code" => "oauthCode" }
+        //     {
+        //         "code" => "oauthCode"
+        //     }
         // );
     }
 

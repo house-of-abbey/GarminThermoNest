@@ -18,11 +18,11 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.Graphics;
-import Toybox.Lang;
-import Toybox.System;
-import Toybox.WatchUi;
-import Toybox.Application.Properties;
+using Toybox.Graphics;
+using Toybox.Lang;
+using Toybox.System;
+using Toybox.WatchUi;
+using Toybox.Application.Properties;
 
 
 // Between the full range arc and the outside of the watch face
@@ -50,9 +50,7 @@ const modeHeight    = 80;
 const modeSpacing   = 5;
 // Vertical spacing either side of centre for the temperature values
 const tempSpace     = 40;
-const heatingColor  = 0xEC7800;
-const coolingColor  = 0x285DF7;
-const offColor      = 0x3B444C;
+// Additional colours over Globals
 const darkGreyColor = 0xaaaaaa;
 const ecoGreenColor = 0x00801c;
 
@@ -60,7 +58,6 @@ class ThermoNestView extends WatchUi.View {
     hidden var mNestStatus;
     hidden var mViewNav;
     hidden var refreshButton;
-
     hidden var ecoOffIcon;
     hidden var ecoOnIcon;
     hidden var heatOffIcon;
@@ -82,7 +79,7 @@ class ThermoNestView extends WatchUi.View {
     }
 
     // Load your resources here
-    function onLayout(dc as Dc) as Void {
+    function onLayout(dc as Graphics.Dc) as Void {
         ecoOffIcon             = Application.loadResource(Rez.Drawables.EcoOffIcon            ) as Graphics.BitmapResource;
         ecoOnIcon              = Application.loadResource(Rez.Drawables.EcoOnIcon             ) as Graphics.BitmapResource;
         heatOffIcon            = Application.loadResource(Rez.Drawables.HeatOffIcon           ) as Graphics.BitmapResource;
@@ -142,7 +139,7 @@ class ThermoNestView extends WatchUi.View {
     //  * start - distance towards the circle centre from the watch circumference to start drawing the tick
     //  * end   - distance towards the circle centre from the watch circumference to end drawing the tick
     //
-    function drawTick(dc as Dc, theta as Lang.Number, start as Lang.Number, end as Lang.Number) {
+    function drawTick(dc as Graphics.Dc, theta as Lang.Number, start as Lang.Number, end as Lang.Number) {
         var crad = Math.toRadians(360 - theta);
         var ca = Math.cos(crad);
         var cb = Math.sin(crad);
@@ -152,19 +149,21 @@ class ThermoNestView extends WatchUi.View {
     }
 
     // Update the view
-    function onUpdate(dc as Dc) as Void {
+    function onUpdate(dc as Graphics.Dc) as Void {
         var w           = dc.getWidth();
         var h           = dc.getHeight();
         var hw          = w/2;
         var hh          = h/2;
 
         dc.setAntiAlias(true);
-        dc.setColor(Graphics.COLOR_WHITE,
-                    mNestStatus.getHvac().equals("HEATING")
-                        ? heatingColor
-                        : mNestStatus.getHvac().equals("COOLING")
-                            ? coolingColor
-                            : offColor);
+        dc.setColor(
+            Graphics.COLOR_WHITE,
+            mNestStatus.getHvac().equals("HEATING")
+                ? Globals.heatingColor
+                : mNestStatus.getHvac().equals("COOLING")
+                    ? Globals.coolingColor
+                    : Globals.offColor
+        );
         dc.clear();
         dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(full_arc_w);
@@ -231,34 +230,54 @@ class ThermoNestView extends WatchUi.View {
 
                 if (mNestStatus.getEco()) {
                     dc.setColor(ecoGreenColor, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(hw, hh - tempSpace, Graphics.FONT_MEDIUM, "ECO",
-                                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                    dc.drawText(
+                        hw,
+                        hh - tempSpace, Graphics.FONT_MEDIUM,
+                        "ECO",
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
                 } else {
                     if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh - tempSpace, Graphics.FONT_MEDIUM,
-                                    Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
-                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                        dc.drawText(
+                            hw,
+                            hh - tempSpace, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
                     } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh - tempSpace, Graphics.FONT_MEDIUM,
-                                    Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
-                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                        dc.drawText(
+                            hw,
+                            hh - tempSpace, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
                     } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh - tempSpace, Graphics.FONT_MEDIUM,
-                                    Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
-                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                        dc.drawText(
+                            hw,
+                            hh - tempSpace, Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
                     } else {
                         dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(hw, hh - tempSpace, Graphics.FONT_MEDIUM, "OFF",
-                                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                        dc.drawText(
+                            hw,
+                            hh - tempSpace, Graphics.FONT_MEDIUM,
+                            "OFF",
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
                     }
                 }
                 dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(hw, hh + tempSpace, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                dc.drawText(
+                    hw,
+                    hh + tempSpace, Graphics.FONT_MEDIUM,
+                    Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
+                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                );
             }
 
             if (mNestStatus.getEco()) {

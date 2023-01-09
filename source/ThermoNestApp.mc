@@ -18,10 +18,10 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.Application;
-import Toybox.Lang;
-import Toybox.WatchUi;
-import Toybox.Application.Properties;
+using Toybox.Application;
+using Toybox.Lang;
+using Toybox.WatchUi;
+using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestApp extends Application.AppBase {
@@ -51,7 +51,7 @@ class ThermoNestApp extends Application.AppBase {
     }
 
     // onStart() is called on application start up
-    function onStart(state as Dictionary?) as Void {
+    function onStart(state as Lang.Dictionary?) as Void {
         if (Globals.debug) {
             System.println(Lang.format("appVersion: $1$",  [Properties.getValue("appVersion")]));
             System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
@@ -60,14 +60,14 @@ class ThermoNestApp extends Application.AppBase {
     }
 
     // onStop() is called when your application is exiting
-    function onStop(state as Dictionary?) as Void {
+    function onStop(state as Lang.Dictionary?) as Void {
     }
 
     // Return the initial view of your application here
-    function getInitialView() as Array<Views or InputDelegates>? {
+    function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
         mNestStatus.isGlance = false;
-        mView = new ThermoNestView(mNestStatus);
-        return [ mView, new ThermoNestDelegate(mView) ] as Array<Views or InputDelegates>;
+        mView                = new ThermoNestView(mNestStatus);
+        return [ mView, new ThermoNestDelegate(mView) ] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
     }
 
     function onSettingsChanged() {

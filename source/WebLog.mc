@@ -20,14 +20,13 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.System;
-import Toybox.Communications;
-import Toybox.Lang;
+using Toybox.Communications;
+using Toybox.Lang;
 
 (:glance)
 class WebLog {
 
-    function print(a as String) {
+    function print(a as Lang.String) {
         Communications.makeWebRequest(
             "https://joseph.abbey1.org.uk/test.php",
             {
@@ -44,9 +43,9 @@ class WebLog {
         );
     }
 
-    function println(a as String) {
+    function println(a as Lang.String) {
         print(a + "\n");
     }
 
-    function on(responseCode as Number, data as Null or Dictionary or String) as Void {}
+    function on(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {}
 }

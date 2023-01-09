@@ -20,26 +20,25 @@
 //
 //-----------------------------------------------------------------------------------
 
-import Toybox.Graphics;
-import Toybox.Lang;
-import Toybox.System;
-import Toybox.WatchUi;
-import Toybox.Communications;
+using Toybox.Graphics;
+using Toybox.Lang;
+using Toybox.WatchUi;
+using Toybox.Communications;
 
 (:glance)
 class ErrorView extends WatchUi.View {
-    hidden var text as String;
+    hidden var text as Lang.String;
 
     hidden var errorIcon;
     hidden var textArea;
 
-    function initialize(t as String) {
+    function initialize(t as Lang.String) {
         View.initialize();
         text = t;
     }
 
     // Load your resources here
-    function onLayout(dc as Dc) as Void {
+    function onLayout(dc as Graphics.Dc) as Void {
         errorIcon = Application.loadResource(Rez.Drawables.ErrorIcon) as Graphics.BitmapResource;
 
         var w = dc.getWidth();
@@ -60,7 +59,7 @@ class ErrorView extends WatchUi.View {
     }
 
     // Update the view
-    function onUpdate(dc as Dc) as Void {
+    function onUpdate(dc as Graphics.Dc) as Void {
         var w = dc.getWidth();
         var h = dc.getHeight();
         var hw = w/2;
