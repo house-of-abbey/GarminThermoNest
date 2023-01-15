@@ -35,4 +35,8 @@
   <!-- لتمكين توطين اللغة -->
   <string id="setMode">ضبط الأوضاع</string>
   <string id="tapIcon">اضغط على الأيقونات</string>
+  <string id="selectDevice" scope="glance">اختر جهاز</string>
+  <string id="deviceList">قائمة الأجهزة</string>
+  <string id="thermostat">منظم الحراره</string>
+  <string id="offStatus" scope="glance">إيقاف</string>
 </strings>

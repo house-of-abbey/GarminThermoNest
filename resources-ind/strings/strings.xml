@@ -35,4 +35,8 @@
   <!-- Untuk mengaktifkan lokalisasi bahasa -->
   <string id="setMode">Atur Mode</string>
   <string id="tapIcon">Ketuk Ikon</string>
+  <string id="selectDevice" scope="glance">Pilih alat</string>
+  <string id="deviceList">Daftar perangkat</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Mati</string>
 </strings>

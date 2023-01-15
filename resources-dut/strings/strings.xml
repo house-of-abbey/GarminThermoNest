@@ -35,4 +35,8 @@
   <!-- Om taallokalisatie in te schakelen -->
   <string id="setMode">Modi Instellen</string>
   <string id="tapIcon">Tik Op Pictogrammen</string>
+  <string id="selectDevice" scope="glance">Selecteer apparaat</string>
+  <string id="deviceList">Lijst met apparaten</string>
+  <string id="thermostat">Thermostaat</string>
+  <string id="offStatus" scope="glance">Uit</string>
 </strings>

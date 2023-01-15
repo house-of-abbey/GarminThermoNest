@@ -35,4 +35,8 @@
   <!-- Pour activer la localisation de la langue -->
   <string id="setMode">Définir Les Modes</string>
   <string id="tapIcon">Appuyez Sur Les Icônes</string>
+  <string id="selectDevice" scope="glance">Choisir un appareil</string>
+  <string id="deviceList">Liste des périphériques</string>
+  <string id="thermostat">Thermostat</string>
+  <string id="offStatus" scope="glance">Désactivé</string>
 </strings>

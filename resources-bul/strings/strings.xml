@@ -35,4 +35,8 @@
   <!-- За да активирате езиковата локализация -->
   <string id="setMode">Задаване На Режими</string>
   <string id="tapIcon">Докоснете Икони</string>
+  <string id="selectDevice" scope="glance">Изберете Устройство</string>
+  <string id="deviceList">Списък с устройства</string>
+  <string id="thermostat">Термостат</string>
+  <string id="offStatus" scope="glance">Изкл</string>
 </strings>

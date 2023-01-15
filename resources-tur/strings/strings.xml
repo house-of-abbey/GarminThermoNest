@@ -35,4 +35,8 @@
   <!-- Dil yerelleştirmesini etkinleştirmek için -->
   <string id="setMode">Modları Ayarla</string>
   <string id="tapIcon">Simgelere Dokunun</string>
+  <string id="selectDevice" scope="glance">Cihaz seç</string>
+  <string id="deviceList">Cihaz listesi</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Kapalı</string>
 </strings>

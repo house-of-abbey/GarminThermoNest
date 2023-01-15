@@ -38,9 +38,10 @@ class ThermoNestApp extends Application.AppBase {
     function getGlanceView() {
         mNestStatus.isGlance = true;
         mGlanceView = new ThermoNestGlanceView(mNestStatus);
-        return [ mGlanceView ];
+        return [mGlanceView];
     }
 
+    // XXX Does this need to be per View now?
     function requestCallback() as Void {
         if (mView != null) {
             mView.requestCallback();
@@ -53,26 +54,23 @@ class ThermoNestApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state as Lang.Dictionary?) as Void {
         if (Globals.debug) {
-            System.println(Lang.format("appVersion: $1$",  [Properties.getValue("appVersion")]));
             System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
             System.println(Lang.format("deviceId: $1$",    [Properties.getValue("deviceId")]));
         }
     }
 
     // onStop() is called when your application is exiting
-    function onStop(state as Lang.Dictionary?) as Void {
-    }
+    function onStop(state as Lang.Dictionary?) as Void {}
 
     // Return the initial view of your application here
     function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
         mNestStatus.isGlance = false;
         mView                = new ThermoNestView(mNestStatus);
-        return [ mView, new ThermoNestDelegate(mView) ] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
+        return [mView, new ThermoNestDelegate(mView)] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
     }
 
     function onSettingsChanged() {
         if (Globals.debug) {
-            System.println(Lang.format("appVersion: $1$",  [Properties.getValue("appVersion")]));
             System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
             System.println(Lang.format("deviceId: $1$",    [Properties.getValue("deviceId")]));
         }

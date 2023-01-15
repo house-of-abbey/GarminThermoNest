@@ -30,9 +30,13 @@
   <string id="tokenGroupTitle">인증 토큰 - 애플리케이션이 이를 관리하지만 여기에서 가시성이 제공됩니다.</string>
   <string id="accessTokenTitle">액세스 토큰 - Google Nest SDM API 프로젝트에 대한 OAuth2 인증 액세스 토큰입니다. OAuth 코드에서 파생되며 1시간 동안 지속됩니다.</string>
   <string id="accessTokenExpireTitle">액세스 토큰 만료 - 액세스 토큰이 만료되는 UTC 시간 값입니다.</string>
-  <string id="refreshTokenTitle">새로 고침 토큰 - Google Nest SDM API 프로젝트에 대한 OAuth2 승인 새로 고침 토큰입니다. 만료된 액세스 토큰을 새로 고치는 데 사용됩니다.</string>
+  <string id="refreshTokenTitle">새로 고침 토큰 - Google Nest SDM API 프로젝트에 대한 OAuth2 인증 새로 고침 토큰입니다. 만료된 액세스 토큰을 새로 고치는 데 사용됩니다.</string>
   <string id="appManagedPrompt">앱에서 관리합니다.</string>
   <!-- 언어 현지화를 활성화하려면 -->
   <string id="setMode">모드 설정</string>
   <string id="tapIcon">탭 아이콘</string>
+  <string id="selectDevice" scope="glance">장치 선택</string>
+  <string id="deviceList">장치 목록</string>
+  <string id="thermostat">온도 조절기</string>
+  <string id="offStatus" scope="glance">끄다</string>
 </strings>

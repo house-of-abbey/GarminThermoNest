@@ -35,4 +35,8 @@
   <!-- Para ativar a localização de idioma -->
   <string id="setMode">Definir Modos</string>
   <string id="tapIcon">Toque Nos Ícones</string>
+  <string id="selectDevice" scope="glance">Selecionar dispositivo</string>
+  <string id="deviceList">Lista de dispositivos</string>
+  <string id="thermostat">Termostato</string>
+  <string id="offStatus" scope="glance">Desligado</string>
 </strings>

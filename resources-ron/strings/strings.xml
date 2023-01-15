@@ -23,16 +23,20 @@
 
 <strings>
   <string id="AppName">ThermoNest</string>
-  <string id="deviceIdTitle">ID dispozitiv - ID-ul dispozitivului ales extras din proiectul dvs. de acces la dispozitiv. Asigurați-vă că identificați ID-ul dispozitivului termostatului dvs. Nest.</string>
+  <string id="deviceIdTitle">ID dispozitiv - ID-ul dispozitivului ales preluat din proiectul dvs. de acces la dispozitiv. Asigurați-vă că identificați ID-ul dispozitivului termostatului dvs. Nest.</string>
   <string id="deviceIdPrompt">Completat de în selecția aplicației.</string>
   <string id="oauthCodeTitle">Cod OAuth - Cod de autorizare OAuth2 pentru proiectul dvs. API Google Nest SDM.</string>
   <string id="oauthCodePrompt">Lipiți rezultatul de pe pagina web.</string>
   <string id="tokenGroupTitle">Jetoane de autorizare - Aplicația le gestionează, dar vizibilitatea este oferită aici.</string>
-  <string id="accessTokenTitle">Jeton de acces - Jeton de acces de autorizare OAuth2 pentru proiectul dvs. API Google Nest SDM. Derivat din codul OAuth și durează 1 oră.</string>
+  <string id="accessTokenTitle">Token de acces - Token de acces de autorizare OAuth2 pentru proiectul dvs. API Google Nest SDM. Derivat din codul OAuth și durează 1 oră.</string>
   <string id="accessTokenExpireTitle">Acces Token Expire - O valoare de timp UTC pentru momentul expirării jetonului de acces.</string>
   <string id="refreshTokenTitle">Refresh Token – OAuth2 Authorization Refresh Token pentru proiectul dvs. Google Nest SDM API. Folosit pentru a reîmprospăta jetonul de acces odată ce acesta a expirat.</string>
   <string id="appManagedPrompt">Gestionat de aplicație.</string>
   <!-- Pentru a activa localizarea limbii -->
   <string id="setMode">Setați Moduri</string>
   <string id="tapIcon">Atingeți Pictograme</string>
+  <string id="selectDevice" scope="glance">Selecteaza dispozitivul</string>
+  <string id="deviceList">Lista de dispozitive</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Oprit</string>
 </strings>

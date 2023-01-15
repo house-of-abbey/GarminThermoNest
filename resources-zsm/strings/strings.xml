@@ -35,4 +35,8 @@
   <!-- Untuk membolehkan penyetempatan bahasa -->
   <string id="setMode">Tetapkan Mod</string>
   <string id="tapIcon">Ketik Ikon</string>
+  <string id="selectDevice" scope="glance">Pilih Peranti</string>
+  <string id="deviceList">Senarai Peranti</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Mati</string>
 </strings>

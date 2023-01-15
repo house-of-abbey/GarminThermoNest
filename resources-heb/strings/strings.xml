@@ -29,10 +29,14 @@
   <string id="oauthCodePrompt">הדבק תוצאה מדף אינטרנט.</string>
   <string id="tokenGroupTitle">אסימוני הרשאה - האפליקציה מנהלת את אלה, אך ניתן לראות כאן.</string>
   <string id="accessTokenTitle">אסימון גישה - אסימון גישה לאישור OAuth2 עבור פרויקט Google Nest SDM API שלך. נגזר מקוד OAuth ונמשך שעה.</string>
-  <string id="accessTokenExpireTitle">תוקף אסימון הגישה - ערך זמן UTC למועד שבו יפוג תוקף אסימון הגישה.</string>
+  <string id="accessTokenExpireTitle">תפוגה של אסימון הגישה - ערך זמן UTC למועד פג תוקפו של אסימון הגישה.</string>
   <string id="refreshTokenTitle">Refresh Token - OAuth2 Authorization Refresh Token עבור פרויקט Google Nest SDM API שלך. משמש לרענון אסימון הגישה לאחר שפג תוקפו.</string>
   <string id="appManagedPrompt">מנוהל על ידי האפליקציה.</string>
   <!-- כדי לאפשר לוקליזציה של שפה -->
   <string id="setMode">הגדר מצבים</string>
   <string id="tapIcon">הקש על אייקונים</string>
+  <string id="selectDevice" scope="glance">תבחר מכשיר</string>
+  <string id="deviceList">רשימת התקנים</string>
+  <string id="thermostat">תֶרמוֹסטָט</string>
+  <string id="offStatus" scope="glance">כבוי</string>
 </strings>

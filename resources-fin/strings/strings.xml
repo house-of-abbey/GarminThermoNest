@@ -23,7 +23,7 @@
 
 <strings>
   <string id="AppName">ThermoNest</string>
-  <string id="deviceIdTitle">Laitetunnus – Laitekäyttöprojektistasi haettu valittu laitetunnus. Varmista, että tunnistat Nest-termostaatin laitetunnuksen.</string>
+  <string id="deviceIdTitle">Laitetunnus – Valittu laitetunnus, joka on haettu laitteen käyttöprojektistasi. Varmista, että tunnistat Nest-termostaatin laitetunnuksen.</string>
   <string id="deviceIdPrompt">Täytetty hakemusvalintaan.</string>
   <string id="oauthCodeTitle">OAuth Code – OAuth2-valtuutuskoodi Google Nest SDM API -projektillesi.</string>
   <string id="oauthCodePrompt">Liitä tulos verkkosivulta.</string>
@@ -35,4 +35,8 @@
   <!-- Ota käyttöön kielen lokalisointi -->
   <string id="setMode">Aseta Tilat</string>
   <string id="tapIcon">Napauta Kuvakkeet</string>
+  <string id="selectDevice" scope="glance">Valitse Laite</string>
+  <string id="deviceList">Laiteluettelo</string>
+  <string id="thermostat">Termostaatti</string>
+  <string id="offStatus" scope="glance">Vinossa</string>
 </strings>

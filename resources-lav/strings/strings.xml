@@ -35,4 +35,8 @@
   <!-- Lai iespējotu valodas lokalizāciju -->
   <string id="setMode">Iestatīt Režīmus</string>
   <string id="tapIcon">Pieskarieties Ikonas</string>
+  <string id="selectDevice" scope="glance">Atlasiet Ierīce</string>
+  <string id="deviceList">Ierīču saraksts</string>
+  <string id="thermostat">Termostats</string>
+  <string id="offStatus" scope="glance">Izslēgts</string>
 </strings>

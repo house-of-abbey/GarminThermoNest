@@ -27,7 +27,7 @@
   <string id="deviceIdPrompt">Wypełnia wybór aplikacji.</string>
   <string id="oauthCodeTitle">Kod OAuth — kod autoryzacji OAuth2 dla Twojego projektu Google Nest SDM API.</string>
   <string id="oauthCodePrompt">Wklej wynik ze strony internetowej.</string>
-  <string id="tokenGroupTitle">Tokeny autoryzacji — aplikacja zarządza nimi, ale tutaj jest zapewniona widoczność.</string>
+  <string id="tokenGroupTitle">Tokeny autoryzacji — aplikacja zarządza nimi, ale tutaj zapewniana jest widoczność.</string>
   <string id="accessTokenTitle">Token dostępu — token dostępu do autoryzacji OAuth2 dla Twojego projektu Google Nest SDM API. Pochodzi z kodu OAuth i trwa 1 godzinę.</string>
   <string id="accessTokenExpireTitle">Wygaśnięcie tokenu dostępu — wartość czasu UTC dla wygaśnięcia tokenu dostępu.</string>
   <string id="refreshTokenTitle">Token odświeżania — token odświeżania autoryzacji OAuth2 dla Twojego projektu Google Nest SDM API. Służy do odświeżania tokenu dostępu po jego wygaśnięciu.</string>
@@ -35,4 +35,8 @@
   <!-- Aby włączyć lokalizację języka -->
   <string id="setMode">Ustaw Tryby</string>
   <string id="tapIcon">Stuknij Ikony</string>
+  <string id="selectDevice" scope="glance">Wybierz urządzenie</string>
+  <string id="deviceList">Lista urządzeń</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Wyłączony</string>
 </strings>

@@ -35,4 +35,8 @@
   <!-- 言語ローカライズを有効にするには -->
   <string id="setMode">モードの設定</string>
   <string id="tapIcon">アイコンをタップ</string>
+  <string id="selectDevice" scope="glance">デバイスを選択</string>
+  <string id="deviceList">デバイス リスト</string>
+  <string id="thermostat">サーモスタット</string>
+  <string id="offStatus" scope="glance">オフ</string>
 </strings>

@@ -29,10 +29,14 @@
   <string id="oauthCodePrompt">Zalijepi rezultat s web stranice.</string>
   <string id="tokenGroupTitle">Tokeni autorizacije - njima upravlja aplikacija, ali ovdje je omogućena vidljivost.</string>
   <string id="accessTokenTitle">Pristupni token - OAuth2 autorizacijski pristupni token za vaš Google Nest SDM API projekt. Izvedeno iz OAuth koda i traje 1 sat.</string>
-  <string id="accessTokenExpireTitle">Istek tokena za pristup - UTC vremenska vrijednost kada istječe token za pristup.</string>
+  <string id="accessTokenExpireTitle">Istek tokena za pristup - vrijednost UTC vremena kada istječe token za pristup.</string>
   <string id="refreshTokenTitle">Osvježi token - OAuth2 autorizacijski token za osvježavanje za vaš Google Nest SDM API projekt. Koristi se za osvježavanje pristupnog tokena nakon što istekne.</string>
   <string id="appManagedPrompt">Upravlja aplikacija.</string>
   <!-- Da biste omogućili lokalizaciju jezika -->
   <string id="setMode">Postavite Načine Rada</string>
   <string id="tapIcon">Dodirnite Ikone</string>
+  <string id="selectDevice" scope="glance">Odaberite uređaj</string>
+  <string id="deviceList">Popis uređaja</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Isključeno</string>
 </strings>

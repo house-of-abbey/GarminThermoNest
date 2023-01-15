@@ -34,4 +34,8 @@
     <!-- To enable language localisation -->
     <string id="setMode">Set Modes</string>
     <string id="tapIcon">Tap Icons</string>
+    <string id="selectDevice" scope="glance">Select Device</string>
+    <string id="deviceList">Device List</string>
+    <string id="thermostat">Thermostat</string>
+    <string id="offStatus" scope="glance">Off</string>
 </strings>

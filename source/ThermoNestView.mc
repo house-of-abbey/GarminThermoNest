@@ -25,37 +25,37 @@ using Toybox.WatchUi;
 using Toybox.Application.Properties;
 
 
-// Between the full range arc and the outside of the watch face
-const margin        = 14;
-// Line width of the full range arc
-const full_arc_w    = 4;
-// Line width of the range arc (thicker than full_arc_w)
-const range_arc_w   = 8;
-// Heat & cool line width of a tick mark
-const hct_tick_w    = 4;
-// Ambient temperature line width of a tick mark
-const at_tick_w     = 8;
-// Ticks start at: watch radius - tick_st_r
-const tick_st_r     = 5;
-// Temperature range ends: watch radius - tick_ren_r
-const tick_ren_r    = 30;
-// Ambient temperature: watch radius - tick_aen_r
-const tick_aen_r    = 20;
-// Vertical space of top centre icon for connectivity/refresh icon
-const statusHeight  = 30;
-// Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
-const modeHeight    = 80;
-// Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
-// icons are spaced at twice this value.
-const modeSpacing   = 5;
-// Vertical spacing either side of centre for the temperature values
-const tempSpace     = 40;
-// Additional colours over Globals
-const darkGreyColor = 0xaaaaaa;
-const ecoGreenColor = 0x00801c;
-
 class ThermoNestView extends WatchUi.View {
-    hidden var mNestStatus;
+    // Between the full range arc and the outside of the watch face
+    hidden const margin        = 14;
+    // Line width of the full range arc
+    hidden const full_arc_w    = 4;
+    // Line width of the range arc (thicker than full_arc_w)
+    hidden const range_arc_w   = 8;
+    // Heat & cool line width of a tick mark
+    hidden const hct_tick_w    = 4;
+    // Ambient temperature line width of a tick mark
+    hidden const at_tick_w     = 8;
+    // Ticks start at: watch radius - tick_st_r
+    hidden const tick_st_r     = 5;
+    // Temperature range ends: watch radius - tick_ren_r
+    hidden const tick_ren_r    = 30;
+    // Ambient temperature: watch radius - tick_aen_r
+    hidden const tick_aen_r    = 20;
+    // Vertical space of top centre icon for connectivity/refresh icon
+    hidden const statusHeight  = 30;
+    // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
+    hidden const modeHeight    = 60;
+    // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
+    // icons are spaced at twice this value.
+    hidden const modeSpacing   = 5;
+    // Vertical spacing either side of centre for the temperature values
+    hidden const tempSpace     = 40;
+    // Additional colours over Globals
+    hidden const darkGreyColor = 0xaaaaaa;
+    hidden const ecoGreenColor = 0x00801c;
+
+    hidden var mNestStatus as NestStatus;
     hidden var mViewNav;
     hidden var refreshButton;
     hidden var ecoOffIcon;
@@ -64,6 +64,7 @@ class ThermoNestView extends WatchUi.View {
     hidden var heatOnIcon;
     hidden var coolOnIcon;
     hidden var heatCoolIcon;
+    hidden var humidityIcon;
     hidden var thermostatIcon;
     hidden var phoneDisconnectedIcon;
     hidden var signalDisconnectedIcon;
@@ -72,10 +73,12 @@ class ThermoNestView extends WatchUi.View {
     hidden var hourglassIcon;
     hidden var loggedOutIcon;
     hidden var errorIcon;
+    hidden var setOffLabel as Lang.String;
 
-    function initialize(n) {
+    function initialize(ns as NestStatus) {
         View.initialize();
-        mNestStatus = n;
+        mNestStatus = ns;
+        setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
     }
 
     // Load your resources here
@@ -86,6 +89,7 @@ class ThermoNestView extends WatchUi.View {
         heatOnIcon             = Application.loadResource(Rez.Drawables.HeatOnIcon            ) as Graphics.BitmapResource;
         coolOnIcon             = Application.loadResource(Rez.Drawables.CoolOnIcon            ) as Graphics.BitmapResource;
         heatCoolIcon           = Application.loadResource(Rez.Drawables.HeatCoolIcon          ) as Graphics.BitmapResource;
+        humidityIcon           = Application.loadResource(Rez.Drawables.HumidityIcon          ) as Graphics.BitmapResource;
         thermostatIcon         = Application.loadResource(Rez.Drawables.ThermostatIcon        ) as Graphics.BitmapResource;
         phoneDisconnectedIcon  = Application.loadResource(Rez.Drawables.PhoneDisconnectedIcon ) as Graphics.BitmapResource;
         signalDisconnectedIcon = Application.loadResource(Rez.Drawables.SignalDisconnectedIcon) as Graphics.BitmapResource;
@@ -101,11 +105,13 @@ class ThermoNestView extends WatchUi.View {
             :radius     => Globals.navRadius,
             :panes      => Globals.navPanes,
             :nth        => 2, // 1-based numbering
-            :visible    => true
+            :visible    => true,
+            :timeout    => Globals.navDelay,
+            :period     => Globals.navPeriod
         });
 
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
-        
+
         // A two element array containing the width and height of the Bitmap object
         var dim = bRefreshDisabledIcon.getDimensions();
         refreshButton = new WatchUi.Button({
@@ -129,6 +135,15 @@ class ThermoNestView extends WatchUi.View {
     }
 
     // Linear IntERPolatation
+    //
+    // Parameters:
+    //  x - Temperature value to scale by linear interpolation
+    //
+    //            | Min | Max
+    //      ------+-----+----
+    //      Temp  |  a  | b
+    //      Angle |  A  | B
+    //
     function lerp(x, a, b, A, B) {
         return (x - a) / (b - a) * (B - A) + A;
     }
@@ -174,18 +189,18 @@ class ThermoNestView extends WatchUi.View {
                 var heat = mNestStatus.getHeatTemp();
                 var cool = mNestStatus.getCoolTemp();
                 var ambientTemperatureArc = mNestStatus.getScale() == 'C'
-                    ? lerp(ambientTemperature,  9f, 32f, 240f, -60f)
-                    : lerp(ambientTemperature, 48f, 90f, 240f, -60f);
+                    ? lerp(ambientTemperature, Globals.minTempC, Globals.maxTempC, 240f, -60f)
+                    : lerp(ambientTemperature, Globals.minTempF, Globals.maxTempF, 240f, -60f);
                 var heatArc = (heat == null)
                     ? 0
                     : mNestStatus.getScale() == 'C'
-                        ? lerp(heat,  9f, 32f, 240f, -60f)
-                        : lerp(heat, 48f, 90f, 240f, -60f);
+                        ? lerp(heat, Globals.minTempC, Globals.maxTempC, 240f, -60f)
+                        : lerp(heat, Globals.minTempF, Globals.maxTempF, 240f, -60f);
                 var coolArc = (cool == null)
                     ? 0
                     : mNestStatus.getScale() == 'C'
-                        ? lerp(cool,  9f, 32f, 240f, -60f)
-                        : lerp(cool, 48f, 90f, 240f, -60f);
+                        ? lerp(cool, Globals.minTempC, Globals.maxTempC, 240f, -60f)
+                        : lerp(cool, Globals.minTempF, Globals.maxTempF, 240f, -60f);
 
                 if (heat != null) {
                     dc.setPenWidth(range_arc_w);
@@ -193,12 +208,17 @@ class ThermoNestView extends WatchUi.View {
                         dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
                         dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
                     } else {
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                         if (cool != null) {
-                            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            if (cool > heat) {
+                                // Test prevents full circle arc being drawn
+                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            }
                         } else {
-                            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                            if (ambientTemperature > heat) {
+                                // Test prevents full circle arc being drawn
+                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
+                            }
                         }
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -214,9 +234,15 @@ class ThermoNestView extends WatchUi.View {
                     } else {
                         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                         if (heat != null) {
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            if (cool > heat) {
+                                // Test prevents full circle arc being drawn
+                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            }
                         } else {
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                            if (cool > ambientTemperature) {
+                                // Test prevents full circle arc being drawn
+                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
+                            }
                         }
                     }
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -228,57 +254,64 @@ class ThermoNestView extends WatchUi.View {
                 dc.setPenWidth(at_tick_w);
                 drawTick(dc, ambientTemperatureArc, tick_st_r, tick_aen_r);
 
-                if (mNestStatus.getEco()) {
-                    dc.setColor(ecoGreenColor, Graphics.COLOR_TRANSPARENT);
+                if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     dc.drawText(
                         hw,
-                        hh - tempSpace, Graphics.FONT_MEDIUM,
-                        "ECO",
+                        hh - tempSpace,
+                        Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
+                } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(
+                        hw,
+                        hh - tempSpace,
+                        Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
+                } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
+                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(
+                        hw,
+                        hh - tempSpace,
+                        Graphics.FONT_MEDIUM,
+                        Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                     );
                 } else {
-                    if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
-                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(
-                            hw,
-                            hh - tempSpace, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                        );
-                    } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
-                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(
-                            hw,
-                            hh - tempSpace, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                        );
-                    } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
-                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(
-                            hw,
-                            hh - tempSpace, Graphics.FONT_MEDIUM,
-                            Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                        );
-                    } else {
-                        dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
-                        dc.drawText(
-                            hw,
-                            hh - tempSpace, Graphics.FONT_MEDIUM,
-                            "OFF",
-                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                        );
-                    }
+                    dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(
+                        hw,
+                        hh - tempSpace,
+                        Graphics.FONT_MEDIUM,
+                        setOffLabel,
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
                 }
+
                 dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(
                     hw,
-                    hh + tempSpace, Graphics.FONT_MEDIUM,
+                    hh + tempSpace,
+                    Graphics.FONT_MEDIUM,
                     Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                 );
             }
+
+            var humidity = mNestStatus.getHumidity();
+            dc.drawBitmap(hw - humidityIcon.getWidth() - 15, h * 3/4 - humidityIcon.getHeight()/2, humidityIcon);
+            dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(
+                hw + 25,
+                h * 3/4,
+                Graphics.FONT_TINY,
+                Lang.format("$1$%", [humidity.format("%2.0f")]),
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
 
             if (mNestStatus.getEco()) {
                 dc.drawBitmap(hw - ecoOnIcon.getWidth() - modeSpacing, h - modeHeight, ecoOnIcon);
@@ -291,7 +324,7 @@ class ThermoNestView extends WatchUi.View {
             } else if (mNestStatus.getThermoMode().equals("HEAT")) {
                 dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOnIcon);
             } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOnIcon);
+                dc.drawBitmap(hw + modeSpacing, h - modeHeight, coolOnIcon);
             } else {
                 dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOffIcon);
             }
@@ -341,9 +374,9 @@ class ThermoNestView extends WatchUi.View {
     }
 
     function onRefreshButton() as Void {
-        mNestStatus.getOAuthToken();
+        // Assume the application has not been used in excess of 3600s such that the token has expired
+        mNestStatus.getDeviceData();
         refreshButton.setState(:stateDisabled);
-        requestUpdate();
     }
 
     function getNestStatus() as NestStatus {
@@ -358,7 +391,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         mView = v;
     }
     function onRefreshButton() {
-        return mView.onRefreshButton(); 
+        return mView.onRefreshButton();
     }
     function onPreviousPage() {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {

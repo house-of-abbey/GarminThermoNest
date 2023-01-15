@@ -23,16 +23,20 @@
 
 <strings>
   <string id="AppName">ThermoNest</string>
-  <string id="deviceIdTitle">Eszközazonosító – Az eszközelérési projektből lekért kiválasztott eszközazonosító. Ügyeljen arra, hogy azonosítsa a Nest Thermostat eszközazonosítóját.</string>
+  <string id="deviceIdTitle">Eszközazonosító – Az eszközelérési projektből leolvasott kiválasztott eszközazonosító. Győződjön meg arról, hogy azonosította a Nest Thermostat eszközazonosítóját.</string>
   <string id="deviceIdPrompt">A pályázati kiválasztásnál kitöltve.</string>
   <string id="oauthCodeTitle">OAuth-kód – OAuth2-engedélyezési kód a Google Nest SDM API-projekthez.</string>
   <string id="oauthCodePrompt">Illessze be az eredményt a weboldalról.</string>
   <string id="tokenGroupTitle">Engedélyezési tokenek – Az alkalmazás kezeli ezeket, de a láthatóság itt biztosított.</string>
-  <string id="accessTokenTitle">Hozzáférési token – OAuth2 engedélyezési hozzáférési token a Google Nest SDM API-projektjéhez. Az OAuth-kódból származik, és 1 óráig tart.</string>
-  <string id="accessTokenExpireTitle">Hozzáférési jogkivonat lejárata – UTC időérték a hozzáférési jogkivonat lejártának időpontjára.</string>
+  <string id="accessTokenTitle">Hozzáférési token – OAuth2 engedélyezési hozzáférési token a Google Nest SDM API-projekthez. Az OAuth-kódból származik, és 1 óráig tart.</string>
+  <string id="accessTokenExpireTitle">Hozzáférési jogkivonat lejárata – UTC időérték a hozzáférési jogkivonat lejártakor.</string>
   <string id="refreshTokenTitle">Refresh Token – OAuth2-engedélyezési frissítési token a Google Nest SDM API-projekthez. A hozzáférési token frissítésére szolgál, ha lejárt.</string>
   <string id="appManagedPrompt">Az App által kezelt.</string>
   <!-- A nyelvi lokalizáció engedélyezése -->
   <string id="setMode">Módok Beállítása</string>
   <string id="tapIcon">Koppintson Az Ikonok Elemre</string>
+  <string id="selectDevice" scope="glance">Válassz eszközt</string>
+  <string id="deviceList">Eszközlista</string>
+  <string id="thermostat">Termosztát</string>
+  <string id="offStatus" scope="glance">Ki</string>
 </strings>

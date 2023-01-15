@@ -15,9 +15,9 @@
 // Description:
 //
 // NestStatus provides the background services for interacting with the Nest API and
-// the Google Cloud Project hosting the REST API access we paid for. In the main it
-// provides a cache of the online status locally, but is also used to update the
-// desired settings and post new settings back to the REST API.
+// the Google Cloud Project hosting the REST API access we paid for. It provides a
+// cache of the online status locally, and is also used to post new settings back to
+// the REST API.
 //
 // References:
 //  * https://developers.google.com/nest/device-access/registration
@@ -66,25 +66,14 @@ class NestStatus {
     hidden var availableEcoModes    = null  as Lang.Array;
     hidden var eco                  = false as Lang.Boolean;
 
-    // Copies before edit for a diff
-    hidden var _heatTemp             = 0.0   as Lang.Number;
-    hidden var _coolTemp             = 0.0   as Lang.Number;
-    hidden var _thermoMode           = ""    as Lang.String;
-    hidden var _eco                  = false as Lang.Boolean;
-
+    // XXX These ought not to be public
     public var gotDeviceData        = false as Lang.Boolean;
     public var gotDeviceDataError   = false as Lang.Boolean;
-
-    // Do we have an Internet connection?
-    hidden var wifiConnection = true;
 
     function initialize(h) {
         requestCallback = h;
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-            var c = Properties.getValue("oauthCode");
-            if (c != null && !c.equals("")) {
-                getOAuthToken();
-            }
+            getOAuthToken();
         }
     }
 
@@ -101,92 +90,92 @@ class NestStatus {
     }
 
     // Convert temperature to the units in 'scale'.
-    function getAmbientTemp() as Lang.Number {
-        if (scale == 'C') {
-            return ambientTemp;
+    function getAmbientTemp() as Lang.Float or Null {
+        if (ambientTemp == null) {
+            return null;
         } else {
-            return (ambientTemp * 9/5) + 32;
+            if (scale == 'C') {
+                return ambientTemp;
+            } else {
+                return cToF(ambientTemp);
+            }
         }
     }
 
     // Convert temperature to the units in 'scale'.
-    function getHeatTemp() as Lang.Number {
-        if (scale == 'C') {
-            return heatTemp;
+    function getHeatTemp() as Lang.Float or Null {
+        if (heatTemp == null) {
+            return null;
         } else {
-            return (heatTemp * 9/5) + 32;
+            if (scale == 'C') {
+                return limitC(heatTemp);
+            } else {
+                return cToF(heatTemp);
+            }
         }
     }
-    function setHeatTemp(value as Lang.Number) as Void {
+
+    function setHeatTemp(value as Lang.Float) as Void {
         if (!eco) {
             if (scale == 'C') {
                 if (9f <= value && value <= 32f) {
-                    heatTemp = value;
+                    heatTemp = limitC(value);
+                } else {
+                    if (Globals.debug) {
+                        System.println("setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
+                    }
                 }
             } else {
                 if (48f <= value && value <= 90f) {
-                    heatTemp = (value - 32) * 5/9;
-                }
-            }
-            requestCallback.invoke();
-        }
-    }
-    function onReturnHeatTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
-        if (Globals.debug) {
-            System.println("onReturnHeatTemp() Response Code: " + responseCode);
-            System.println("onReturnHeatTemp() Response Data: " + data);
-        }
-        if (responseCode != 200) {
-            if (!isGlance) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
-            }
-            getDeviceData();
-        }
-        requestCallback.invoke();
-    }
-    function executeHeatTemp() as Void {
-        if (!eco && (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL"))) {
-            if (heatTemp != _heatTemp) {
-                executeCommand({
-                    "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetHeat",
-                    "params"  => {
-                        "heatCelsius" => heatTemp
+                    heatTemp = fToC(value);
+                } else {
+                    if (Globals.debug) {
+                        System.println("setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
                     }
-                }, method(:onReturnHeatTemp));
-            } else {
-                if (Globals.debug) {
-                    System.println("Skipping executeHeatTemp() as no change.");
                 }
             }
         }
     }
 
     // Convert temperature to the units in 'scale'.
-    function getCoolTemp() as Lang.Number {
-        if (scale == 'C') {
-            return coolTemp;
+    function getCoolTemp() as Lang.Float or Null {
+        if (coolTemp == null) {
+            return null;
         } else {
-            return (coolTemp * 9/5) + 32;
+            if (scale == 'C') {
+                return coolTemp;
+            } else {
+                return cToF(coolTemp);
+            }
         }
     }
-    function setCoolTemp(value as Lang.Number) as Void {
+
+    function setCoolTemp(value as Lang.Float) as Void {
         if (!eco) {
             if (scale == 'C') {
                 if (9f <= value && value <= 32f) {
                     coolTemp = value;
+                } else {
+                    if (Globals.debug) {
+                        System.println("setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
+                    }
                 }
             } else {
                 if (48f <= value && value <= 90f) {
-                    coolTemp = (value - 32) * 5/9;
+                    coolTemp = fToC(value);
+                } else {
+                    if (Globals.debug) {
+                        System.println("setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
+                    }
                 }
             }
-            requestCallback.invoke();
         }
     }
-    function onReturnCoolTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
+
+    function onReturnChangeTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
-            System.println("onReturnCoolTemp() Response Code: " + responseCode);
-            System.println("onReturnCoolTemp() Response Data: " + data);
+            System.println("onReturnChangeTemp() Response Code: " + responseCode);
+            System.println("onReturnChangeTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
@@ -194,23 +183,99 @@ class NestStatus {
             }
             getDeviceData();
         }
+        // XXX Pass this via the function parameters
+        if (Globals.debug) {
+            System.println("onReturnChangeTemp() Display Update");
+        }
         requestCallback.invoke();
     }
-    function executeCoolTemp() as Void {
-        if (!eco && (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL"))) {
-            if (coolTemp != _coolTemp) {
-                executeCommand({
-                    "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetCool",
-                    "params"  => {
-                        "CoolCelsius" => coolTemp
-                    }
-                }, method(:onReturnCoolTemp));
-            } else {
-                if (Globals.debug) {
-                    System.println("Skipping executeCoolTemp() as no change.");
-                }
-            }
+
+    function executeChangeTemp(ht as Lang.Float, ct as Lang.Float) as Void {
+        if (scale == 'C') {
+            if (ht != null) { ht = limitC(ht); }
+            if (ct != null) { ct = limitC(ct); }
+        } else {
+            if (ht != null) { ht = fToC(ht); }
+            if (ct != null) { ct = fToC(ct); }
         }
+        if (!eco && !thermoMode.equals("OFF")) {
+            // https://developers.google.com/nest/device-access/traits/device/thermostat-temperature-setpoint
+            switch (thermoMode as Lang.String) {
+                case "OFF":
+                    break;
+
+                case "HEAT":
+                    if (heatTemp != ht) {
+                        executeCommand(
+                            {
+                                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetHeat",
+                                "params"  => {
+                                    "heatCelsius" => ht
+                                }
+                            },
+                            method(:onReturnChangeTemp),
+                            null
+                        );
+                        // Sets heatTemp below within the allowed limits in Celcius
+                        setHeatTemp(ht);
+                    } else {
+                        if (Globals.debug) {
+                            System.println("Skipping executeChangeTemp() as no change.");
+                        }
+                    }
+                    break;
+
+                case "COOL":
+                    if (coolTemp != ct) {
+                        executeCommand(
+                            {
+                                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetCool",
+                                "params"  => {
+                                    "CoolCelsius" => ct
+                                }
+                            },
+                            method(:onReturnChangeTemp),
+                            null
+                        );
+                        // Sets heatTemp below within the allowed limits in Celcius
+                        setCoolTemp(ct);
+                    } else {
+                        if (Globals.debug) {
+                            System.println("Skipping executeChangeTemp() as no change.");
+                        }
+                    }
+                    break;
+
+                case "HEATCOOL":
+                    if (heatTemp != ht || coolTemp != ct) {
+                        executeCommand(
+                            {
+                                "command" => "sdm.devices.commands.ThermostatTemperatureSetpoint.SetRange",
+                                "params"  => {
+                                    "heatCelsius" => ht,
+                                    "CoolCelsius" => ct
+                                }
+                            },
+                            method(:onReturnChangeTemp),
+                            null
+                        );
+                        // Sets heatTemp below within the allowed limits in Celcius
+                        setHeatTemp(ht);
+                        setCoolTemp(ct);
+                    } else {
+                        if (Globals.debug) {
+                            System.println("Skipping executeChangeTemp() as no change.");
+                        }
+                    }
+                    break;
+
+                default:
+                    if (Globals.debug) {
+                        System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + thermoMode + "'");
+                    }
+                    break;
+            }
+         }
     }
 
     function getHumidity() as Lang.Number {
@@ -224,17 +289,15 @@ class NestStatus {
     function getThermoMode() as Lang.String {
         return thermoMode;
     }
-    function setThermoMode(value as Lang.String) as Void {
-        if (value.equals("OFF")) {
-            eco = false;
-        }
-        thermoMode = value;
-        requestCallback.invoke();
-    }
-    function nextAvailableThermoModes() as Void {
-        setThermoMode((availableThermoModes as Lang.Array)[(availableThermoModes.indexOf(thermoMode)+1) % availableThermoModes.size()]);
-    }
-    function onReturnThermoMode(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
+
+    // function setThermoMode(value as Lang.String) as Void {
+    //     if (value.equals("OFF")) {
+    //         eco = false;
+    //     }
+    //     thermoMode = value;
+    // }
+
+    function onReturnThermoMode(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
             System.println("onReturnThermoMode() Response Code: " + responseCode);
             System.println("onReturnThermoMode() Response Data: " + data);
@@ -243,23 +306,28 @@ class NestStatus {
             if (!isGlance) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
-            getDeviceData();
         }
-        executeMode(Thermo);
+        executeMode(Thermo, context as Lang.Dictionary);
     }
-    function executeThermoMode() as Void {
-        if (!thermoMode.equals(_thermoMode)) {
-            executeCommand({
-                "command" => "sdm.devices.commands.ThermostatMode.SetMode",
-                "params"  => {
-                    "mode" => thermoMode
-                }
-            }, method(:onReturnThermoMode));
-        } else {
+
+    function executeThermoMode(params as Lang.Dictionary) as Void {
+        var mode = params.get(:thermoMode);
+        if (mode.equals(thermoMode)) {
             if (Globals.debug) {
                 System.println("Skipping executeThermoMode() as no change.");
             }
-            executeMode(NoThermo);
+            executeMode(NoThermo, params);
+        } else {
+            executeCommand(
+                {
+                    "command" => "sdm.devices.commands.ThermostatMode.SetMode",
+                    "params"  => {
+                        "mode" => mode
+                    }
+                },
+                method(:onReturnThermoMode),
+                params as Lang.Object
+            );
         }
     }
 
@@ -274,25 +342,21 @@ class NestStatus {
     function getEco() as Lang.Boolean {
         return eco;
     }
-    function setEco(value as Lang.Boolean) as Void {
-        if (value) {
-            if (availableThermoModes.indexOf("HEATCOOL") != -1) {
-                thermoMode = "HEATCOOL";
-            } else if (availableThermoModes.indexOf("HEAT") != -1) {
-                thermoMode = "HEAT";
-            } else if (availableThermoModes.indexOf("COOL") != -1) {
-                thermoMode = "COOL";
-            }
-        }
-        eco = value;
-        requestCallback.invoke();
-    }
-    function nextAvailableEcoMode() as Void {
-        if (availableEcoModes.indexOf("MANUAL_ECO") != -1) {
-            setEco(!eco);
-        }
-    }
-    function onReturnEco(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
+
+    // function setEco(value as Lang.Boolean) as Void {
+    //     if (value) {
+    //         if (availableThermoModes.indexOf("HEATCOOL") != -1) {
+    //             thermoMode = "HEATCOOL";
+    //         } else if (availableThermoModes.indexOf("HEAT") != -1) {
+    //             thermoMode = "HEAT";
+    //         } else if (availableThermoModes.indexOf("COOL") != -1) {
+    //             thermoMode = "COOL";
+    //         }
+    //     }
+    //     eco = value;
+    // }
+
+    function onReturnEco(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
             System.println("onReturnEco() Response Code: " + responseCode);
             System.println("onReturnEco() Response Data: " + data);
@@ -301,64 +365,83 @@ class NestStatus {
             if (!isGlance) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
-            getDeviceData();
         }
-        executeMode(Eco);
+        executeMode(Eco, context as Lang.Dictionary);
     }
-    function executeEco() as Void {
-        if (eco != _eco) {
-            executeCommand({
-                "command" => "sdm.devices.commands.ThermostatEco.SetMode",
-                "params"  => {
-                    "mode" => eco ? "MANUAL_ECO" : "OFF"
-                }
-            }, method(:onReturnEco));
-        } else {
+
+    function executeEco(
+        params as {
+            :thermoMode as Lang.String,
+            :ecoMode    as Lang.Boolean
+        }
+    ) as Void {
+        var e = params.get(:ecoMode);
+        if (eco == e) {
             if (Globals.debug) {
                 System.println("Skipping executeEco() as no change.");
             }
-            executeMode(NoEco);
+            executeMode(NoEco, params);
+        } else {
+            executeCommand(
+                {
+                    "command" => "sdm.devices.commands.ThermostatEco.SetMode",
+                    "params"  => {
+                        "mode" => e ? "MANUAL_ECO" : "OFF"
+                    }
+                },
+                method(:onReturnEco),
+                params
+            );
+            eco = e;
         }
     }
 
     // Spawn sub-tasks from here and retain control of execution of asynchronous elements.
-    function executeMode(r) as Void {
+    function executeMode(
+        r      as Lang.Number,
+        params as {
+            :thermoMode as Lang.String,
+            :ecoMode    as Lang.Boolean
+        }
+    ) as Void {
         switch (r) {
             case Start:
+                if (Globals.debug) {
+                    System.println("executeMode() Start: thermoMode=" + params.get(:thermoMode) + ", ecoMode=" + params.get(:ecoMode));
+                }
                 // Changing ThermoMode also turns off Eco Mode, then setting Eco mode off errors.
-                executeThermoMode();
+                executeThermoMode(params);
                 break;
             case NoThermo:
-                executeEco();
+                if (Globals.debug) {
+                    System.println("executeMode() NoThermo");
+                }
+                executeEco(params);
                 break;
             case Thermo:
+                if (Globals.debug) {
+                    System.println("executeMode() Thermo");
+                }
                 // At this point Eco is always OFF as we set the ThermoMode.
-                if (eco) {
-                    executeEco();
+                if (params.get(:ecoMode)) {
+                    executeEco(params);
+                } else {
+                    // The end
+                    getDeviceData();
                 }
                 break;
             case NoEco: // Fall through
             case Eco:
+                if (Globals.debug) {
+                    System.println("executeMode() NoEco & Eco");
+                }
                 // The end
-                requestCallback.invoke();
+                getDeviceData();
                 break;
         }
     }
 
-    // Copy the state at the onShow() of an edit View for comparison later in order to reduce
-    // unnecessary API requests. This is then compared by the execute functions in order to
-    // decide if they make changes via the API.
-    //
-    function copyState() {
-        _heatTemp   = heatTemp;
-        _coolTemp   = coolTemp;
-        _thermoMode = thermoMode;
-        _eco        = eco;
-    }
-
-    private function executeCommand(payload as Lang.Dictionary, callback) {
-        var url = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices/" + Properties.getValue("deviceId") + ":executeCommand";
-
+    private function executeCommand(payload as Lang.Dictionary, callback, context as Lang.Object or Null) {
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_POST,
             :headers => {
@@ -367,8 +450,11 @@ class NestStatus {
             },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
-        if (System.getDeviceSettings().phoneConnected && wifiConnection) {
-            Communications.makeWebRequest(url, payload, options, callback);
+        if (context != null) {
+            options.put(:context, context);
+        }
+        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
+            Communications.makeWebRequest(Globals.getExecuteCommandUrl(), payload, options, callback);
         } else {
             if (Globals.debug) {
                 System.println("Note - executeCommand(): No Internet connection, skipping API call.");
@@ -405,15 +491,15 @@ class NestStatus {
                     }
                     var e = traits.get("sdm.devices.traits.Temperature") as Lang.Dictionary;
                     if (e != null) {
-                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Number);
+                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Float, 0.5f);
                         if (Globals.debug) {
                             System.println(" Temperature: " + ambientTemp + " deg C");
                         }
                     }
                     var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Lang.Dictionary;
                     if (ttsp != null) {
-                        heatTemp = round(ttsp.get("heatCelsius") as Lang.Number);
-                        coolTemp = round(ttsp.get("coolCelsius") as Lang.Number);
+                        heatTemp = round(ttsp.get("heatCelsius") as Lang.Float, 0.5f);
+                        coolTemp = round(ttsp.get("coolCelsius") as Lang.Float, 0.5f);
                         if (Globals.debug) {
                             System.println(" Heat Temperature: " + heatTemp + " deg C");
                             System.println(" Cool Temperature: " + coolTemp + " deg C");
@@ -451,11 +537,17 @@ class NestStatus {
                             System.println(" ThermostatEco: " + (eco ? "Eco" : "Off"));
                         }
                         if (eco) {
-                            heatTemp = round(te.get("heatCelsius") as Lang.Number);
-                            coolTemp = round(te.get("coolCelsius") as Lang.Number);
-                            if (Globals.debug) {
-                                System.println(" Heat Temperature: " + heatTemp + " deg C (eco)");
-                                System.println(" Cool Temperature: " + coolTemp + " deg C (eco)");
+                            if (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL")) {
+                                heatTemp = round(te.get("heatCelsius") as Lang.Float, 0.5);
+                                if (Globals.debug) {
+                                    System.println(" Heat Temperature: " + heatTemp + " deg C (eco)");
+                                }
+                            }
+                            if (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL")) {
+                                coolTemp = round(te.get("coolCelsius") as Lang.Float, 0.5);
+                                if (Globals.debug) {
+                                    System.println(" Cool Temperature: " + coolTemp + " deg C (eco)");
+                                }
                             }
                         }
                     }
@@ -463,7 +555,6 @@ class NestStatus {
             }
             gotDeviceData      = true;
             gotDeviceDataError = false;
-            requestCallback.invoke();
         } else {
             if (Globals.debug) {
                 System.println("onReceiveDeviceData() Response Code: " + responseCode);
@@ -479,6 +570,7 @@ class NestStatus {
                 }
             } else if (responseCode == 401) {
                 Properties.setValue("accessToken", "");
+                Properties.setValue("accessTokenExpire", 0);
                 Properties.setValue("refreshToken", "");
                 if (!isGlance) {
                     WatchUi.pushView(new ErrorView("Authentication issue, access and refresh tokens deleted."), new ErrorDelegate(), WatchUi.SLIDE_UP);
@@ -487,20 +579,17 @@ class NestStatus {
                 // This method might be called before authorisation has completed.
                 if (!isGlance && (data != null)) {
                     WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
-                } else {
-                    if (Globals.debug) {
-                        System.println("onReceiveDeviceData() Response Code: " + responseCode);
-                        System.println("onReceiveDeviceData() Response Data: " + data);
-                    }
                 }
             }
-
-            requestCallback.invoke();
         }
+        // XXX Pass this via the function parameters
+        if (Globals.debug) {
+            System.println("onReceiveDeviceData() Display Update");
+        }
+        requestCallback.invoke();
     }
 
     function getDeviceData() as Void {
-        var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices/" + Properties.getValue("deviceId");
         var options = {
             :method  => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
@@ -510,8 +599,8 @@ class NestStatus {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        if (System.getDeviceSettings().phoneConnected && wifiConnection) {
-            Communications.makeWebRequest(url, null, options, method(:onReceiveDeviceData));
+        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
+            Communications.makeWebRequest(Globals.getDeviceDataUrl(), null, options, method(:onReceiveDeviceData));
         } else {
             if (Globals.debug) {
                 System.println("Note - getDeviceData(): No Internet connection, skipping API call.");
@@ -525,30 +614,31 @@ class NestStatus {
             System.println("onReceiveDevices() Response Data: " + data);
         }
         if (responseCode == 200) {
-            var devices = data.get("devices") as Lang.Array;
-            var menu = new WatchUi.Menu2({ :title => "Devices" });
-            var o = 21 + ClientId.projectId.length();
-            for (var i = 0; i < devices.size(); i++) {
-                var device = devices[i];
-                // API documentation says not to rely on this value remaining unchanged.
-                // See https://developers.google.com/nest/device-access/traits#device-types
-                if (device.get("type").equals("sdm.devices.types.THERMOSTAT")) {
-                    var n = device.get("traits").get("sdm.devices.traits.Info").get("customName");
-                    var r = (device.get("parentRelations") as Lang.Array<Lang.Dictionary>)[0].get("displayName");
-                    if (n.equals("")) {
-                        n = r + " Thermostat";
-                    }
-                    menu.addItem(
-                        new WatchUi.MenuItem(
-                            n,
-                            r,
-                            device.get("name").substring(o, null),
-                            {}
-                        )
-                    );
-                }
-            }
             if (!isGlance) {
+                var devices = data.get("devices") as Lang.Array;
+                var menu = new WatchUi.Menu2({ :title => WatchUi.loadResource($.Rez.Strings.deviceList) });
+                var thermStr = WatchUi.loadResource($.Rez.Strings.thermostat) as Lang.String;
+                var o = 21 + ClientId.projectId.length();
+                for (var i = 0; i < devices.size(); i++) {
+                    var device = devices[i];
+                    // API documentation says not to rely on this value remaining unchanged.
+                    // See https://developers.google.com/nest/device-access/traits#device-types
+                    if (device.get("type").equals("sdm.devices.types.THERMOSTAT")) {
+                        var n = device.get("traits").get("sdm.devices.traits.Info").get("customName");
+                        var r = (device.get("parentRelations") as Lang.Array<Lang.Dictionary>)[0].get("displayName");
+                        if (n.equals("")) {
+                            n = r + " " + thermStr;
+                        }
+                        menu.addItem(
+                            new WatchUi.MenuItem(
+                                n,
+                                r,
+                                device.get("name").substring(o, null),
+                                {}
+                            )
+                        );
+                    }
+                }
                 WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
             }
         } else {
@@ -556,8 +646,8 @@ class NestStatus {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             } else {
                 if (Globals.debug) {
-                    System.println("onReceiveDeviceData() Response Code: " + responseCode);
-                    System.println("onReceiveDeviceData() Response Data: " + data);
+                    System.println("onReceiveDevices() Response Code: " + responseCode);
+                    System.println("onReceiveDevices() Response Data: " + data);
                 }
             }
         }
@@ -565,44 +655,47 @@ class NestStatus {
 
     function getDevices() {
         var c = Properties.getValue("deviceId");
-        if (c != null && !c.equals("")) {
-            getDeviceData();
-        } else {
-            var url     = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" + ClientId.projectId + "/devices";
-            var options  = {
-                :method  => Communications.HTTP_REQUEST_METHOD_GET,
-                :headers => {
-                    "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                    "Authorization" => "Bearer " + Properties.getValue("accessToken")
-                },
-                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-            };
-
-            if (System.getDeviceSettings().phoneConnected && wifiConnection) {
-                Communications.makeWebRequest(url, null, options, method(:onReceiveDevices));
+        if (c == null || c.equals("")) {
+            if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
+                var options  = {
+                    :method  => Communications.HTTP_REQUEST_METHOD_GET,
+                    :headers => {
+                        "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+                        "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                    },
+                    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+                };
+                Communications.makeWebRequest(Globals.getDevicesUrl(), null, options, method(:onReceiveDevices));
             } else {
                 if (Globals.debug) {
                     System.println("Note - getDevices(): No Internet connection, skipping API call.");
                 }
             }
+        } else {
+            getDeviceData();
         }
     }
 
-    function onRecieveRefreshAccessToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
+    function onReceiveRefreshToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
-            System.println("onRecieveRefreshAccessToken() Response Code: " + responseCode);
-            System.println("onRecieveRefreshAccessToken() Response Data: " + data);
+            System.println("onReceiveRefreshToken() Response Code: " + responseCode);
+            System.println("onReceiveRefreshToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
             if (Globals.debug) {
-                System.println("onRecieveRefreshAccessToken() accessToken: " + Properties.getValue("accessToken"));
+                System.println("onReceiveRefreshToken() accessToken: " + Properties.getValue("accessToken"));
             }
             getDevices();
         } else {
             Properties.setValue("accessToken", "");
+            Properties.setValue("accessTokenExpire", 0);
             Properties.setValue("refreshToken", "");
+            // XXX Pass this via the function parameters
+            if (Globals.debug) {
+                System.println("onReceiveRefreshToken() Display Update");
+            }
             requestCallback.invoke();
         }
     }
@@ -624,16 +717,44 @@ class NestStatus {
             Properties.setValue("oauthCode", "Succeeded and deleted");
         } else {
             Properties.setValue("oauthCode", "FAILED, please try again");
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
+            // XXX Pass this via the function parameters
+            if (Globals.debug) {
+                System.println("onRecieveAccessToken() Display Update");
+            }
             requestCallback.invoke();
         }
     }
 
     function getAccessToken() as Void {
-        var c = Properties.getValue("refreshToken");
-        if (c != null && !c.equals("")) {
-            var e = Properties.getValue("accessTokenExpire");
-            if (e == null || Time.now().value() > e) {
-                // Access token expired, use refresh token to get a new one
+        // Both Access and Refresh tokens are truncated when authentication with them fails
+        var e = Properties.getValue("accessTokenExpire");
+        if (e == null || Time.now().value() > e) {
+            // Access token expired, use refresh token to get a new one
+            var c = Properties.getValue("refreshToken");
+            if (c == null || c.equals("")) {
+                // Full OAuth
+                var payload = {
+                    "code"          => Properties.getValue("oauthCode"),
+                    "client_id"     => ClientId.clientId,
+                    "client_secret" => ClientId.clientSecret,
+                    "redirect_uri"  => Globals.getRedirectUrl(),
+                    "grant_type"    => "authorization_code"
+                };
+
+                var options = {
+                    :method => Communications.HTTP_REQUEST_METHOD_POST,
+                    :headers => {
+                        "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+                    },
+                    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+                };
+                // This follows a check for Internet access
+                Communications.makeWebRequest(Globals.getOAuthTokenUrl(), payload, options, method(:onRecieveAccessToken));
+            } else {
+                // Refresh Auth
                 var payload = {
                     "refresh_token" => c,
                     "client_id"     => ClientId.clientId,
@@ -649,37 +770,26 @@ class NestStatus {
                     :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
                 };
                 // This follows a check for Internet access
-                Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveRefreshAccessToken));
-            } else {
-                getDevices();
+                Communications.makeWebRequest(Globals.getOAuthTokenUrl(), payload, options, method(:onReceiveRefreshToken));
             }
         } else {
-            var payload = {
-                "code"          => Properties.getValue("oauthCode"),
-                "client_id"     => ClientId.clientId,
-                "client_secret" => ClientId.clientSecret,
-                "redirect_uri"  => "https://house-of-abbey.github.io/GarminThermoNest/auth",
-                "grant_type"    => "authorization_code"
-            };
-
-            var options = {
-                :method => Communications.HTTP_REQUEST_METHOD_POST,
-                :headers => {
-                    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
-                },
-                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-            };
-            // This follows a check for Internet access
-            Communications.makeWebRequest("https://www.googleapis.com/oauth2/v4/token", payload, options, method(:onRecieveAccessToken));
+            // Token is current, just use it
+            getDevices();
         }
     }
 
-    function onOAuthMessage(message as Communications.OAuthMessage) as Void {
-        if (message.data != null) {
-            Properties.setValue("oauthCode", (message.data as Lang.Dictionary)["oauthCode"]);
-            getAccessToken();
-        } else {}
-    }
+    // Park of the SDK's broken OAuth - Commented out for now.
+    //
+    // private function onOAuthMessage(message as Communications.OAuthMessage) as Void {
+    //     if (message.data != null) {
+    //         Properties.setValue("oauthCode", (message.data as Lang.Dictionary)["oauthCode"]);
+    //         getAccessToken();
+    //     } else {
+    //         if (Globals.debug) {
+    //             System.println("onOAuthMessage() message.data was null.");
+    //         }
+    //     }
+    // }
 
     function getOAuthToken() as Void {
         var c = Properties.getValue("oauthCode");
@@ -697,7 +807,7 @@ class NestStatus {
                 "client_id"              => ClientId.clientId,
                 "include_granted_scopes" => "true",
                 "prompt"                 => "consent",
-                "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
+                "redirect_uri"           => Globals.getRedirectUrl(),
                 "response_type"          => "code",
                 "scope"                  => "https://www.googleapis.com/auth/sdm.service",
                 "state"                  => "pass-through value"
@@ -712,7 +822,7 @@ class NestStatus {
         //     "client_id"              => clientId,
         //     "include_granted_scopes" => "true",
         //     "prompt"                 => "consent",
-        //     "redirect_uri"           => "https://house-of-abbey.github.io/GarminThermoNest/auth",
+        //     "redirect_uri"           => Globals.getRedirectUrl(),
         //     "response_type"          => "code",
         //     "scope"                  => "https://www.googleapis.com/auth/sdm.service",
         //     "state"                  => "pass-through value"
@@ -721,7 +831,7 @@ class NestStatus {
         // Communications.makeOAuthRequest(
         //     "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
         //     params,
-        //     "https://house-of-abbey.github.io/GarminThermoNest/auth",
+        //     Globals.getRedirectUrl(),
         //     Communications.OAUTH_RESULT_TYPE_URL,
         //     {
         //         "code" => "oauthCode"
@@ -729,12 +839,53 @@ class NestStatus {
         // );
     }
 
-    hidden function round(n as Lang.Number) as Lang.Number or Null {
+    // Rounds to a 0.5 of a Celcius
+    // Parameters:
+    // * n   = Number to round
+    // * res = Resolution, e.g. 0.5
+    static function round(n as Lang.Float, res as Lang.Float) as Lang.Float or Null {
+        var invres = 1 / res;
         if (n == null) {
             return null;
         } else {
-            return Math.round(n*2) / 2;
+            return Math.round(n * invres) / invres;
         }
+    }
+
+    // Limit the Celcius range.
+    //
+    static function limitC(t as Lang.Float) as Lang.Float {
+        if (t > Globals.maxTempC) {
+            t = Globals.maxTempC;
+        }
+        if (t < Globals.minTempC) {
+            t = Globals.minTempC;
+        }
+        return t;
+    }
+
+    // Convert Celcius to Fahrenheit with the correct rounding and within the range limits.
+    //
+    static function cToF(t as Lang.Float) as Lang.Float {
+        return round((limitC(t) * 9/5) + 32, 1.0);
+    }
+
+    // Limit the Fahrenheit range.
+    //
+    static function limitF(t as Lang.Float) as Lang.Float {
+        if (t > Globals.maxTempF) {
+            t = Globals.maxTempF;
+        }
+        if (t < Globals.minTempF) {
+            t = Globals.minTempF;
+        }
+        return t;
+    }
+
+    // Convert Fahrenheit to Celcius with the correct rounding and within the range limits.
+    //
+    static function fToC(t as Lang.Float) as Lang.Float {
+        return round((limitF(t) - 32) * 5/9, 0.5);
     }
 }
 

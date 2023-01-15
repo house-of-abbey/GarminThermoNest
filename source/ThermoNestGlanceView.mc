@@ -16,6 +16,9 @@
 //
 // ThermoNestGlanceView provides the summary status as an application 'glance'.
 //
+// References:
+//  * Sandbox Rate Limits https://developers.google.com/nest/device-access/project/limits
+//
 //-----------------------------------------------------------------------------------
 
 using Toybox.Graphics;
@@ -34,10 +37,14 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
     hidden var loggedOutIcon;
     hidden var errorIcon;
     hidden var hourglassIcon;
+    hidden var setOffLabel as Lang.String;
+    hidden var selectDeviceMenuTitle as Lang.String;
 
     function initialize(n) {
         GlanceView.initialize();
-        mNestStatus = n;
+        mNestStatus           = n;
+        setOffLabel           = WatchUi.loadResource($.Rez.Strings.offStatus   ) as Lang.String;
+        selectDeviceMenuTitle = WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String;
     }
 
     function onLayout(dc as Graphics.Dc) as Void {
@@ -50,28 +57,34 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
     }
 
     function onUpdate(dc) {
+        var d = Properties.getValue("deviceId");
         if (System.getDeviceSettings().phoneConnected) {
             if (System.getDeviceSettings().connectionAvailable) {
                 var c = Properties.getValue("oauthCode");
-                if (c != null && !c.equals("")) {
-                    if (mNestStatus.gotDeviceData) {
-                        if (mNestStatus.gotDeviceDataError) {
-                            dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
-                            return;
-                        } else {
-                            if (!mNestStatus.getOnline()) {
-                                dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
-                                return;
-                            }
-                            // Else drop through without a return and no icon
-                        }
-                    } else {
-                        dc.drawBitmap(10, (dc.getHeight()-hourglassIcon.getHeight())/2, hourglassIcon);
-                        return;
-                    }
-                } else {
+                if (c == null || c.equals("")) {
                     dc.drawBitmap(10, (dc.getHeight()-loggedOutIcon.getHeight())/2, loggedOutIcon);
                     return;
+                } else {
+                    if (d == null || d.equals("")) {
+                        dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
+                        // Else drop through without a return to print text
+                    } else {
+                        if (mNestStatus.gotDeviceData) {
+                            if (mNestStatus.gotDeviceDataError) {
+                                dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
+                                return;
+                            } else {
+                                if (!mNestStatus.getOnline()) {
+                                    dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
+                                    return;
+                                }
+                                // Else drop through without a return and no icon to print text
+                            }
+                        } else {
+                            dc.drawBitmap(10, (dc.getHeight()-hourglassIcon.getHeight())/2, hourglassIcon);
+                            return;
+                        }
+                    }
                 }
             } else {
                 dc.drawBitmap(10, (dc.getHeight()-signalDisconnectedIcon.getHeight())/2, signalDisconnectedIcon);
@@ -82,19 +95,20 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
             return;
         }
 
-
         var heat = mNestStatus.getHeatTemp();
         var cool = mNestStatus.getCoolTemp();
         var text;
 
-        if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
+        if (d == null || d.equals("")) {
+            text = selectDeviceMenuTitle;
+        } else if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
             text = Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]);
         } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
             text = Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]);
         } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
             text = Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]);
         } else {
-            text = "OFF";
+            text = setOffLabel;
         }
 
         dc.setColor(
@@ -107,7 +121,9 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         );
         dc.clear();
         dc.drawText(
-            10, dc.getHeight()/2, Graphics.FONT_SMALL,
+            10,
+            dc.getHeight()/2,
+            Graphics.FONT_SMALL,
             text,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );

@@ -27,11 +27,13 @@ using Toybox.Lang;
 using Toybox.Timer;
 
 class ViewNav extends WatchUi.Drawable {
-    hidden var radius = 5;
-    hidden var panes  = 1;
-    hidden var nth    = 1;
-    hidden var timer as Timer.Timer;
     hidden var ilocX;
+    hidden var radius  = 5;
+    hidden var panes   = 1;
+    hidden var nth     = 1;
+    hidden var timeout = 2000; // ms
+    hidden var period  = 0.5;  // s
+    hidden var timer as Timer.Timer;
 
     function initialize(settings as {
             :identifier as Lang.Object,  // Just use a string if nothing else to provide
@@ -40,12 +42,16 @@ class ViewNav extends WatchUi.Drawable {
             :radius     as Lang.Numeric,
             :panes      as Lang.Numeric, // Number of panes, 1..n
             :nth        as Lang.Numeric, // Pane index (1-based)
-            :visible    as Lang.Boolean
+            :visible    as Lang.Boolean,
+            :timeout    as Lang.Numeric,
+            :period     as Lang.Numeric
         }) {
-        radius = settings.get(:radius);
-        panes  = settings.get(:panes);
-        nth    = settings.get(:nth);
-        ilocX  = settings.get(:locX) - settings.get(:radius);
+        ilocX   = settings.get(:locX) - settings.get(:radius);
+        radius  = settings.get(:radius);
+        panes   = settings.get(:panes);
+        nth     = settings.get(:nth);
+        timeout = settings.get(:timeout);
+        period  = settings.get(:period);
         Drawable.initialize({
             :identifier => settings.get(:identifier),
             :locX       => ilocX,
@@ -102,7 +108,7 @@ class ViewNav extends WatchUi.Drawable {
     }
 
     function animate() as Void {
-        timer.start(method(:animateCallback), Globals.navDelay, false);
+        timer.start(method(:animateCallback), timeout, false);
     }
 
     function resetAnimation() as Void {

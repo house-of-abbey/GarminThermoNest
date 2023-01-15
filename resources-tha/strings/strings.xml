@@ -27,7 +27,7 @@
   <string id="deviceIdPrompt">กรอกโดยการเลือกใบสมัคร</string>
   <string id="oauthCodeTitle">รหัส OAuth - รหัสการให้สิทธิ์ OAuth2 สำหรับโครงการ Google Nest SDM API ของคุณ</string>
   <string id="oauthCodePrompt">วางผลลัพธ์จากหน้าเว็บ</string>
-  <string id="tokenGroupTitle">โทเค็นการอนุญาต - แอปพลิเคชันจัดการสิ่งเหล่านี้ แต่การมองเห็นมีให้ที่นี่</string>
+  <string id="tokenGroupTitle">โทเค็นการอนุญาต - แอปพลิเคชันจัดการสิ่งเหล่านี้ แต่มีการเปิดเผยที่นี่</string>
   <string id="accessTokenTitle">โทเค็นการเข้าถึง - โทเค็นการเข้าถึงการให้สิทธิ์ OAuth2 สำหรับโครงการ Google Nest SDM API ของคุณ มาจากรหัส OAuth และใช้เวลา 1 ชั่วโมง</string>
   <string id="accessTokenExpireTitle">Access Token Expire - ค่าเวลา UTC เมื่อโทเค็นการเข้าถึงหมดอายุ</string>
   <string id="refreshTokenTitle">รีเฟรชโทเค็น - โทเค็นการรีเฟรชการให้สิทธิ์ OAuth2 สำหรับโครงการ Google Nest SDM API ของคุณ ใช้เพื่อรีเฟรชโทเค็นการเข้าถึงเมื่อหมดอายุ</string>
@@ -35,4 +35,8 @@
   <!-- เพื่อเปิดใช้งานการแปลภาษา -->
   <string id="setMode">ตั้งค่าโหมด</string>
   <string id="tapIcon">แตะไอคอน</string>
+  <string id="selectDevice" scope="glance">เลือกอุปกรณ์</string>
+  <string id="deviceList">รายการอุปกรณ์</string>
+  <string id="thermostat">เทอร์โมสตัท</string>
+  <string id="offStatus" scope="glance">ปิด</string>
 </strings>

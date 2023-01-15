@@ -35,4 +35,8 @@
   <!-- Щоб увімкнути мовну локалізацію -->
   <string id="setMode">Встановити Режими</string>
   <string id="tapIcon">Торкніться Значків</string>
+  <string id="selectDevice" scope="glance">Виберіть Пристрій</string>
+  <string id="deviceList">Список пристроїв</string>
+  <string id="thermostat">Термостат</string>
+  <string id="offStatus" scope="glance">Вимкнено</string>
 </strings>

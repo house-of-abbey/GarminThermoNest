@@ -29,10 +29,14 @@
   <string id="oauthCodePrompt">Kleebi tulemus veebilehelt.</string>
   <string id="tokenGroupTitle">Autoriseerimismärgid – rakendus haldab neid, kuid siin pakutakse nähtavust.</string>
   <string id="accessTokenTitle">Juurdepääsuluba – OAuth2 autoriseerimisluba teie Google Nesti SDM API projekti jaoks. Tuletatud OAuthi koodist ja kestab 1 tund.</string>
-  <string id="accessTokenExpireTitle">Juurdepääsuloa aegumine – UTC aja väärtus, millal juurdepääsuluba aegub.</string>
+  <string id="accessTokenExpireTitle">Juurdepääsuloa aegumine – UTC-aja väärtus, millal juurdepääsuluba aegub.</string>
   <string id="refreshTokenTitle">Refresh Token – OAuth2 volituse värskendamise tunnus teie Google Nesti SDM API projekti jaoks. Kasutatakse juurdepääsuloa värskendamiseks, kui see on aegunud.</string>
   <string id="appManagedPrompt">Rakenduse hallatav.</string>
   <!-- Keele lokaliseerimise lubamiseks -->
   <string id="setMode">Määra Režiimid</string>
   <string id="tapIcon">Puudutage Valikut Ikoonid</string>
+  <string id="selectDevice" scope="glance">Valige Seade</string>
+  <string id="deviceList">Seadmete loend</string>
+  <string id="thermostat">Termostaat</string>
+  <string id="offStatus" scope="glance">Väljas</string>
 </strings>

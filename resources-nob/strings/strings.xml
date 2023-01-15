@@ -23,7 +23,7 @@
 
 <strings>
   <string id="AppName">ThermoNest</string>
-  <string id="deviceIdTitle">Enhets-ID - Den valgte enhets-IDen hentet fra enhetens tilgangsprosjekt. Pass på at du identifiserer enhets-ID-en til Nest Thermostat.</string>
+  <string id="deviceIdTitle">Enhets-ID - Den valgte enhets-IDen hentet fra enhetens tilgangsprosjekt. Sørg for å identifisere enhets-ID-en til Nest Thermostat.</string>
   <string id="deviceIdPrompt">Fylles ut av i søknadsvalg.</string>
   <string id="oauthCodeTitle">OAuth-kode – OAuth2-autorisasjonskode for Google Nest SDM API-prosjektet ditt.</string>
   <string id="oauthCodePrompt">Lim inn resultat fra nettsiden.</string>
@@ -35,4 +35,8 @@
   <!-- For å aktivere språklokalisering -->
   <string id="setMode">Still Inn Moduser</string>
   <string id="tapIcon">Trykk På Ikoner</string>
+  <string id="selectDevice" scope="glance">Velg Enhet</string>
+  <string id="deviceList">Enhetsliste</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Av</string>
 </strings>

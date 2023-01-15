@@ -35,4 +35,8 @@
   <!-- 啟用語言本地化 -->
   <string id="setMode">設置模式</string>
   <string id="tapIcon">點擊圖標</string>
+  <string id="selectDevice" scope="glance">選擇設備</string>
+  <string id="deviceList">設備列表</string>
+  <string id="thermostat">溫控器</string>
+  <string id="offStatus" scope="glance">離開</string>
 </strings>

@@ -35,4 +35,8 @@
   <!-- Um die Sprachlokalisierung zu aktivieren -->
   <string id="setMode">Modi Einstellen</string>
   <string id="tapIcon">Tippen Sie Auf Symbole</string>
+  <string id="selectDevice" scope="glance">Wählen Sie Gerät aus</string>
+  <string id="deviceList">Geräteliste</string>
+  <string id="thermostat">Thermostat</string>
+  <string id="offStatus" scope="glance">aus</string>
 </strings>

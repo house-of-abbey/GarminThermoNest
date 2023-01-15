@@ -26,6 +26,13 @@ using Toybox.WatchUi;
 using Toybox.Communications;
 
 class TempChangeView extends WatchUi.View {
+    // Vertical spacing between the outside of the face and the temperature change (arrow) buttons
+    hidden const incDecMargin     = 15;
+    // Vertical spacing either side of centre for the temperature values
+    hidden const tempSpace        = 30;
+    // Vertical spacing between the outside of the face and the thermostat icon
+    hidden const thermoIconMargin = 120;
+
     hidden var mNestStatus;
     hidden var mViewNav;
     hidden var incTempButton;
@@ -33,17 +40,33 @@ class TempChangeView extends WatchUi.View {
     hidden var heatTempButton;
     hidden var coolTempButton;
     hidden var thermostatIcon;
-    hidden var settingCool as Lang.Boolean;
+    hidden var heatOnIcon;
+    hidden var coolOnIcon;
+    hidden var settingCool as Lang.Boolean = false;
+    hidden var setOffLabel as Lang.String;
 
-    function initialize(s) {
+    hidden var heatTemp;
+    hidden var coolTemp;
+
+    function initialize(ns as NestStatus) {
         View.initialize();
-        mNestStatus = s;
-        settingCool = mNestStatus.getThermoMode().equals("COOL");
+        mNestStatus = ns;
+        setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
+    }
+
+    function getHeatTemp() as  Lang.Number or Null {
+        return heatTemp;
+    }
+
+    function getCoolTemp() as  Lang.Number or Null {
+        return coolTemp;
     }
 
     // Load your resources here
     function onLayout(dc as Graphics.Dc) as Void {
         thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
+        heatOnIcon     = Application.loadResource(Rez.Drawables.HeatOnIcon    ) as Graphics.BitmapResource;
+        coolOnIcon     = Application.loadResource(Rez.Drawables.CoolOnIcon    ) as Graphics.BitmapResource;
         var bArrowUpIcon   = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowUpIcon   });
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
         // A two element array containing the width and height of the Bitmap object
@@ -57,7 +80,7 @@ class TempChangeView extends WatchUi.View {
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onIncTempButton,
             :locX                     => (dc.getWidth() - dim[0]) / 2,
-            :locY                     => 20,
+            :locY                     => incDecMargin,
             :width                    => dim[0],
             :height                   => dim[1]
         });
@@ -72,7 +95,7 @@ class TempChangeView extends WatchUi.View {
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onDecTempButton,
             :locX                     => (dc.getWidth() - dim[0]) / 2,
-            :locY                     => (dc.getHeight() - dim[1] - 20),
+            :locY                     => (dc.getHeight() - dim[1] - incDecMargin),
             :width                    => dim[0],
             :height                   => dim[1]
         });
@@ -85,7 +108,7 @@ class TempChangeView extends WatchUi.View {
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onHeatTempButton,
             :locX                     => dc.getWidth()/2 - 50,
-            :locY                     => dc.getHeight()/2 - 45,
+            :locY                     => dc.getHeight()/2 + 5,
             :width                    => 100,
             :height                   => 40
         });
@@ -98,7 +121,7 @@ class TempChangeView extends WatchUi.View {
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onCoolTempButton,
             :locX                     => dc.getWidth()/2 - 50,
-            :locY                     => dc.getHeight()/2 + 5,
+            :locY                     => dc.getHeight()/2 - 45,
             :width                    => 100,
             :height                   => 40
         });
@@ -109,14 +132,18 @@ class TempChangeView extends WatchUi.View {
             :radius     => Globals.navRadius,
             :panes      => Globals.navPanes,
             :nth        => 3, // 1-based numbering
-            :visible    => true
+            :visible    => true,
+            :timeout    => Globals.navDelay,
+            :period     => Globals.navPeriod
         });
         setLayout([mViewNav, incTempButton, decTempButton, heatTempButton, coolTempButton]);
     }
 
     function onShow() {
         // Track changes to NestStatus state
-        mNestStatus.copyState();
+        settingCool = mNestStatus.getThermoMode().equals("COOL");
+        heatTemp    = mNestStatus.getHeatTemp();
+        coolTemp    = mNestStatus.getCoolTemp();
         mViewNav.animate();
     }
 
@@ -131,62 +158,97 @@ class TempChangeView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.clear();
 
-        dc.drawBitmap(hw - thermostatIcon.getWidth()/2, h/3 - thermostatIcon.getHeight()/2, thermostatIcon);
-        var temp = mNestStatus.getHeatTemp();
-        if (temp != null) {
-            dc.drawText(
-                hw, hh, Graphics.FONT_MEDIUM,
-                Lang.format("$1$°$2$", [temp.format("%2.1f"), mNestStatus.getScale()]),
-                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-            );
-        }
+        dc.drawBitmap(hw - thermostatIcon.getWidth()/2, thermoIconMargin - thermostatIcon.getHeight()/2, thermostatIcon);
 
         if (mNestStatus.gotDeviceData) {
             if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
+                dc.drawText(
+                    hw,
+                    hh,
+                    Graphics.FONT_MEDIUM,
+                    setOffLabel,
+                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                );
                 incTempButton.setState(:stateDisabled);
                 decTempButton.setState(:stateDisabled);
             } else {
-                if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
-                    dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(
-                        hw,
-                        hh - 25, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                    );
+                switch (mNestStatus.getThermoMode()) {
+                    case "HEATCOOL":
+                        dc.drawBitmap(
+                            hw - coolOnIcon.getWidth()/2 - 100,
+                            hh - coolOnIcon.getHeight()/2 - tempSpace,
+                            coolOnIcon
+                        );
+                        dc.setColor(settingCool ? Graphics.COLOR_WHITE : Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(
+                            hw,
+                            hh - tempSpace,
+                            Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [coolTemp.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
 
-                    dc.setColor(settingCool ? Graphics.COLOR_WHITE : Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(
-                        hw,
-                        hh + 25, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                    );
+                        dc.drawBitmap(
+                            hw - heatOnIcon.getWidth()/2 - 100,
+                            hh - heatOnIcon.getHeight()/2 + tempSpace,
+                            heatOnIcon
+                        );
+                        dc.setColor(settingCool ? Graphics.COLOR_LT_GRAY : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(
+                            hw,
+                            hh + tempSpace,
+                            Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [heatTemp.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
 
-                    heatTempButton.setState(:stateDefault);
-                    coolTempButton.setState(:stateDefault);
-                } else if (mNestStatus.getThermoMode().equals("HEAT")) {
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(
-                        hw,
-                        hh, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [mNestStatus.getHeatTemp().format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                    );
+                        heatTempButton.setState(:stateDefault);
+                        coolTempButton.setState(:stateDefault);
+                        break;
 
-                    heatTempButton.setState(:stateDisabled);
-                    coolTempButton.setState(:stateDisabled);
-                } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(
-                        hw,
-                        hh, Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [mNestStatus.getCoolTemp().format("%2.1f"), mNestStatus.getScale()]),
-                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-                    );
+                    case "HEAT":
+                        dc.drawBitmap(
+                            hw - heatOnIcon.getWidth()/2 - 100,
+                            hh - heatOnIcon.getHeight()/2,
+                            heatOnIcon
+                        );
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(
+                            hw,
+                            hh,
+                            Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [heatTemp.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
 
-                    heatTempButton.setState(:stateDisabled);
-                    coolTempButton.setState(:stateDisabled);
+                        heatTempButton.setState(:stateDisabled);
+                        coolTempButton.setState(:stateDisabled);
+                        break;
+
+                    case "COOL":
+                        dc.drawBitmap(
+                            hw - coolOnIcon.getWidth()/2 - 100,
+                            hh - coolOnIcon.getHeight()/2,
+                            coolOnIcon
+                        );
+                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(
+                            hw,
+                            hh,
+                            Graphics.FONT_MEDIUM,
+                            Lang.format("$1$°$2$", [coolTemp.format("%2.1f"), mNestStatus.getScale()]),
+                            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                        );
+
+                        heatTempButton.setState(:stateDisabled);
+                        coolTempButton.setState(:stateDisabled);
+                        break;
+
+                    default:
+                        if (Globals.debug) {
+                            System.print("ERROR - TempChangeView: HVAC mode '" + mNestStatus.getThermoMode() + "', so nothing to draw.");
+                        }
+                        break;
                 }
 
                 incTempButton.setState(:stateDefault);
@@ -203,19 +265,53 @@ class TempChangeView extends WatchUi.View {
     }
 
     function onIncTempButton() as Void {
-        if (settingCool) {
-            mNestStatus.setCoolTemp(mNestStatus.getCoolTemp() + 0.5);
+        if (mNestStatus.getScale() == 'C') {
+            if (settingCool) {
+                if (coolTemp < Globals.maxTempC) {
+                    coolTemp = coolTemp + 0.5;
+                }
+            } else {
+                if (heatTemp < Globals.maxTempC && (coolTemp == null || heatTemp < coolTemp)) {
+                    heatTemp = heatTemp + 0.5;
+                }
+            }
         } else {
-            mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() + 0.5);
+            if (settingCool) {
+                if (coolTemp < Globals.maxTempF) {
+                    coolTemp = coolTemp + 1.0;
+                }
+            } else {
+                if (heatTemp < Globals.maxTempF && (coolTemp == null || heatTemp  < coolTemp)) {
+                    heatTemp = heatTemp + 1.0;
+                }
+            }
         }
+        requestUpdate();
     }
 
     function onDecTempButton() as Void {
-        if (settingCool) {
-            mNestStatus.setCoolTemp(mNestStatus.getCoolTemp() - 0.5);
+        if (mNestStatus.getScale() == 'C') {
+            if (settingCool) {
+                if (coolTemp > Globals.minTempC && (heatTemp == null || coolTemp > heatTemp)) {
+                    coolTemp = coolTemp - 0.5;
+                }
+            } else {
+                if (heatTemp > Globals.minTempC) {
+                    heatTemp = heatTemp - 0.5;
+                }
+            }
         } else {
-            mNestStatus.setHeatTemp(mNestStatus.getHeatTemp() - 0.5);
+            if (settingCool) {
+                if (coolTemp > Globals.minTempF && (heatTemp == null || coolTemp > heatTemp)) {
+                    coolTemp = coolTemp - 1.0;
+                }
+            } else {
+                if (heatTemp > Globals.minTempF) {
+                    heatTemp = heatTemp - 1.0;
+                }
+            }
         }
+        requestUpdate();
     }
 
     function onHeatTempButton() as Void {
@@ -250,15 +346,28 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
         return mView.onCoolTempButton(); 
     }
     function onBack() {
-        mView.getNestStatus().executeCoolTemp();
-        mView.getNestStatus().executeHeatTemp();
+        var alert = new Alert({
+            :timeout => Globals.alertTimeout,
+            :font    => Graphics.FONT_MEDIUM,
+            :text    => "Cancelled",
+            :fgcolor => Graphics.COLOR_RED,
+            :bgcolor => Graphics.COLOR_BLACK
+        });
         WatchUi.popView(WatchUi.SLIDE_DOWN);
+        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
     function onPreviousPage() {
-        mView.getNestStatus().executeCoolTemp();
-        mView.getNestStatus().executeHeatTemp();
+        var alert = new Alert({
+            :timeout => Globals.alertTimeout,
+            :font    => Graphics.FONT_MEDIUM,
+            :text    => "Sending",
+            :fgcolor => Graphics.COLOR_GREEN,
+            :bgcolor => Graphics.COLOR_BLACK
+        });
         WatchUi.popView(WatchUi.SLIDE_DOWN);
+        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
+        mView.getNestStatus().executeChangeTemp(mView.getHeatTemp(), mView.getCoolTemp());
         return true;
     }
 }

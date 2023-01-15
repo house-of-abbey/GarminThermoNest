@@ -35,4 +35,8 @@
   <!-- Chcete-li povolit jazykovou lokalizaci -->
   <string id="setMode">Nastavit Režimy</string>
   <string id="tapIcon">Klepněte Na Ikonu</string>
+  <string id="selectDevice" scope="glance">Vyberte Zařízení</string>
+  <string id="deviceList">Seznam zařízení</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Vypnuto</string>
 </strings>

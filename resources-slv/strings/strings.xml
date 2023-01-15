@@ -28,11 +28,15 @@
   <string id="oauthCodeTitle">Koda OAuth – avtorizacijska koda OAuth2 za vaš projekt Google Nest SDM API.</string>
   <string id="oauthCodePrompt">Prilepi rezultat s spletne strani.</string>
   <string id="tokenGroupTitle">Avtorizacijski žetoni – aplikacija jih upravlja, vendar je tukaj zagotovljena vidnost.</string>
-  <string id="accessTokenTitle">Žeton za dostop – avtorizacijski žeton za dostop OAuth2 za vaš projekt API-ja Google Nest SDM. Izhaja iz kode OAuth in traja 1 uro.</string>
+  <string id="accessTokenTitle">Žeton za dostop – avtorizacijski žeton za dostop OAuth2 za vaš projekt Google Nest SDM API. Izhaja iz kode OAuth in traja 1 uro.</string>
   <string id="accessTokenExpireTitle">Žeton za dostop poteče – časovna vrednost UTC, kdaj poteče žeton za dostop.</string>
-  <string id="refreshTokenTitle">Osveži žeton – OAuth2 avtorizacijski žeton za osvežitev za vaš projekt Google Nest SDM API. Uporablja se za osvežitev žetona za dostop, ko poteče.</string>
+  <string id="refreshTokenTitle">Osveži žeton – OAuth2 avtorizacijski žeton osveži za vaš projekt Google Nest SDM API. Uporablja se za osvežitev žetona za dostop, ko poteče.</string>
   <string id="appManagedPrompt">Upravlja aplikacija.</string>
   <!-- Če želite omogočiti jezikovno lokalizacijo -->
   <string id="setMode">Nastavite Načine</string>
   <string id="tapIcon">Tapnite Ikone</string>
+  <string id="selectDevice" scope="glance">Izberite Naprava</string>
+  <string id="deviceList">Seznam naprav</string>
+  <string id="thermostat">Termostat</string>
+  <string id="offStatus" scope="glance">Izključeno</string>
 </strings>

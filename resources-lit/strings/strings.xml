@@ -35,4 +35,8 @@
   <!-- Norėdami įjungti kalbos lokalizaciją -->
   <string id="setMode">Nustatyti Režimus</string>
   <string id="tapIcon">Bakstelėkite Piktogramos</string>
+  <string id="selectDevice" scope="glance">Pasirinkite Įrenginys</string>
+  <string id="deviceList">Įrenginių sąrašas</string>
+  <string id="thermostat">Termostatas</string>
+  <string id="offStatus" scope="glance">Išjungta</string>
 </strings>

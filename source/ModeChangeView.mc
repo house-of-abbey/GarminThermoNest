@@ -35,14 +35,28 @@ class ModeChangeView extends WatchUi.View {
     hidden var heatCoolIcon;
     hidden var ecoOffIcon;
     hidden var ecoOnIcon;
-    hidden var setModeLabel as Lang.String;
-    hidden var tapIconLabel as Lang.String;
+    hidden var setModeLabel         as Lang.String;
+    hidden var tapIconLabel         as Lang.String;
+    hidden var thermoMode           as Lang.String or Null;
+    hidden var ecoMode              as Lang.Boolean or Null;
+    hidden var availableThermoModes as Lang.Array;
+    hidden var availableEcoModes    as Lang.Array;
 
-    function initialize(s) {
+    function initialize(ns as NestStatus) {
         View.initialize();
-        mNestStatus  = s;
-        setModeLabel = WatchUi.loadResource($.Rez.Strings.setMode) as Lang.String;
-        tapIconLabel = WatchUi.loadResource($.Rez.Strings.tapIcon) as Lang.String;
+        mNestStatus          = ns;
+        setModeLabel         = WatchUi.loadResource($.Rez.Strings.setMode) as Lang.String;
+        tapIconLabel         = WatchUi.loadResource($.Rez.Strings.tapIcon) as Lang.String;
+        availableThermoModes = mNestStatus.getAvailableThermoModes();
+        availableEcoModes    = mNestStatus.getAvailableEcoModes();
+    }
+
+    function getThermoMode() as Lang.String {
+        return thermoMode;
+    }
+
+    function getEcoMode() as Lang.Boolean {
+        return ecoMode;
     }
 
     // Load your resources here
@@ -60,7 +74,9 @@ class ModeChangeView extends WatchUi.View {
             :radius     => Globals.navRadius,
             :panes      => Globals.navPanes,
             :nth        => 1, // 1-based numbering
-            :visible    => true
+            :visible    => true,
+            :timeout    => Globals.navDelay,
+            :period     => Globals.navPeriod
         });
 
         var w = dc.getWidth();
@@ -95,8 +111,8 @@ class ModeChangeView extends WatchUi.View {
     }
 
     function onShow() {
-        // Track changes to NestStatus state
-        mNestStatus.copyState();
+        thermoMode = mNestStatus.getThermoMode();
+        ecoMode    = mNestStatus.getEco();
         mViewNav.animate();
     }
 
@@ -110,7 +126,9 @@ class ModeChangeView extends WatchUi.View {
         dc.clear();
 
         dc.drawText(
-            w/2, h/4, Graphics.FONT_SMALL,
+            w/2,
+            h/4,
+            Graphics.FONT_SMALL,
             setModeLabel, // "Set Modes"
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
@@ -118,7 +136,9 @@ class ModeChangeView extends WatchUi.View {
         ecoButton.draw(dc);
         dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.drawText(
-            w/2, h*3/4, Graphics.FONT_XTINY,
+            w/2,
+            h*3/4,
+            Graphics.FONT_XTINY,
             tapIconLabel, // "Tap Icons"
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
@@ -126,7 +146,7 @@ class ModeChangeView extends WatchUi.View {
         if (mNestStatus.gotDeviceData) {
             var posx = w/4-heatOffIcon.getWidth()/2;
             var posy = h/2-heatOffIcon.getHeight()/2;
-            if (mNestStatus.getEco()) {
+            if (ecoMode) {
                 dc.drawBitmap(posx, posy, ecoOnIcon);
             } else {
                 dc.drawBitmap(posx, posy, ecoOffIcon);
@@ -134,7 +154,7 @@ class ModeChangeView extends WatchUi.View {
 
             posx = w*3/4-heatOffIcon.getWidth()/2;
             //mNestStatus.setThermoMode(supportedModes[modeStatus]);
-            switch (mNestStatus.getThermoMode() as Lang.String) {
+            switch (thermoMode) {
                 case "OFF":
                     dc.drawBitmap(posx, posy, heatOffIcon);
                     break;
@@ -153,7 +173,7 @@ class ModeChangeView extends WatchUi.View {
 
                 default:
                     if (Globals.debug) {
-                        System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + mNestStatus.getThermoMode() + "'");
+                        System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + thermoMode + "'");
                     }
                     break;
             }
@@ -167,11 +187,25 @@ class ModeChangeView extends WatchUi.View {
     }
 
     function onModeButton() as Void {
-        mNestStatus.nextAvailableThermoModes();
+        thermoMode = availableThermoModes[(availableThermoModes.indexOf(thermoMode)+1) % availableThermoModes.size()];
+        if (thermoMode.equals("OFF")) {
+            ecoMode = false;
+        }
     }
 
     function onEcoButton() as Void {
-        mNestStatus.nextAvailableEcoMode();
+        if (availableEcoModes.indexOf("MANUAL_ECO") != -1) {
+            ecoMode = !ecoMode;
+            if (ecoMode) {
+                if (availableThermoModes.indexOf("HEATCOOL") != -1) {
+                    thermoMode = "HEATCOOL";
+                } else if (availableThermoModes.indexOf("HEAT") != -1) {
+                    thermoMode = "HEAT";
+                } else if (availableThermoModes.indexOf("COOL") != -1) {
+                    thermoMode = "COOL";
+                }
+            }
+        }
     }
 
     function getNestStatus() as NestStatus {
@@ -192,13 +226,34 @@ class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
         return mView.onEcoButton(); 
     }
     function onBack() {
-        mView.getNestStatus().executeMode(NestStatus.Start);
+        var alert = new Alert({
+            :timeout => Globals.alertTimeout,
+            :font    => Graphics.FONT_MEDIUM,
+            :text    => "Cancelled",
+            :fgcolor => Graphics.COLOR_RED,
+            :bgcolor => Graphics.COLOR_BLACK
+        });
         WatchUi.popView(WatchUi.SLIDE_UP);
+        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
     function onNextPage() {
-        mView.getNestStatus().executeMode(NestStatus.Start);
+        var alert = new Alert({
+            :timeout => Globals.alertTimeout,
+            :font    => Graphics.FONT_MEDIUM,
+            :text    => "Sending",
+            :fgcolor => Graphics.COLOR_GREEN,
+            :bgcolor => Graphics.COLOR_BLACK
+        });
         WatchUi.popView(WatchUi.SLIDE_DOWN);
+        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
+        mView.getNestStatus().executeMode(
+            NestStatus.Start,
+            {
+                :thermoMode => mView.getThermoMode(),
+                :ecoMode    => mView.getEcoMode()
+            }
+        );
         return true;
     }
 }
