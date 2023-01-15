@@ -143,7 +143,7 @@ class ModeChangeView extends WatchUi.View {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
-        if (mNestStatus.gotDeviceData) {
+        if (mNestStatus.getGotDeviceData()) {
             var posx = w/4-heatOffIcon.getWidth()/2;
             var posy = h/2-heatOffIcon.getHeight()/2;
             if (ecoMode) {

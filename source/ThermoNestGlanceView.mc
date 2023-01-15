@@ -40,9 +40,10 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
     hidden var setOffLabel as Lang.String;
     hidden var selectDeviceMenuTitle as Lang.String;
 
-    function initialize(n) {
+    function initialize() {
         GlanceView.initialize();
-        mNestStatus           = n;
+        mNestStatus           = new NestStatus(method(:requestCallback));
+        mNestStatus.isGlance  = true;
         setOffLabel           = WatchUi.loadResource($.Rez.Strings.offStatus   ) as Lang.String;
         selectDeviceMenuTitle = WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String;
     }
@@ -69,8 +70,8 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
                         dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
                         // Else drop through without a return to print text
                     } else {
-                        if (mNestStatus.gotDeviceData) {
-                            if (mNestStatus.gotDeviceDataError) {
+                        if (mNestStatus.getGotDeviceData()) {
+                            if (mNestStatus.getGotDeviceDataError()) {
                                 dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
                                 return;
                             } else {

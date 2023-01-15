@@ -75,9 +75,9 @@ class ThermoNestView extends WatchUi.View {
     hidden var errorIcon;
     hidden var setOffLabel as Lang.String;
 
-    function initialize(ns as NestStatus) {
+    function initialize() {
         View.initialize();
-        mNestStatus = ns;
+        mNestStatus = new NestStatus(method(:requestCallback));
         setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
     }
 
@@ -183,7 +183,7 @@ class ThermoNestView extends WatchUi.View {
         dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(full_arc_w);
         dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, 240f, -60f);
-        if (mNestStatus.gotDeviceData) {
+        if (mNestStatus.getGotDeviceData()) {
             var ambientTemperature = mNestStatus.getAmbientTemp();
             if (ambientTemperature != null) {
                 var heat = mNestStatus.getHeatTemp();
@@ -337,8 +337,8 @@ class ThermoNestView extends WatchUi.View {
                 if (System.getDeviceSettings().connectionAvailable) {
                     var c = Properties.getValue("oauthCode");
                     if (c != null && !c.equals("")) {
-                        if (mNestStatus.gotDeviceData) {
-                            if (mNestStatus.gotDeviceDataError) {
+                        if (mNestStatus.getGotDeviceData()) {
+                            if (mNestStatus.getGotDeviceDataError()) {
                                 dc.drawBitmap(hw - errorIcon.getWidth()/2, statusHeight, errorIcon);
                             } else if (!mNestStatus.getOnline()) {
                                 dc.drawBitmap(hw - thermostatOfflineIcon.getWidth()/2, statusHeight, thermostatOfflineIcon);

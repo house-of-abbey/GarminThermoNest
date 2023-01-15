@@ -160,7 +160,7 @@ class TempChangeView extends WatchUi.View {
 
         dc.drawBitmap(hw - thermostatIcon.getWidth()/2, thermoIconMargin - thermostatIcon.getHeight()/2, thermostatIcon);
 
-        if (mNestStatus.gotDeviceData) {
+        if (mNestStatus.getGotDeviceData()) {
             if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
                 dc.drawText(
                     hw,

@@ -65,13 +65,11 @@ class NestStatus {
     hidden var hvac                 = ""    as Lang.String;
     hidden var availableEcoModes    = null  as Lang.Array;
     hidden var eco                  = false as Lang.Boolean;
+    hidden var gotDeviceData        = false as Lang.Boolean;
+    hidden var gotDeviceDataError   = false as Lang.Boolean;
 
-    // XXX These ought not to be public
-    public var gotDeviceData        = false as Lang.Boolean;
-    public var gotDeviceDataError   = false as Lang.Boolean;
-
-    function initialize(h) {
-        requestCallback = h;
+    function initialize(v) {
+        requestCallback = v;
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             getOAuthToken();
         }
@@ -87,6 +85,14 @@ class NestStatus {
 
     function getScale() as Lang.Char {
         return scale;
+    }
+
+    function getGotDeviceData() as Lang.Boolean {
+        return gotDeviceData;
+    }
+
+    function getGotDeviceDataError() as Lang.Boolean {
+        return gotDeviceDataError;
     }
 
     // Convert temperature to the units in 'scale'.
@@ -335,19 +341,6 @@ class NestStatus {
     function getEco() as Lang.Boolean {
         return eco;
     }
-
-    // function setEco(value as Lang.Boolean) as Void {
-    //     if (value) {
-    //         if (availableThermoModes.indexOf("HEATCOOL") != -1) {
-    //             thermoMode = "HEATCOOL";
-    //         } else if (availableThermoModes.indexOf("HEAT") != -1) {
-    //             thermoMode = "HEAT";
-    //         } else if (availableThermoModes.indexOf("COOL") != -1) {
-    //             thermoMode = "COOL";
-    //         }
-    //     }
-    //     eco = value;
-    // }
 
     function onReturnEco(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {

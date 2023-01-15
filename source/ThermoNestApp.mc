@@ -25,30 +25,16 @@ using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestApp extends Application.AppBase {
-    hidden var mNestStatus;
     hidden var mView;
     hidden var mGlanceView;
 
     function initialize() {
         AppBase.initialize();
-        // Glance and App each need their own and cannot be shared
-        mNestStatus = new NestStatus(method(:requestCallback));
     }
 
     function getGlanceView() {
-        mNestStatus.isGlance = true;
-        mGlanceView = new ThermoNestGlanceView(mNestStatus);
+        mGlanceView = new ThermoNestGlanceView();
         return [mGlanceView];
-    }
-
-    // XXX Does this need to be per View now?
-    function requestCallback() as Void {
-        if (mView != null) {
-            mView.requestCallback();
-        }
-        if (mGlanceView != null) {
-            mGlanceView.requestCallback();
-        }
     }
 
     // onStart() is called on application start up
@@ -64,8 +50,7 @@ class ThermoNestApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
-        mNestStatus.isGlance = false;
-        mView                = new ThermoNestView(mNestStatus);
+        mView = new ThermoNestView();
         return [mView, new ThermoNestDelegate(mView)] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
     }
 
