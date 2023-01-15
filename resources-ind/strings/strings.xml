@@ -39,4 +39,7 @@
   <string id="deviceList">Daftar perangkat</string>
   <string id="thermostat">Termostat</string>
   <string id="offStatus" scope="glance">Mati</string>
+  <string id="cancelledAlert">Dibatalkan</string>
+  <string id="sendingAlert">Mengirim</string>
+  <string id="noChangeAlert">Tidak ada perubahan</string>
 </strings>

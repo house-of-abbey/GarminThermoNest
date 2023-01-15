@@ -26,7 +26,7 @@ using Toybox.Application.Properties;
 class Globals {
     // Enable printing of messages to the debug console (don't make this a Property
     // as the messages can't be read from a watch!)
-    static const debug        = true;
+    static const debug        = false;
     // Multi-dot navigation drawable on each View
     static const navRadius    = 8;
     static const navMarginX   = 40;
@@ -53,8 +53,6 @@ class Globals {
 
     static function getDeviceDataUrl() {
         return smartDeviceManagementUrl + ClientId.projectId + "/devices/" + Properties.getValue("deviceId");
-        //return "https://www.melrose.ruins/cgi-bin/fake-nest.json";
-        //return "https://www.melrose.ruins/cgi-bin/fake-nest.json?capability=heat";
     }
 
     static function getExecuteCommandUrl() {

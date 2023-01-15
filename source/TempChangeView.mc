@@ -328,45 +328,44 @@ class TempChangeView extends WatchUi.View {
 }
 
 class TempChangeDelegate extends WatchUi.BehaviorDelegate {
-    var mView;
+    hidden var mView;
+    hidden var cancelledAlert;
+
     function initialize(v) {
         WatchUi.BehaviorDelegate.initialize();
         mView = v;
-    }
-    function onIncTempButton() {
-        return mView.onIncTempButton(); 
-    }
-    function onDecTempButton() {
-        return mView.onDecTempButton(); 
-    }
-    function onHeatTempButton() {
-        return mView.onHeatTempButton(); 
-    }
-    function onCoolTempButton() {
-        return mView.onCoolTempButton(); 
-    }
-    function onBack() {
-        var alert = new Alert({
+        cancelledAlert = new Alert({
             :timeout => Globals.alertTimeout,
             :font    => Graphics.FONT_MEDIUM,
-            :text    => "Cancelled",
+            :text    => WatchUi.loadResource($.Rez.Strings.cancelledAlert) as Lang.String,
             :fgcolor => Graphics.COLOR_RED,
             :bgcolor => Graphics.COLOR_BLACK
         });
+    }
+
+    function onIncTempButton() {
+        return mView.onIncTempButton(); 
+    }
+
+    function onDecTempButton() {
+        return mView.onDecTempButton(); 
+    }
+
+    function onHeatTempButton() {
+        return mView.onHeatTempButton(); 
+    }
+
+    function onCoolTempButton() {
+        return mView.onCoolTempButton(); 
+    }
+
+    function onBack() {
         WatchUi.popView(WatchUi.SLIDE_DOWN);
-        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
+        cancelledAlert.pushView(WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
     function onPreviousPage() {
-        var alert = new Alert({
-            :timeout => Globals.alertTimeout,
-            :font    => Graphics.FONT_MEDIUM,
-            :text    => "Sending",
-            :fgcolor => Graphics.COLOR_GREEN,
-            :bgcolor => Graphics.COLOR_BLACK
-        });
         WatchUi.popView(WatchUi.SLIDE_DOWN);
-        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
         mView.getNestStatus().executeChangeTemp(mView.getHeatTemp(), mView.getCoolTemp());
         return true;
     }

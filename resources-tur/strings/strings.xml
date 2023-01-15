@@ -39,4 +39,7 @@
   <string id="deviceList">Cihaz listesi</string>
   <string id="thermostat">Termostat</string>
   <string id="offStatus" scope="glance">Kapalı</string>
+  <string id="cancelledAlert">İptal edildi</string>
+  <string id="sendingAlert">gönderme</string>
+  <string id="noChangeAlert">Değişiklik yok</string>
 </strings>

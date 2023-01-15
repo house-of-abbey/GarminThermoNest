@@ -39,4 +39,7 @@
   <string id="deviceList">รายการอุปกรณ์</string>
   <string id="thermostat">เทอร์โมสตัท</string>
   <string id="offStatus" scope="glance">ปิด</string>
+  <string id="cancelledAlert">ยกเลิก</string>
+  <string id="sendingAlert">การส่ง</string>
+  <string id="noChangeAlert">ไม่มีการเปลี่ยนแปลง</string>
 </strings>

@@ -214,39 +214,37 @@ class ModeChangeView extends WatchUi.View {
 }
 
 class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
-    var mView;
-    function initialize(v) {
+    hidden var mView;
+    hidden var cancelledAlert;
+
+    function initialize(view) {
         WatchUi.BehaviorDelegate.initialize();
-        mView = v;
-    }
-    function onModeButton() {
-        return mView.onModeButton(); 
-    }
-    function onEcoButton() {
-        return mView.onEcoButton(); 
-    }
-    function onBack() {
-        var alert = new Alert({
+        mView = view;
+        cancelledAlert = new Alert({
             :timeout => Globals.alertTimeout,
             :font    => Graphics.FONT_MEDIUM,
-            :text    => "Cancelled",
+            :text    => WatchUi.loadResource($.Rez.Strings.cancelledAlert) as Lang.String,
             :fgcolor => Graphics.COLOR_RED,
             :bgcolor => Graphics.COLOR_BLACK
         });
+    }
+
+    function onModeButton() {
+        return mView.onModeButton(); 
+    }
+
+    function onEcoButton() {
+        return mView.onEcoButton(); 
+    }
+
+    function onBack() {
         WatchUi.popView(WatchUi.SLIDE_UP);
-        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
+        cancelledAlert.pushView(WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
+
     function onNextPage() {
-        var alert = new Alert({
-            :timeout => Globals.alertTimeout,
-            :font    => Graphics.FONT_MEDIUM,
-            :text    => "Sending",
-            :fgcolor => Graphics.COLOR_GREEN,
-            :bgcolor => Graphics.COLOR_BLACK
-        });
         WatchUi.popView(WatchUi.SLIDE_DOWN);
-        alert.pushView(WatchUi.SLIDE_IMMEDIATE);
         mView.getNestStatus().executeMode(
             NestStatus.Start,
             {

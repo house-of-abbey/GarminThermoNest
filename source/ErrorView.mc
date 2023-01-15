@@ -32,9 +32,9 @@ class ErrorView extends WatchUi.View {
     hidden var errorIcon;
     hidden var textArea;
 
-    function initialize(t as Lang.String) {
+    function initialize(text as Lang.String) {
         View.initialize();
-        text = t;
+        self.text = text;
     }
 
     // Load your resources here

@@ -39,4 +39,7 @@
   <string id="deviceList">장치 목록</string>
   <string id="thermostat">온도 조절기</string>
   <string id="offStatus" scope="glance">끄다</string>
+  <string id="cancelledAlert">취소 된</string>
+  <string id="sendingAlert">배상</string>
+  <string id="noChangeAlert">변화가 없다</string>
 </strings>

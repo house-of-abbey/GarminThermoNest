@@ -39,4 +39,7 @@
   <string id="deviceList">Laiteluettelo</string>
   <string id="thermostat">Termostaatti</string>
   <string id="offStatus" scope="glance">Vinossa</string>
+  <string id="cancelledAlert">Peruutettu</string>
+  <string id="sendingAlert">Lähetetään</string>
+  <string id="noChangeAlert">Ei muutoksia</string>
 </strings>

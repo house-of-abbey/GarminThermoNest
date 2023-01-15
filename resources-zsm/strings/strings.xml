@@ -39,4 +39,7 @@
   <string id="deviceList">Senarai Peranti</string>
   <string id="thermostat">Termostat</string>
   <string id="offStatus" scope="glance">Mati</string>
+  <string id="cancelledAlert">Dibatalkan</string>
+  <string id="sendingAlert">Menghantar</string>
+  <string id="noChangeAlert">Tiada perubahan</string>
 </strings>

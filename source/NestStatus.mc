@@ -46,7 +46,6 @@ class NestStatus {
         NoEco    = 4
     }
 
-    hidden var requestCallback;
     public var isGlance             = false as Lang.Boolean;
 
     hidden var online               = false as Lang.Boolean;
@@ -67,9 +66,30 @@ class NestStatus {
     hidden var eco                  = false as Lang.Boolean;
     hidden var gotDeviceData        = false as Lang.Boolean;
     hidden var gotDeviceDataError   = false as Lang.Boolean;
+    hidden var alertSending;
+    hidden var alertNoChange;
 
-    function initialize(v) {
-        requestCallback = v;
+    // Parameters:
+    //  * ig = isGlance, true when initialised from a GlanceView, otherwise false.
+    //
+    function initialize(isGlance) {
+        self.isGlance = isGlance;
+        if (!isGlance) {
+            alertSending = new Alert({
+                :timeout => Globals.alertTimeout,
+                :font    => Graphics.FONT_MEDIUM,
+                :text    => WatchUi.loadResource($.Rez.Strings.sendingAlert) as Lang.String,
+                :fgcolor => Graphics.COLOR_GREEN,
+                :bgcolor => Graphics.COLOR_BLACK
+            });
+            alertNoChange = new Alert({
+                :timeout => Globals.alertTimeout,
+                :font    => Graphics.FONT_MEDIUM,
+                :text    => WatchUi.loadResource($.Rez.Strings.noChangeAlert) as Lang.String,
+                :fgcolor => Graphics.COLOR_YELLOW,
+                :bgcolor => Graphics.COLOR_BLACK
+            });
+        }
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             getOAuthToken();
         }
@@ -193,7 +213,7 @@ class NestStatus {
         if (Globals.debug) {
             System.println("onReturnChangeTemp() Display Update");
         }
-        requestCallback.invoke();
+        WatchUi.requestUpdate();
     }
 
     function executeChangeTemp(ht as Lang.Float, ct as Lang.Float) as Void {
@@ -224,10 +244,12 @@ class NestStatus {
                         );
                         // Sets heatTemp below within the allowed limits in Celcius
                         setHeatTemp(ht);
+                        alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                     } else {
                         if (Globals.debug) {
                             System.println("Skipping executeChangeTemp() as no change.");
                         }
+                        alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
                     }
                     break;
 
@@ -245,10 +267,12 @@ class NestStatus {
                         );
                         // Sets heatTemp below within the allowed limits in Celcius
                         setCoolTemp(ct);
+                        alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                     } else {
                         if (Globals.debug) {
                             System.println("Skipping executeChangeTemp() as no change.");
                         }
+                        alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
                     }
                     break;
 
@@ -268,10 +292,12 @@ class NestStatus {
                         // Sets heatTemp below within the allowed limits in Celcius
                         setHeatTemp(ht);
                         setCoolTemp(ct);
+                        alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                     } else {
                         if (Globals.debug) {
                             System.println("Skipping executeChangeTemp() as no change.");
                         }
+                        alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
                     }
                     break;
 
@@ -394,6 +420,11 @@ class NestStatus {
             case Start:
                 if (Globals.debug) {
                     System.println("executeMode() Start: thermoMode=" + params.get(:thermoMode) + ", ecoMode=" + params.get(:ecoMode));
+                }
+                if (params.get(:thermoMode) == thermoMode && params.get(:ecoMode) == eco) {
+                    alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
+                } else {
+                    alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                 }
                 // Changing ThermoMode also turns off Eco Mode, then setting Eco mode off errors.
                 executeThermoMode(params);
@@ -572,7 +603,7 @@ class NestStatus {
         if (Globals.debug) {
             System.println("onReceiveDeviceData() Display Update");
         }
-        requestCallback.invoke();
+        WatchUi.requestUpdate();
     }
 
     function getDeviceData() as Void {
@@ -682,7 +713,7 @@ class NestStatus {
             if (Globals.debug) {
                 System.println("onReceiveRefreshToken() Display Update");
             }
-            requestCallback.invoke();
+            WatchUi.requestUpdate();
         }
     }
 
@@ -710,7 +741,7 @@ class NestStatus {
             if (Globals.debug) {
                 System.println("onRecieveAccessToken() Display Update");
             }
-            requestCallback.invoke();
+            WatchUi.requestUpdate();
         }
     }
 

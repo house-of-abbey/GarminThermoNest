@@ -39,4 +39,7 @@
   <string id="deviceList">Lijst met apparaten</string>
   <string id="thermostat">Thermostaat</string>
   <string id="offStatus" scope="glance">Uit</string>
+  <string id="cancelledAlert">Geannuleerd</string>
+  <string id="sendingAlert">Bezig met verzenden</string>
+  <string id="noChangeAlert">Geen veranderingen</string>
 </strings>

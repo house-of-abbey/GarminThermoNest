@@ -39,4 +39,7 @@
   <string id="deviceList">Lista de dispozitive</string>
   <string id="thermostat">Termostat</string>
   <string id="offStatus" scope="glance">Oprit</string>
+  <string id="cancelledAlert">Anulat</string>
+  <string id="sendingAlert">Trimiterea</string>
+  <string id="noChangeAlert">Nici o schimbare</string>
 </strings>

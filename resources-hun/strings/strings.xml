@@ -39,4 +39,7 @@
   <string id="deviceList">Eszközlista</string>
   <string id="thermostat">Termosztát</string>
   <string id="offStatus" scope="glance">Ki</string>
+  <string id="cancelledAlert">Törölve</string>
+  <string id="sendingAlert">Küldés</string>
+  <string id="noChangeAlert">Nincs változás</string>
 </strings>

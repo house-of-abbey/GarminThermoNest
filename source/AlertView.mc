@@ -112,20 +112,20 @@ class Alert extends WatchUi.View {
 }
 
 class Delegate extends WatchUi.InputDelegate {
-    hidden var view;
+    hidden var mView;
 
     function initialize(view) {
         InputDelegate.initialize();
-        self.view = view;
+        mView = view;
     }
 
     function onKey(evt) {
-        view.dismiss();
+        mView.dismiss();
         return true;
     }
 
     function onTap(evt) {
-        view.dismiss();
+        mView.dismiss();
         return true;
     }
 }

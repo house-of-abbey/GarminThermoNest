@@ -23,6 +23,7 @@ using Toybox.Lang;
 using Toybox.System;
 using Toybox.WatchUi;
 using Toybox.Application.Properties;
+using Toybox.Timer;
 
 
 class ThermoNestView extends WatchUi.View {
@@ -54,6 +55,7 @@ class ThermoNestView extends WatchUi.View {
     // Additional colours over Globals
     hidden const darkGreyColor = 0xaaaaaa;
     hidden const ecoGreenColor = 0x00801c;
+    hidden const timeout       = 10000; // ms
 
     hidden var mNestStatus as NestStatus;
     hidden var mViewNav;
@@ -74,10 +76,11 @@ class ThermoNestView extends WatchUi.View {
     hidden var loggedOutIcon;
     hidden var errorIcon;
     hidden var setOffLabel as Lang.String;
+    hidden var timer;
 
     function initialize() {
         View.initialize();
-        mNestStatus = new NestStatus(method(:requestCallback));
+        mNestStatus = new NestStatus(false);
         setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
     }
 
@@ -109,6 +112,7 @@ class ThermoNestView extends WatchUi.View {
             :timeout    => Globals.navDelay,
             :period     => Globals.navPeriod
         });
+        timer = new Timer.Timer();
 
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
 
@@ -132,6 +136,7 @@ class ThermoNestView extends WatchUi.View {
 
     function onShow() as Void {
         mViewNav.animate();
+        enableRefresh();
     }
 
     // Linear IntERPolatation
@@ -156,19 +161,22 @@ class ThermoNestView extends WatchUi.View {
     //
     function drawTick(dc as Graphics.Dc, theta as Lang.Number, start as Lang.Number, end as Lang.Number) {
         var crad = Math.toRadians(360 - theta);
-        var ca = Math.cos(crad);
-        var cb = Math.sin(crad);
-        var hw = dc.getWidth() / 2;
-        var hh = dc.getHeight() / 2;
+        var ca   = Math.cos(crad);
+        var cb   = Math.sin(crad);
+        var hw   = dc.getWidth() / 2;
+        var hh   = dc.getHeight() / 2;
         dc.drawLine(ca*(hw - end) + hw, cb*(hh - end) + hh, ca*(hw - start) + hw, cb*(hh - start) + hh);
     }
 
     // Update the view
     function onUpdate(dc as Graphics.Dc) as Void {
-        var w           = dc.getWidth();
-        var h           = dc.getHeight();
-        var hw          = w/2;
-        var hh          = h/2;
+        if (Globals.debug) {
+            System.println("ThermoNestView onUpdate()");
+        }
+        var w  = dc.getWidth();
+        var h  = dc.getHeight();
+        var hw = w/2;
+        var hh = h/2;
 
         dc.setAntiAlias(true);
         dc.setColor(
@@ -364,19 +372,22 @@ class ThermoNestView extends WatchUi.View {
 
     function onHide() as Void {
         mViewNav.resetAnimation();
-    }
-
-    function requestCallback() as Void {
-        if (refreshButton != null) {
-            refreshButton.setState(:stateDefault);
-        }
-        requestUpdate();
+        timer.stop();
+        enableRefresh();
     }
 
     function onRefreshButton() as Void {
         // Assume the application has not been used in excess of 3600s such that the token has expired
         mNestStatus.getDeviceData();
         refreshButton.setState(:stateDisabled);
+        timer.start(method(:enableRefresh), timeout, false);
+    }
+
+    function enableRefresh() as Void {
+        if (refreshButton != null) {
+            refreshButton.setState(:stateDefault);
+        }
+        requestUpdate();
     }
 
     function getNestStatus() as NestStatus {
@@ -385,14 +396,17 @@ class ThermoNestView extends WatchUi.View {
 }
 
 class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
-    var mView;
-    function initialize(v) {
+    hidden var mView;
+
+    function initialize(view) {
         WatchUi.BehaviorDelegate.initialize();
-        mView = v;
+        mView = view;
     }
+
     function onRefreshButton() {
         return mView.onRefreshButton();
     }
+
     function onPreviousPage() {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var v = new ModeChangeView(mView.getNestStatus());
@@ -400,6 +414,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         }
         return true;
     }
+
     function onNextPage() {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var v = new TempChangeView(mView.getNestStatus());

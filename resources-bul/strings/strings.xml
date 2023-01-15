@@ -39,4 +39,7 @@
   <string id="deviceList">Списък с устройства</string>
   <string id="thermostat">Термостат</string>
   <string id="offStatus" scope="glance">Изкл</string>
+  <string id="cancelledAlert">Отменен</string>
+  <string id="sendingAlert">Изпращане</string>
+  <string id="noChangeAlert">Без промени</string>
 </strings>

@@ -39,4 +39,7 @@
   <string id="deviceList">Zoznam zariadení</string>
   <string id="thermostat">Termostat</string>
   <string id="offStatus" scope="glance">Vypnuté</string>
+  <string id="cancelledAlert">Zrušené</string>
+  <string id="sendingAlert">Odosielanie</string>
+  <string id="noChangeAlert">Bez zmien</string>
 </strings>

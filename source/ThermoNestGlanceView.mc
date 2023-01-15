@@ -42,8 +42,7 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
 
     function initialize() {
         GlanceView.initialize();
-        mNestStatus           = new NestStatus(method(:requestCallback));
-        mNestStatus.isGlance  = true;
+        mNestStatus           = new NestStatus(true);
         setOffLabel           = WatchUi.loadResource($.Rez.Strings.offStatus   ) as Lang.String;
         selectDeviceMenuTitle = WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String;
     }
@@ -128,9 +127,5 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
             text,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
-    }
-
-    function requestCallback() as Void {
-        requestUpdate();
     }
 }

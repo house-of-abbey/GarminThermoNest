@@ -39,4 +39,7 @@
   <string id="deviceList">Danh sách thiết bị</string>
   <string id="thermostat">máy điều nhiệt</string>
   <string id="offStatus" scope="glance">Tắt</string>
+  <string id="cancelledAlert">Đã hủy</string>
+  <string id="sendingAlert">Gửi</string>
+  <string id="noChangeAlert">Không thay đổi</string>
 </strings>

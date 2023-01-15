@@ -39,4 +39,7 @@
   <string id="deviceList">Įrenginių sąrašas</string>
   <string id="thermostat">Termostatas</string>
   <string id="offStatus" scope="glance">Išjungta</string>
+  <string id="cancelledAlert">Atšauktas</string>
+  <string id="sendingAlert">Siuntimas</string>
+  <string id="noChangeAlert">Jokių pakeitimų</string>
 </strings>

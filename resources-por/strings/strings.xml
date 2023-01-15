@@ -39,4 +39,7 @@
   <string id="deviceList">Lista de dispositivos</string>
   <string id="thermostat">Termostato</string>
   <string id="offStatus" scope="glance">Desligado</string>
+  <string id="cancelledAlert">Cancelado</string>
+  <string id="sendingAlert">Enviando</string>
+  <string id="noChangeAlert">Sem alterações</string>
 </strings>

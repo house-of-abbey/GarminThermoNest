@@ -39,4 +39,7 @@
   <string id="deviceList">Λίστα συσκευών</string>
   <string id="thermostat">Θερμοστάτης</string>
   <string id="offStatus" scope="glance">Μακριά από</string>
+  <string id="cancelledAlert">Ακυρώθηκε</string>
+  <string id="sendingAlert">Αποστολή</string>
+  <string id="noChangeAlert">Χωρίς αλλαγές</string>
 </strings>

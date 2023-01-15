@@ -39,4 +39,7 @@
   <string id="deviceList">قائمة الأجهزة</string>
   <string id="thermostat">منظم الحراره</string>
   <string id="offStatus" scope="glance">إيقاف</string>
+  <string id="cancelledAlert">ألغيت</string>
+  <string id="sendingAlert">إرسال</string>
+  <string id="noChangeAlert">لا تغييرات</string>
 </strings>

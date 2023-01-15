@@ -39,4 +39,7 @@
   <string id="deviceList">Ierīču saraksts</string>
   <string id="thermostat">Termostats</string>
   <string id="offStatus" scope="glance">Izslēgts</string>
+  <string id="cancelledAlert">Atcelts</string>
+  <string id="sendingAlert">Nosūtīšana</string>
+  <string id="noChangeAlert">Nav izmaiņu</string>
 </strings>

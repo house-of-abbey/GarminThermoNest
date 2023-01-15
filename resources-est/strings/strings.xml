@@ -39,4 +39,7 @@
   <string id="deviceList">Seadmete loend</string>
   <string id="thermostat">Termostaat</string>
   <string id="offStatus" scope="glance">Väljas</string>
+  <string id="cancelledAlert">Tühistatud</string>
+  <string id="sendingAlert">Saatmine</string>
+  <string id="noChangeAlert">Muutusteta</string>
 </strings>
