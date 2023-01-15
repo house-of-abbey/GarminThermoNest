@@ -290,13 +290,6 @@ class NestStatus {
         return thermoMode;
     }
 
-    // function setThermoMode(value as Lang.String) as Void {
-    //     if (value.equals("OFF")) {
-    //         eco = false;
-    //     }
-    //     thermoMode = value;
-    // }
-
     function onReturnThermoMode(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
             System.println("onReturnThermoMode() Response Code: " + responseCode);
