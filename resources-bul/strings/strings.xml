@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Отменен</string>
   <string id="sendingAlert">Изпращане</string>
   <string id="noChangeAlert">Без промени</string>
+  <string id="changeModeLabel">Промяна на режима</string>
 </strings>

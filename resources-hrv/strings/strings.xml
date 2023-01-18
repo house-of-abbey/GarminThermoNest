@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Otkazano</string>
   <string id="sendingAlert">Slanje</string>
   <string id="noChangeAlert">Nema promjena</string>
+  <string id="changeModeLabel">Promjena načina rada</string>
 </strings>

@@ -42,4 +42,5 @@
   <string id="cancelledAlert">ยกเลิก</string>
   <string id="sendingAlert">การส่ง</string>
   <string id="noChangeAlert">ไม่มีการเปลี่ยนแปลง</string>
+  <string id="changeModeLabel">เปลี่ยนโหมด</string>
 </strings>

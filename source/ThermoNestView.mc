@@ -194,8 +194,20 @@ class ThermoNestView extends WatchUi.View {
         if (mNestStatus.getGotDeviceData()) {
             var ambientTemperature = mNestStatus.getAmbientTemp();
             if (ambientTemperature != null) {
-                var heat = mNestStatus.getHeatTemp();
-                var cool = mNestStatus.getCoolTemp();
+                var heat = null;
+                var cool = null;
+                var thermoMode = mNestStatus.getThermoMode();
+                if (mNestStatus.getEco()) {
+                    if (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL")) {
+                        heat = mNestStatus.getEcoHeatTemp();
+                    }
+                    if (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL")) {
+                        cool = mNestStatus.getEcoCoolTemp();
+                    }
+                } else {
+                    heat = mNestStatus.getHeatTemp();
+                    cool = mNestStatus.getCoolTemp();
+                }
                 var ambientTemperatureArc = mNestStatus.getScale() == 'C'
                     ? lerp(ambientTemperature, Globals.minTempC, Globals.maxTempC, 240f, -60f)
                     : lerp(ambientTemperature, Globals.minTempF, Globals.maxTempF, 240f, -60f);

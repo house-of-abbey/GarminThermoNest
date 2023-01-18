@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Đã hủy</string>
   <string id="sendingAlert">Gửi</string>
   <string id="noChangeAlert">Không thay đổi</string>
+  <string id="changeModeLabel">Thay đổi chế độ</string>
 </strings>

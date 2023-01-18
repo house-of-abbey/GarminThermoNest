@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Törölve</string>
   <string id="sendingAlert">Küldés</string>
   <string id="noChangeAlert">Nincs változás</string>
+  <string id="changeModeLabel">Módváltás</string>
 </strings>

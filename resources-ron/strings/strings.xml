@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Anulat</string>
   <string id="sendingAlert">Trimiterea</string>
   <string id="noChangeAlert">Nici o schimbare</string>
+  <string id="changeModeLabel">Schimbați modul</string>
 </strings>

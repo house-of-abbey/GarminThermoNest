@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Dibatalkan</string>
   <string id="sendingAlert">Menghantar</string>
   <string id="noChangeAlert">Tiada perubahan</string>
+  <string id="changeModeLabel">Tukar Mod</string>
 </strings>

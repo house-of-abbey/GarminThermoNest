@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Atcelts</string>
   <string id="sendingAlert">Nosūtīšana</string>
   <string id="noChangeAlert">Nav izmaiņu</string>
+  <string id="changeModeLabel">Mainīt režīmu</string>
 </strings>

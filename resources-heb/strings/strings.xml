@@ -42,4 +42,5 @@
   <string id="cancelledAlert">מבוטל</string>
   <string id="sendingAlert">שְׁלִיחָה</string>
   <string id="noChangeAlert">אין שינויים</string>
+  <string id="changeModeLabel">שינוי מצב</string>
 </strings>

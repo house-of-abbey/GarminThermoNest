@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Atšauktas</string>
   <string id="sendingAlert">Siuntimas</string>
   <string id="noChangeAlert">Jokių pakeitimų</string>
+  <string id="changeModeLabel">Keisti režimą</string>
 </strings>

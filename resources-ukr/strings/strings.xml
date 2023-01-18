@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Скасовано</string>
   <string id="sendingAlert">Відправка</string>
   <string id="noChangeAlert">Жодних змін</string>
+  <string id="changeModeLabel">Змінити режим</string>
 </strings>

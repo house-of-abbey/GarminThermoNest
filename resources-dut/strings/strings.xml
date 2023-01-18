@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Geannuleerd</string>
   <string id="sendingAlert">Bezig met verzenden</string>
   <string id="noChangeAlert">Geen veranderingen</string>
+  <string id="changeModeLabel">Modus wijzigen</string>
 </strings>

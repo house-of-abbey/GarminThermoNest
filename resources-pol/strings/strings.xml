@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Odwołany</string>
   <string id="sendingAlert">Wysyłanie</string>
   <string id="noChangeAlert">Bez zmian</string>
+  <string id="changeModeLabel">Zmień tryb</string>
 </strings>

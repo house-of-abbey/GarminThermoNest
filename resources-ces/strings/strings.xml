@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Zrušeno</string>
   <string id="sendingAlert">Odesílání</string>
   <string id="noChangeAlert">Žádné změny</string>
+  <string id="changeModeLabel">Změnit režim</string>
 </strings>

@@ -36,10 +36,11 @@
   <string id="setMode">設置模式</string>
   <string id="tapIcon">點擊圖標</string>
   <string id="selectDevice" scope="glance">選擇設備</string>
-  <string id="deviceList">設備列表</string>
+  <string id="deviceList">設備清單</string>
   <string id="thermostat">溫控器</string>
   <string id="offStatus" scope="glance">離開</string>
   <string id="cancelledAlert">取消</string>
   <string id="sendingAlert">發送中</string>
   <string id="noChangeAlert">沒有變化</string>
+  <string id="changeModeLabel">改變模式</string>
 </strings>

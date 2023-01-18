@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Peruutettu</string>
   <string id="sendingAlert">Lähetetään</string>
   <string id="noChangeAlert">Ei muutoksia</string>
+  <string id="changeModeLabel">Vaihda tila</string>
 </strings>

@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Inställt</string>
   <string id="sendingAlert">Sändning</string>
   <string id="noChangeAlert">Inga förändringar</string>
+  <string id="changeModeLabel">Ändra läge</string>
 </strings>

@@ -42,4 +42,5 @@
   <string id="cancelledAlert">ألغيت</string>
   <string id="sendingAlert">إرسال</string>
   <string id="noChangeAlert">لا تغييرات</string>
+  <string id="changeModeLabel">غير الطريقة</string>
 </strings>

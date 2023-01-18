@@ -58,6 +58,10 @@ class NestStatus {
     hidden var heatTemp             = 0.0   as Lang.Number;
     // Always Celsius
     hidden var coolTemp             = 0.0   as Lang.Number;
+    // Always Celsius
+    hidden var ecoHeatTemp          = 0.0   as Lang.Number;
+    // Always Celsius
+    hidden var ecoCoolTemp          = 0.0   as Lang.Number;
     hidden var humidity             = 0.0   as Lang.Number;
     hidden var availableThermoModes = null  as Lang.Array;
     hidden var thermoMode           = ""    as Lang.String;
@@ -198,6 +202,32 @@ class NestStatus {
         }
     }
 
+    // Convert temperature to the units in 'scale'.
+    function getEcoHeatTemp() as Lang.Float or Null {
+        if (ecoHeatTemp == null) {
+            return null;
+        } else {
+            if (scale == 'C') {
+                return limitC(ecoHeatTemp);
+            } else {
+                return cToF(ecoHeatTemp);
+            }
+        }
+    }
+
+    // Convert temperature to the units in 'scale'.
+    function getEcoCoolTemp() as Lang.Float or Null {
+        if (ecoCoolTemp == null) {
+            return null;
+        } else {
+            if (scale == 'C') {
+                return ecoCoolTemp;
+            } else {
+                return cToF(ecoCoolTemp);
+            }
+        }
+    }
+
     function onReturnChangeTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReturnChangeTemp() Response Code: " + responseCode);
@@ -209,7 +239,6 @@ class NestStatus {
             }
             getDeviceData();
         }
-        // XXX Pass this via the function parameters
         if (Globals.debug) {
             System.println("onReturnChangeTemp() Display Update");
         }
@@ -553,19 +582,13 @@ class NestStatus {
                             System.println(" Eco Modes: " + availableEcoModes);
                             System.println(" ThermostatEco: " + (eco ? "Eco" : "Off"));
                         }
-                        if (eco) {
-                            if (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL")) {
-                                heatTemp = round(te.get("heatCelsius") as Lang.Float, 0.5);
-                                if (Globals.debug) {
-                                    System.println(" Heat Temperature: " + heatTemp + " deg C (eco)");
-                                }
-                            }
-                            if (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL")) {
-                                coolTemp = round(te.get("coolCelsius") as Lang.Float, 0.5);
-                                if (Globals.debug) {
-                                    System.println(" Cool Temperature: " + coolTemp + " deg C (eco)");
-                                }
-                            }
+                        ecoHeatTemp = round(te.get("heatCelsius") as Lang.Float or Null, 0.5);
+                        if (Globals.debug) {
+                            System.println(" Eco Heat Temperature: " + ecoHeatTemp + " deg C");
+                        }
+                        ecoCoolTemp = round(te.get("coolCelsius") as Lang.Float or Null, 0.5);
+                        if (Globals.debug) {
+                            System.println(" Eco Cool Temperature: " + ecoCoolTemp + " deg C");
                         }
                     }
                 }
@@ -599,7 +622,6 @@ class NestStatus {
                 }
             }
         }
-        // XXX Pass this via the function parameters
         if (Globals.debug) {
             System.println("onReceiveDeviceData() Display Update");
         }
@@ -709,7 +731,6 @@ class NestStatus {
             Properties.setValue("accessToken", "");
             Properties.setValue("accessTokenExpire", 0);
             Properties.setValue("refreshToken", "");
-            // XXX Pass this via the function parameters
             if (Globals.debug) {
                 System.println("onReceiveRefreshToken() Display Update");
             }
@@ -737,7 +758,6 @@ class NestStatus {
             if (!isGlance) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
-            // XXX Pass this via the function parameters
             if (Globals.debug) {
                 System.println("onRecieveAccessToken() Display Update");
             }
@@ -810,30 +830,35 @@ class NestStatus {
 
     function getOAuthToken() as Void {
         var c = Properties.getValue("oauthCode");
-        if (c != null && !c.equals("")) {
+        if (c == null || c.equals("")) {
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView("Need to complete OAuth externally first"), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
+            return;
+        } else {
             getAccessToken();
             return;
         }
 
-        // for the time being, we cannot use the oauth api because google does not allow signin in a webview
-        // instead we will do it manually
-        Communications.openWebPage(
-            "https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth",
-            {
-                "access_type"            => "offline",
-                "client_id"              => ClientId.clientId,
-                "include_granted_scopes" => "true",
-                "prompt"                 => "consent",
-                "redirect_uri"           => Globals.getRedirectUrl(),
-                "response_type"          => "code",
-                "scope"                  => "https://www.googleapis.com/auth/sdm.service",
-                "state"                  => "pass-through value"
-            },
-            {}
-        );
-
+        // For the time being, we cannot use the OAuth API because Google does not allow sign in in a
+        // webview. Instead we will do it manually outside the application.
+        //
+        // Communications.openWebPage(
+        //     "https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth",
+        //     {
+        //         "access_type"            => "offline",
+        //         "client_id"              => ClientId.clientId,
+        //         "include_granted_scopes" => "true",
+        //         "prompt"                 => "consent",
+        //         "redirect_uri"           => Globals.getRedirectUrl(),
+        //         "response_type"          => "code",
+        //         "scope"                  => "https://www.googleapis.com/auth/sdm.service",
+        //         "state"                  => "pass-through value"
+        //     },
+        //     {}
+        // );
         // Communications.registerForOAuthMessages(method(:onOAuthMessage));
-
+        //
         // var params = {
         //     "access_type"            => "offline",
         //     "client_id"              => clientId,
@@ -844,7 +869,6 @@ class NestStatus {
         //     "scope"                  => "https://www.googleapis.com/auth/sdm.service",
         //     "state"                  => "pass-through value"
         // };
-
         // Communications.makeOAuthRequest(
         //     "https://nestservices.google.com/partnerconnections/" + projectId + "/auth",
         //     params,
@@ -860,7 +884,7 @@ class NestStatus {
     // Parameters:
     // * n   = Number to round
     // * res = Resolution, e.g. 0.5
-    static function round(n as Lang.Float, res as Lang.Float) as Lang.Float or Null {
+    static function round(n as Lang.Float or Null, res as Lang.Float) as Lang.Float or Null {
         var invres = 1 / res;
         if (n == null) {
             return null;

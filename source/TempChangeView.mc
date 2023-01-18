@@ -32,6 +32,11 @@ class TempChangeView extends WatchUi.View {
     hidden const tempSpace        = 30;
     // Vertical spacing between the outside of the face and the thermostat icon
     hidden const thermoIconMargin = 120;
+    // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
+    // icons are spaced at twice this value.
+    hidden const modeSpacing   = 5;
+    // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
+    hidden const modeHeight    = 60;
 
     hidden var mNestStatus;
     hidden var mViewNav;
@@ -40,18 +45,22 @@ class TempChangeView extends WatchUi.View {
     hidden var heatTempButton;
     hidden var coolTempButton;
     hidden var thermostatIcon;
+    hidden var settingCool as Lang.Boolean = false;
+    hidden var ecoOffIcon;
+    hidden var ecoOnIcon;
+    hidden var heatOffIcon;
     hidden var heatOnIcon;
     hidden var coolOnIcon;
-    hidden var settingCool as Lang.Boolean = false;
-    hidden var setOffLabel as Lang.String;
+    hidden var heatCoolIcon;
+    hidden var changeModeLabel;
 
     hidden var heatTemp;
     hidden var coolTemp;
 
     function initialize(ns as NestStatus) {
         View.initialize();
-        mNestStatus = ns;
-        setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
+        mNestStatus     = ns;
+        changeModeLabel = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;changeModeLabel;
     }
 
     function getHeatTemp() as  Lang.Number or Null {
@@ -64,9 +73,13 @@ class TempChangeView extends WatchUi.View {
 
     // Load your resources here
     function onLayout(dc as Graphics.Dc) as Void {
-        thermostatIcon = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
-        heatOnIcon     = Application.loadResource(Rez.Drawables.HeatOnIcon    ) as Graphics.BitmapResource;
-        coolOnIcon     = Application.loadResource(Rez.Drawables.CoolOnIcon    ) as Graphics.BitmapResource;
+        thermostatIcon     = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
+        ecoOffIcon         = Application.loadResource(Rez.Drawables.EcoOffIcon    ) as Graphics.BitmapResource;
+        ecoOnIcon          = Application.loadResource(Rez.Drawables.EcoOnIcon     ) as Graphics.BitmapResource;
+        heatOffIcon        = Application.loadResource(Rez.Drawables.HeatOffIcon   ) as Graphics.BitmapResource;
+        heatOnIcon         = Application.loadResource(Rez.Drawables.HeatOnIcon    ) as Graphics.BitmapResource;
+        coolOnIcon         = Application.loadResource(Rez.Drawables.CoolOnIcon    ) as Graphics.BitmapResource;
+        heatCoolIcon       = Application.loadResource(Rez.Drawables.HeatCoolIcon  ) as Graphics.BitmapResource;
         var bArrowUpIcon   = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowUpIcon   });
         var bArrowDownIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.ArrowDownIcon });
         // A two element array containing the width and height of the Bitmap object
@@ -161,14 +174,33 @@ class TempChangeView extends WatchUi.View {
         dc.drawBitmap(hw - thermostatIcon.getWidth()/2, thermoIconMargin - thermostatIcon.getHeight()/2, thermostatIcon);
 
         if (mNestStatus.getGotDeviceData()) {
+            // https://developers.google.com/nest/device-access/traits/device/thermostat-temperature-setpoint
+            // The temperature setpoint cannot be set when the thermostat is in manual Eco mode.
             if (mNestStatus.getEco() || mNestStatus.getThermoMode().equals("OFF")) {
                 dc.drawText(
                     hw,
                     hh,
                     Graphics.FONT_MEDIUM,
-                    setOffLabel,
+                    changeModeLabel,
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                 );
+
+                if (mNestStatus.getEco()) {
+                    dc.drawBitmap(hw - ecoOnIcon.getWidth() - modeSpacing, h - modeHeight, ecoOnIcon);
+                } else {
+                    dc.drawBitmap(hw - ecoOffIcon.getWidth() - modeSpacing, h - modeHeight, ecoOffIcon);
+                }
+
+                if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
+                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatCoolIcon);
+                } else if (mNestStatus.getThermoMode().equals("HEAT")) {
+                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOnIcon);
+                } else if (mNestStatus.getThermoMode().equals("COOL")) {
+                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, coolOnIcon);
+                } else {
+                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOffIcon);
+                }
+
                 incTempButton.setState(:stateDisabled);
                 decTempButton.setState(:stateDisabled);
             } else {

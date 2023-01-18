@@ -42,4 +42,5 @@
   <string id="cancelledAlert">キャンセル</string>
   <string id="sendingAlert">送信</string>
   <string id="noChangeAlert">変更なし</string>
+  <string id="changeModeLabel">モード変更</string>
 </strings>

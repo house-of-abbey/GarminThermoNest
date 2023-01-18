@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Annulé</string>
   <string id="sendingAlert">Envoi en cours</string>
   <string id="noChangeAlert">Aucun changement</string>
+  <string id="changeModeLabel">Changer de mode</string>
 </strings>

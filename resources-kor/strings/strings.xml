@@ -42,4 +42,5 @@
   <string id="cancelledAlert">취소 된</string>
   <string id="sendingAlert">배상</string>
   <string id="noChangeAlert">변화가 없다</string>
+  <string id="changeModeLabel">모드 변경</string>
 </strings>

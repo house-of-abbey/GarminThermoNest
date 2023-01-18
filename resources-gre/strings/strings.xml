@@ -24,7 +24,7 @@
 <strings>
   <string id="AppName">ThermoNest</string>
   <string id="deviceIdTitle">Αναγνωριστικό συσκευής - Το επιλεγμένο αναγνωριστικό συσκευής που ανακτήθηκε από το έργο πρόσβασης στη συσκευή σας. Βεβαιωθείτε ότι έχετε αναγνωρίσει το αναγνωριστικό συσκευής του Θερμοστάτη Nest.</string>
-  <string id="deviceIdPrompt">Συμπληρώνεται από την επιλογή αίτησης.</string>
+  <string id="deviceIdPrompt">Συμπληρώνεται από την επιλογή της αίτησης.</string>
   <string id="oauthCodeTitle">Κωδικός OAuth - Κωδικός εξουσιοδότησης OAuth2 για το έργο σας Google Nest SDM API.</string>
   <string id="oauthCodePrompt">Επικολλήστε το αποτέλεσμα από την ιστοσελίδα.</string>
   <string id="tokenGroupTitle">Διακριτικά εξουσιοδότησης - Η εφαρμογή τα διαχειρίζεται, αλλά η ορατότητα παρέχεται εδώ.</string>
@@ -42,4 +42,5 @@
   <string id="cancelledAlert">Ακυρώθηκε</string>
   <string id="sendingAlert">Αποστολή</string>
   <string id="noChangeAlert">Χωρίς αλλαγές</string>
+  <string id="changeModeLabel">Αλλαγή λειτουργίας</string>
 </strings>
