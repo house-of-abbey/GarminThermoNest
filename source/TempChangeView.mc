@@ -25,7 +25,7 @@ using Toybox.System;
 using Toybox.WatchUi;
 using Toybox.Communications;
 
-class TempChangeView extends WatchUi.View {
+class TempChangeView extends ThermoView {
     // Vertical spacing between the outside of the face and the temperature change (arrow) buttons
     hidden const incDecMargin     = 15;
     // Vertical spacing either side of centre for the temperature values
@@ -38,7 +38,6 @@ class TempChangeView extends WatchUi.View {
     // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
     hidden const modeHeight    = 60;
 
-    hidden var mNestStatus;
     hidden var mViewNav;
     hidden var incTempButton;
     hidden var decTempButton;
@@ -58,8 +57,7 @@ class TempChangeView extends WatchUi.View {
     hidden var coolTemp;
 
     function initialize(ns as NestStatus) {
-        View.initialize();
-        mNestStatus     = ns;
+        ThermoView.initialize(ns);
         changeModeLabel = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;changeModeLabel;
     }
 
@@ -204,6 +202,7 @@ class TempChangeView extends WatchUi.View {
                 incTempButton.setState(:stateDisabled);
                 decTempButton.setState(:stateDisabled);
             } else {
+                drawTempScale(dc, mNestStatus.getAmbientTemp(), heatTemp, coolTemp);
                 switch (mNestStatus.getThermoMode()) {
                     case "HEATCOOL":
                         dc.drawBitmap(
@@ -300,21 +299,21 @@ class TempChangeView extends WatchUi.View {
         if (mNestStatus.getScale() == 'C') {
             if (settingCool) {
                 if (coolTemp < Globals.maxTempC) {
-                    coolTemp = coolTemp + 0.5;
+                    coolTemp = coolTemp + Globals.celciusRes;
                 }
             } else {
                 if (heatTemp < Globals.maxTempC && (coolTemp == null || heatTemp < coolTemp)) {
-                    heatTemp = heatTemp + 0.5;
+                    heatTemp = heatTemp + Globals.celciusRes;
                 }
             }
         } else {
             if (settingCool) {
                 if (coolTemp < Globals.maxTempF) {
-                    coolTemp = coolTemp + 1.0;
+                    coolTemp = coolTemp + Globals.farenheitRes;
                 }
             } else {
                 if (heatTemp < Globals.maxTempF && (coolTemp == null || heatTemp  < coolTemp)) {
-                    heatTemp = heatTemp + 1.0;
+                    heatTemp = heatTemp + Globals.farenheitRes;
                 }
             }
         }
@@ -325,21 +324,21 @@ class TempChangeView extends WatchUi.View {
         if (mNestStatus.getScale() == 'C') {
             if (settingCool) {
                 if (coolTemp > Globals.minTempC && (heatTemp == null || coolTemp > heatTemp)) {
-                    coolTemp = coolTemp - 0.5;
+                    coolTemp = coolTemp - Globals.celciusRes;
                 }
             } else {
                 if (heatTemp > Globals.minTempC) {
-                    heatTemp = heatTemp - 0.5;
+                    heatTemp = heatTemp - Globals.celciusRes;
                 }
             }
         } else {
             if (settingCool) {
                 if (coolTemp > Globals.minTempF && (heatTemp == null || coolTemp > heatTemp)) {
-                    coolTemp = coolTemp - 1.0;
+                    coolTemp = coolTemp - Globals.farenheitRes;
                 }
             } else {
                 if (heatTemp > Globals.minTempF) {
-                    heatTemp = heatTemp - 1.0;
+                    heatTemp = heatTemp - Globals.farenheitRes;
                 }
             }
         }

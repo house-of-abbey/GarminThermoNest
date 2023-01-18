@@ -33,7 +33,7 @@ class ThermoNestApp extends Application.AppBase {
     }
 
     function getGlanceView() {
-        mGlanceView = new ThermoNestGlanceView();
+        mGlanceView = new ThermoNestGlanceView(new NestStatus(true));
         return [mGlanceView];
     }
 
@@ -50,7 +50,7 @@ class ThermoNestApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
-        mView = new ThermoNestView();
+        mView = new ThermoNestView(new NestStatus(false));
         return [mView, new ThermoNestDelegate(mView)] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
     }
 

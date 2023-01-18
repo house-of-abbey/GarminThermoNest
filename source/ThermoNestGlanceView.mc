@@ -40,9 +40,9 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
     hidden var setOffLabel as Lang.String;
     hidden var selectDeviceMenuTitle as Lang.String;
 
-    function initialize() {
+    function initialize(ns as NestStatus) {
         GlanceView.initialize();
-        mNestStatus           = new NestStatus(true);
+        mNestStatus           = ns;
         setOffLabel           = WatchUi.loadResource($.Rez.Strings.offStatus   ) as Lang.String;
         selectDeviceMenuTitle = WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String;
     }

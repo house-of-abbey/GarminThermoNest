@@ -537,15 +537,15 @@ class NestStatus {
                     }
                     var e = traits.get("sdm.devices.traits.Temperature") as Lang.Dictionary;
                     if (e != null) {
-                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Float, 0.5f);
+                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Float, Globals.celciusRes);
                         if (Globals.debug) {
                             System.println(" Temperature: " + ambientTemp + " deg C");
                         }
                     }
                     var ttsp = traits.get("sdm.devices.traits.ThermostatTemperatureSetpoint") as Lang.Dictionary;
                     if (ttsp != null) {
-                        heatTemp = round(ttsp.get("heatCelsius") as Lang.Float, 0.5f);
-                        coolTemp = round(ttsp.get("coolCelsius") as Lang.Float, 0.5f);
+                        heatTemp = round(ttsp.get("heatCelsius") as Lang.Float, Globals.celciusRes);
+                        coolTemp = round(ttsp.get("coolCelsius") as Lang.Float, Globals.celciusRes);
                         if (Globals.debug) {
                             System.println(" Heat Temperature: " + heatTemp + " deg C");
                             System.println(" Cool Temperature: " + coolTemp + " deg C");
@@ -582,11 +582,11 @@ class NestStatus {
                             System.println(" Eco Modes: " + availableEcoModes);
                             System.println(" ThermostatEco: " + (eco ? "Eco" : "Off"));
                         }
-                        ecoHeatTemp = round(te.get("heatCelsius") as Lang.Float or Null, 0.5);
+                        ecoHeatTemp = round(te.get("heatCelsius") as Lang.Float or Null, Globals.celciusRes);
                         if (Globals.debug) {
                             System.println(" Eco Heat Temperature: " + ecoHeatTemp + " deg C");
                         }
-                        ecoCoolTemp = round(te.get("coolCelsius") as Lang.Float or Null, 0.5);
+                        ecoCoolTemp = round(te.get("coolCelsius") as Lang.Float or Null, Globals.celciusRes);
                         if (Globals.debug) {
                             System.println(" Eco Cool Temperature: " + ecoCoolTemp + " deg C");
                         }
@@ -880,7 +880,7 @@ class NestStatus {
         // );
     }
 
-    // Rounds to a 0.5 of a Celcius
+    // Rounds to a resolution
     // Parameters:
     // * n   = Number to round
     // * res = Resolution, e.g. 0.5
@@ -908,7 +908,7 @@ class NestStatus {
     // Convert Celcius to Fahrenheit with the correct rounding and within the range limits.
     //
     static function cToF(t as Lang.Float) as Lang.Float {
-        return round((limitC(t) * 9/5) + 32, 1.0);
+        return round((limitC(t) * 9/5) + 32, Globals.farenheitRes);
     }
 
     // Limit the Fahrenheit range.
@@ -926,7 +926,7 @@ class NestStatus {
     // Convert Fahrenheit to Celcius with the correct rounding and within the range limits.
     //
     static function fToC(t as Lang.Float) as Lang.Float {
-        return round((limitF(t) - 32) * 5/9, 0.5);
+        return round((limitF(t) - 32) * 5/9, Globals.celciusRes);
     }
 }
 

@@ -26,38 +26,16 @@ using Toybox.Application.Properties;
 using Toybox.Timer;
 
 
-class ThermoNestView extends WatchUi.View {
-    // Between the full range arc and the outside of the watch face
-    hidden const margin        = 14;
-    // Line width of the full range arc
-    hidden const full_arc_w    = 4;
-    // Line width of the range arc (thicker than full_arc_w)
-    hidden const range_arc_w   = 8;
-    // Heat & cool line width of a tick mark
-    hidden const hct_tick_w    = 4;
-    // Ambient temperature line width of a tick mark
-    hidden const at_tick_w     = 8;
-    // Ticks start at: watch radius - tick_st_r
-    hidden const tick_st_r     = 5;
-    // Temperature range ends: watch radius - tick_ren_r
-    hidden const tick_ren_r    = 30;
-    // Ambient temperature: watch radius - tick_aen_r
-    hidden const tick_aen_r    = 20;
-    // Vertical space of top centre icon for connectivity/refresh icon
-    hidden const statusHeight  = 30;
+class ThermoNestView extends ThermoView {
     // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
-    hidden const modeHeight    = 60;
+    hidden const modeHeight  = 60;
     // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
     // icons are spaced at twice this value.
-    hidden const modeSpacing   = 5;
+    hidden const modeSpacing = 5;
     // Vertical spacing either side of centre for the temperature values
-    hidden const tempSpace     = 40;
-    // Additional colours over Globals
-    hidden const darkGreyColor = 0xaaaaaa;
-    hidden const ecoGreenColor = 0x00801c;
-    hidden const timeout       = 10000; // ms
+    hidden const tempSpace   = 40;
+    hidden const timeout     = 10000; // ms
 
-    hidden var mNestStatus as NestStatus;
     hidden var mViewNav;
     hidden var refreshButton;
     hidden var ecoOffIcon;
@@ -78,9 +56,8 @@ class ThermoNestView extends WatchUi.View {
     hidden var setOffLabel as Lang.String;
     hidden var timer;
 
-    function initialize() {
-        View.initialize();
-        mNestStatus = new NestStatus(false);
+    function initialize(ns as NestStatus) {
+        ThermoView.initialize(ns);
         setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
     }
 
@@ -139,35 +116,6 @@ class ThermoNestView extends WatchUi.View {
         enableRefresh();
     }
 
-    // Linear IntERPolatation
-    //
-    // Parameters:
-    //  x - Temperature value to scale by linear interpolation
-    //
-    //            | Min | Max
-    //      ------+-----+----
-    //      Temp  |  a  | b
-    //      Angle |  A  | B
-    //
-    function lerp(x, a, b, A, B) {
-        return (x - a) / (b - a) * (B - A) + A;
-    }
-
-    // Draw a tick on ther arc of the watch face.
-    // Parameters:
-    //  * theta - angle of rotation in degrees from 6 o'clock
-    //  * start - distance towards the circle centre from the watch circumference to start drawing the tick
-    //  * end   - distance towards the circle centre from the watch circumference to end drawing the tick
-    //
-    function drawTick(dc as Graphics.Dc, theta as Lang.Number, start as Lang.Number, end as Lang.Number) {
-        var crad = Math.toRadians(360 - theta);
-        var ca   = Math.cos(crad);
-        var cb   = Math.sin(crad);
-        var hw   = dc.getWidth() / 2;
-        var hh   = dc.getHeight() / 2;
-        dc.drawLine(ca*(hw - end) + hw, cb*(hh - end) + hh, ca*(hw - start) + hw, cb*(hh - start) + hh);
-    }
-
     // Update the view
     function onUpdate(dc as Graphics.Dc) as Void {
         if (Globals.debug) {
@@ -192,113 +140,54 @@ class ThermoNestView extends WatchUi.View {
         dc.setPenWidth(full_arc_w);
         dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, 240f, -60f);
         if (mNestStatus.getGotDeviceData()) {
-            var ambientTemperature = mNestStatus.getAmbientTemp();
-            if (ambientTemperature != null) {
-                var heat = null;
-                var cool = null;
+            var ambientTemp = mNestStatus.getAmbientTemp();
+            if (ambientTemp != null) {
+                var heatTemp = null;
+                var coolTemp = null;
                 var thermoMode = mNestStatus.getThermoMode();
                 if (mNestStatus.getEco()) {
                     if (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL")) {
-                        heat = mNestStatus.getEcoHeatTemp();
+                        heatTemp = mNestStatus.getEcoHeatTemp();
                     }
                     if (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL")) {
-                        cool = mNestStatus.getEcoCoolTemp();
+                        coolTemp = mNestStatus.getEcoCoolTemp();
                     }
                 } else {
-                    heat = mNestStatus.getHeatTemp();
-                    cool = mNestStatus.getCoolTemp();
-                }
-                var ambientTemperatureArc = mNestStatus.getScale() == 'C'
-                    ? lerp(ambientTemperature, Globals.minTempC, Globals.maxTempC, 240f, -60f)
-                    : lerp(ambientTemperature, Globals.minTempF, Globals.maxTempF, 240f, -60f);
-                var heatArc = (heat == null)
-                    ? 0
-                    : mNestStatus.getScale() == 'C'
-                        ? lerp(heat, Globals.minTempC, Globals.maxTempC, 240f, -60f)
-                        : lerp(heat, Globals.minTempF, Globals.maxTempF, 240f, -60f);
-                var coolArc = (cool == null)
-                    ? 0
-                    : mNestStatus.getScale() == 'C'
-                        ? lerp(cool, Globals.minTempC, Globals.maxTempC, 240f, -60f)
-                        : lerp(cool, Globals.minTempF, Globals.maxTempF, 240f, -60f);
-
-                if (heat != null) {
-                    dc.setPenWidth(range_arc_w);
-                    if (ambientTemperature < heat) {
-                        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
-                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, heatArc);
-                    } else {
-                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        if (cool != null) {
-                            if (cool > heat) {
-                                // Test prevents full circle arc being drawn
-                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
-                            }
-                        } else {
-                            if (ambientTemperature > heat) {
-                                // Test prevents full circle arc being drawn
-                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientTemperatureArc);
-                            }
-                        }
+                    if (thermoMode.equals("HEAT") || thermoMode.equals("HEATCOOL")) {
+                        heatTemp = mNestStatus.getHeatTemp();
                     }
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.setPenWidth(hct_tick_w);
-                    drawTick(dc, heatArc, tick_st_r, tick_ren_r);
-                }
-
-                if (cool != null) {
-                    dc.setPenWidth(range_arc_w);
-                    if (cool < ambientTemperature) {
-                        dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-                        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientTemperatureArc);
-                    } else {
-                        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                        if (heat != null) {
-                            if (cool > heat) {
-                                // Test prevents full circle arc being drawn
-                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
-                            }
-                        } else {
-                            if (cool > ambientTemperature) {
-                                // Test prevents full circle arc being drawn
-                                dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientTemperatureArc, coolArc);
-                            }
-                        }
+                    if (thermoMode.equals("COOL") || thermoMode.equals("HEATCOOL")) {
+                        coolTemp = mNestStatus.getCoolTemp();
                     }
-                    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-                    dc.setPenWidth(hct_tick_w);
-                    drawTick(dc, coolArc, tick_st_r, tick_ren_r);
                 }
 
-                dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
-                dc.setPenWidth(at_tick_w);
-                drawTick(dc, ambientTemperatureArc, tick_st_r, tick_aen_r);
+                drawTempScale(dc, ambientTemp, heatTemp, coolTemp);
 
-                if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
+                if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heatTemp != null) && (coolTemp != null)) {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     dc.drawText(
                         hw,
                         hh - tempSpace,
                         Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]),
+                        Lang.format("$1$°$3$ • $2$°$3$", [heatTemp.format("%2.1f"), coolTemp.format("%2.1f"), mNestStatus.getScale()]),
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                     );
-                } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
+                } else if (mNestStatus.getThermoMode().equals("HEAT") && (heatTemp != null)) {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     dc.drawText(
                         hw,
                         hh - tempSpace,
                         Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]),
+                        Lang.format("$1$°$2$", [heatTemp.format("%2.1f"), mNestStatus.getScale()]),
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                     );
-                } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
+                } else if (mNestStatus.getThermoMode().equals("COOL") && (coolTemp != null)) {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     dc.drawText(
                         hw,
                         hh - tempSpace,
                         Graphics.FONT_MEDIUM,
-                        Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]),
+                        Lang.format("$1$°$2$", [coolTemp.format("%2.1f"), mNestStatus.getScale()]),
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                     );
                 } else {
@@ -317,7 +206,7 @@ class ThermoNestView extends WatchUi.View {
                     hw,
                     hh + tempSpace,
                     Graphics.FONT_MEDIUM,
-                    Lang.format("$1$°$2$", [ambientTemperature.format("%2.1f"), mNestStatus.getScale()]),
+                    Lang.format("$1$°$2$", [ambientTemp.format("%2.1f"), mNestStatus.getScale()]),
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                 );
             }

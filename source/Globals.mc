@@ -40,10 +40,12 @@ class Globals {
 
     static const alertTimeout = 2000; // ms
 
-    static const maxTempC = 32f; // deg C
-    static const minTempC =  9f; // deg C
-    static const maxTempF = 90f; // deg F
-    static const minTempF = 48f; // deg F
+    static const maxTempC     =  32f; // deg C
+    static const minTempC     =   9f; // deg C
+    static const maxTempF     =  90f; // deg F
+    static const minTempF     =  48f; // deg F
+    static const celciusRes   = 0.5f; // Resolution and increment for deg C
+    static const farenheitRes = 1.0f; // Resolution and increment for deg F
 
     static hidden const smartDeviceManagementUrl = "https://smartdevicemanagement.googleapis.com/v1/enterprises/";
 
