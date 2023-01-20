@@ -127,7 +127,7 @@ class NestStatus {
             if (scale == 'C') {
                 return ambientTemp;
             } else {
-                return cToF(ambientTemp);
+                return cToF(ambientTemp, Globals.ambientRes);
             }
         }
     }
@@ -140,7 +140,7 @@ class NestStatus {
             if (scale == 'C') {
                 return limitC(heatTemp);
             } else {
-                return cToF(heatTemp);
+                return cToF(heatTemp, Globals.farenheitRes);
             }
         }
     }
@@ -157,7 +157,7 @@ class NestStatus {
                 }
             } else {
                 if (48f <= value && value <= 90f) {
-                    heatTemp = fToC(value);
+                    heatTemp = fToC(value, Globals.celciusRes);
                 } else {
                     if (Globals.debug) {
                         System.println("setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
@@ -175,7 +175,7 @@ class NestStatus {
             if (scale == 'C') {
                 return coolTemp;
             } else {
-                return cToF(coolTemp);
+                return cToF(coolTemp, Globals.farenheitRes);
             }
         }
     }
@@ -192,7 +192,7 @@ class NestStatus {
                 }
             } else {
                 if (48f <= value && value <= 90f) {
-                    coolTemp = fToC(value);
+                    coolTemp = fToC(value, Globals.celciusRes);
                 } else {
                     if (Globals.debug) {
                         System.println("setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
@@ -210,7 +210,7 @@ class NestStatus {
             if (scale == 'C') {
                 return limitC(ecoHeatTemp);
             } else {
-                return cToF(ecoHeatTemp);
+                return cToF(ecoHeatTemp, Globals.farenheitRes);
             }
         }
     }
@@ -223,7 +223,7 @@ class NestStatus {
             if (scale == 'C') {
                 return ecoCoolTemp;
             } else {
-                return cToF(ecoCoolTemp);
+                return cToF(ecoCoolTemp, Globals.farenheitRes);
             }
         }
     }
@@ -250,8 +250,8 @@ class NestStatus {
             if (ht != null) { ht = limitC(ht); }
             if (ct != null) { ct = limitC(ct); }
         } else {
-            if (ht != null) { ht = fToC(ht); }
-            if (ct != null) { ct = fToC(ct); }
+            if (ht != null) { ht = fToC(ht, Globals.celciusRes); }
+            if (ct != null) { ct = fToC(ct, Globals.celciusRes); }
         }
         if (!eco && !thermoMode.equals("OFF")) {
             // https://developers.google.com/nest/device-access/traits/device/thermostat-temperature-setpoint
@@ -537,7 +537,7 @@ class NestStatus {
                     }
                     var e = traits.get("sdm.devices.traits.Temperature") as Lang.Dictionary;
                     if (e != null) {
-                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Float, Globals.celciusRes);
+                        ambientTemp = round(e.get("ambientTemperatureCelsius") as Lang.Float, Globals.ambientRes);
                         if (Globals.debug) {
                             System.println(" Temperature: " + ambientTemp + " deg C");
                         }
@@ -907,8 +907,8 @@ class NestStatus {
 
     // Convert Celcius to Fahrenheit with the correct rounding and within the range limits.
     //
-    static function cToF(t as Lang.Float) as Lang.Float {
-        return round((limitC(t) * 9/5) + 32, Globals.farenheitRes);
+    static function cToF(t as Lang.Float, res as Lang.Float) as Lang.Float {
+        return round((limitC(t) * 9/5) + 32, res);
     }
 
     // Limit the Fahrenheit range.
@@ -925,8 +925,8 @@ class NestStatus {
 
     // Convert Fahrenheit to Celcius with the correct rounding and within the range limits.
     //
-    static function fToC(t as Lang.Float) as Lang.Float {
-        return round((limitF(t) - 32) * 5/9, Globals.celciusRes);
+    static function fToC(t as Lang.Float, res as Lang.Float) as Lang.Float {
+        return round((limitF(t) - 32) * 5/9, res);
     }
 }
 

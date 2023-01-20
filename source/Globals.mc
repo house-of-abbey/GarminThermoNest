@@ -44,6 +44,8 @@ class Globals {
     static const minTempC     =   9f; // deg C
     static const maxTempF     =  90f; // deg F
     static const minTempF     =  48f; // deg F
+    // Display the current temperature more finely than heat and cool settings.
+    static const ambientRes   = 0.1f;
     static const celciusRes   = 0.5f; // Resolution and increment for deg C
     static const farenheitRes = 1.0f; // Resolution and increment for deg F
 

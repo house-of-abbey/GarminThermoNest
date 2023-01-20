@@ -117,7 +117,7 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
                 ? Globals.heatingColor
                 : mNestStatus.getHvac().equals("COOLING")
                     ? Globals.coolingColor
-                    : Globals.offColor
+                    : Graphics.COLOR_TRANSPARENT
         );
         dc.clear();
         dc.drawText(
