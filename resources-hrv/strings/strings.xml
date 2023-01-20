@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Ispunjeno u odabiru aplikacije.</string>
   <string id="oauthCodeTitle">OAuth kod - OAuth2 autorizacijski kod za vaš Google Nest SDM API projekt.</string>
   <string id="oauthCodePrompt">Zalijepi rezultat s web stranice.</string>
+  <string id="faceTitle">Odaberite lice temperaturne ljestvice</string>
+  <string id="facePrompt">Odaberi</string>
+  <string id="ticksFace">Krpelji</string>
+  <string id="minimalFace">Minimalno</string>
   <string id="tokenGroupTitle">Tokeni autorizacije - njima upravlja aplikacija, ali ovdje je omogućena vidljivost.</string>
   <string id="accessTokenTitle">Pristupni token - OAuth2 autorizacijski pristupni token za vaš Google Nest SDM API projekt. Izvedeno iz OAuth koda i traje 1 sat.</string>
   <string id="accessTokenExpireTitle">Istek tokena za pristup - vrijednost UTC vremena kada istječe token za pristup.</string>

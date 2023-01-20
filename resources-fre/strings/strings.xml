@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Rempli par dans la sélection d'applications.</string>
   <string id="oauthCodeTitle">Code OAuth - Code d'autorisation OAuth2 pour votre projet d'API Google Nest SDM.</string>
   <string id="oauthCodePrompt">Coller le résultat de la page Web.</string>
+  <string id="faceTitle">Choisissez le visage de l'échelle de température</string>
+  <string id="facePrompt">Sélectionner</string>
+  <string id="ticksFace">Tiques</string>
+  <string id="minimalFace">Minimal</string>
   <string id="tokenGroupTitle">Jetons d'autorisation - L'application les gère, mais la visibilité est fournie ici.</string>
   <string id="accessTokenTitle">Jeton d'accès - Jeton d'accès d'autorisation OAuth2 pour votre projet d'API Google Nest SDM. Dérivé du code OAuth et dure 1 heure.</string>
   <string id="accessTokenExpireTitle">Access Token Expire - Une valeur de temps UTC pour le moment où le jeton d'accès expire.</string>

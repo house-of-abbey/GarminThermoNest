@@ -136,9 +136,6 @@ class ThermoNestView extends ThermoView {
                     : Globals.offColor
         );
         dc.clear();
-        dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(full_arc_w);
-        dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, 240f, -60f);
         if (mNestStatus.getGotDeviceData()) {
             var ambientTemp = mNestStatus.getAmbientTemp();
             if (ambientTemp != null) {
@@ -201,7 +198,7 @@ class ThermoNestView extends ThermoView {
                     );
                 }
 
-                dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
+                dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(
                     hw,
                     hh + tempSpace,

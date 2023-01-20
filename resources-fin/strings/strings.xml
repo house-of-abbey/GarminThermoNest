@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Täytetty hakemusvalintaan.</string>
   <string id="oauthCodeTitle">OAuth Code – OAuth2-valtuutuskoodi Google Nest SDM API -projektillesi.</string>
   <string id="oauthCodePrompt">Liitä tulos verkkosivulta.</string>
+  <string id="faceTitle">Valitse lämpötila-asteikon pinta</string>
+  <string id="facePrompt">Valitse</string>
+  <string id="ticksFace">Punkit</string>
+  <string id="minimalFace">Minimaalinen</string>
   <string id="tokenGroupTitle">Valtuutustunnukset - Sovellus hallitsee näitä, mutta näkyvyys tarjotaan täällä.</string>
   <string id="accessTokenTitle">Access Token – OAuth2-valtuutuksen käyttöoikeustunnus Google Nest SDM API -projektillesi. Johdettu OAuth-koodista ja kestää 1 tunnin.</string>
   <string id="accessTokenExpireTitle">Access Token Expire – UTC-aika-arvo, jolloin käyttöoikeus vanhenee.</string>

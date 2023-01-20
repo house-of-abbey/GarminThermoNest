@@ -25,6 +25,11 @@
     <string id="oauthCodeTitle">OAuth Code - OAuth2 Authorisation Code for your Google Nest SDM API project.</string>
     <string id="oauthCodePrompt">Paste result from web page.</string>
 
+    <string id="faceTitle">Choose the temperature scale face</string>
+    <string id="facePrompt">Select</string>
+    <string id="ticksFace">Ticks</string>
+    <string id="minimalFace">Minimal</string>
+
     <string id="tokenGroupTitle">Authorisation Tokens - The application manages these, but visibility is provided here.</string>
     <string id="accessTokenTitle">Access Token - OAuth2 Authorisation Access Token for your Google Nest SDM API project. Derived from OAuth Code and lasts 1 hour.</string>
     <string id="accessTokenExpireTitle">Access Token Expire - A UTC time value for when the access token expires.</string>

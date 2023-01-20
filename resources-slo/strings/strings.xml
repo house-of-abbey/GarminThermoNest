@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Vyplnil vo výbere aplikácie.</string>
   <string id="oauthCodeTitle">Kód OAuth – autorizačný kód OAuth2 pre váš projekt Google Nest SDM API.</string>
   <string id="oauthCodePrompt">Prilepte výsledok z webovej stránky.</string>
+  <string id="faceTitle">Vyberte tvár teplotnej stupnice</string>
+  <string id="facePrompt">Vyberte</string>
+  <string id="ticksFace">Kliešte</string>
+  <string id="minimalFace">Minimálne</string>
   <string id="tokenGroupTitle">Autorizačné tokeny – aplikácia ich spravuje, ale viditeľnosť je tu poskytovaná.</string>
   <string id="accessTokenTitle">Prístupový token – autorizačný prístupový token OAuth2 pre váš projekt Google Nest SDM API. Odvodené z kódu OAuth a trvá 1 hodinu.</string>
   <string id="accessTokenExpireTitle">Access Token Expire – Časová hodnota UTC, kedy vyprší platnosť prístupového tokenu.</string>

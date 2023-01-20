@@ -37,6 +37,17 @@
     />
   </setting>
 
+  <setting
+    propertyKey="@Properties.faceSelect"
+    title="@Strings.faceTitle"
+    prompt="@Strings.facePrompt"
+  >
+    <settingConfig type="list">
+        <listEntry value="0">@Strings.ticksFace</listEntry>
+        <listEntry value="1">@Strings.minimalFace</listEntry>
+    </settingConfig>
+  </setting>
+
   <group
     id="tokenGroup"
     title="@Strings.tokenGroupTitle"

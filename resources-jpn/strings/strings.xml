@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">アプリケーションの選択で入力します。</string>
   <string id="oauthCodeTitle">OAuth コード - Google Nest SDM API プロジェクトの OAuth2 認証コード。</string>
   <string id="oauthCodePrompt">Web ページから結果を貼り付けます。</string>
+  <string id="faceTitle">温度目盛り面を選択してください</string>
+  <string id="facePrompt">選択する</string>
+  <string id="ticksFace">ティック</string>
+  <string id="minimalFace">最小限</string>
   <string id="tokenGroupTitle">認証トークン - アプリケーションがこれらを管理しますが、可視性はここで提供されます。</string>
   <string id="accessTokenTitle">アクセス トークン - Google Nest SDM API プロジェクトの OAuth2 認証アクセス トークン。 OAuth コードから派生し、1 時間続きます。</string>
   <string id="accessTokenExpireTitle">Access Token Expire - アクセス トークンの有効期限が切れる UTC 時間の値。</string>

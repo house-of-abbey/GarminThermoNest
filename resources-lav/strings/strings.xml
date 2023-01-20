@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Aizpilda pieteikuma atlasē.</string>
   <string id="oauthCodeTitle">OAuth kods — OAuth2 autorizācijas kods jūsu Google Nest SDM API projektam.</string>
   <string id="oauthCodePrompt">Ielīmējiet rezultātu no tīmekļa lapas.</string>
+  <string id="faceTitle">Izvēlieties temperatūras skalas seju</string>
+  <string id="facePrompt">Izvēlieties</string>
+  <string id="ticksFace">Ērces</string>
+  <string id="minimalFace">Minimāli</string>
   <string id="tokenGroupTitle">Autorizācijas marķieri — lietojumprogramma tos pārvalda, taču šeit tiek nodrošināta redzamība.</string>
   <string id="accessTokenTitle">Piekļuves pilnvara — OAuth2 autorizācijas piekļuves pilnvara jūsu Google Nest SDM API projektam. Atvasināts no OAuth koda un ilgst 1 stundu.</string>
   <string id="accessTokenExpireTitle">Piekļuves pilnvaras derīguma termiņš — UTC laika vērtība, kad beidzas piekļuves pilnvaras derīguma termiņš.</string>

@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">מילוי על ידי בבחירת הבקשה.</string>
   <string id="oauthCodeTitle">קוד OAuth - קוד הרשאה OAuth2 לפרויקט Google Nest SDM API שלך.</string>
   <string id="oauthCodePrompt">הדבק תוצאה מדף אינטרנט.</string>
+  <string id="faceTitle">בחר את פני סולם הטמפרטורה</string>
+  <string id="facePrompt">בחר</string>
+  <string id="ticksFace">קרציות</string>
+  <string id="minimalFace">מִינִימָלִי</string>
   <string id="tokenGroupTitle">אסימוני הרשאה - האפליקציה מנהלת את אלה, אך ניתן לראות כאן.</string>
   <string id="accessTokenTitle">אסימון גישה - אסימון גישה לאישור OAuth2 עבור פרויקט Google Nest SDM API שלך. נגזר מקוד OAuth ונמשך שעה.</string>
   <string id="accessTokenExpireTitle">תפוגה של אסימון הגישה - ערך זמן UTC למועד פג תוקפו של אסימון הגישה.</string>

@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Completat de în selecția aplicației.</string>
   <string id="oauthCodeTitle">Cod OAuth - Cod de autorizare OAuth2 pentru proiectul dvs. API Google Nest SDM.</string>
   <string id="oauthCodePrompt">Lipiți rezultatul de pe pagina web.</string>
+  <string id="faceTitle">Alegeți fața scalei de temperatură</string>
+  <string id="facePrompt">Selectați</string>
+  <string id="ticksFace">Căpușe</string>
+  <string id="minimalFace">Minim</string>
   <string id="tokenGroupTitle">Jetoane de autorizare - Aplicația le gestionează, dar vizibilitatea este oferită aici.</string>
   <string id="accessTokenTitle">Token de acces - Token de acces de autorizare OAuth2 pentru proiectul dvs. API Google Nest SDM. Derivat din codul OAuth și durează 1 oră.</string>
   <string id="accessTokenExpireTitle">Acces Token Expire - O valoare de timp UTC pentru momentul expirării jetonului de acces.</string>

@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Užpildė paraiškos atrankoje.</string>
   <string id="oauthCodeTitle">„OAuth“ kodas – „Google Nest“ SDM API projekto „OAuth2“ prieigos teisės kodas.</string>
   <string id="oauthCodePrompt">Įklijuokite rezultatą iš tinklalapio.</string>
+  <string id="faceTitle">Pasirinkite temperatūros skalės veidą</string>
+  <string id="facePrompt">Pasirinkite</string>
+  <string id="ticksFace">Erkės</string>
+  <string id="minimalFace">Minimalus</string>
   <string id="tokenGroupTitle">Autorizacijos žetonai – programa juos valdo, tačiau čia pateikiamas matomumas.</string>
   <string id="accessTokenTitle">Prieigos prieigos raktas – „Google Nest“ SDM API projekto „OAuth2“ prieigos teisės prieigos raktas. Gauta iš OAuth kodo ir trunka 1 valandą.</string>
   <string id="accessTokenExpireTitle">Prieigos prieigos rakto galiojimo laikas – UTC laiko reikšmė, kai baigiasi prieigos prieigos rakto galiojimo laikas.</string>

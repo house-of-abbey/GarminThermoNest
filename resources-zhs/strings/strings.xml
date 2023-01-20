@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">在应用程序选择中填写。</string>
   <string id="oauthCodeTitle">OAuth 代码 - 您的 Google Nest SDM API 项目的 OAuth2 授权代码。</string>
   <string id="oauthCodePrompt">从网页粘贴结果。</string>
+  <string id="faceTitle">选择温标面</string>
+  <string id="facePrompt">选择</string>
+  <string id="ticksFace">蜱虫</string>
+  <string id="minimalFace">最小的</string>
   <string id="tokenGroupTitle">授权令牌 - 应用程序管理这些令牌，但此处提供可见性。</string>
   <string id="accessTokenTitle">访问令牌 - 用于您的 Google Nest SDM API 项目的 OAuth2 授权访问令牌。源自 OAuth 代码并持续 1 小时。</string>
   <string id="accessTokenExpireTitle">访问令牌过期 - 访问令牌过期时间的 UTC 时间值。</string>

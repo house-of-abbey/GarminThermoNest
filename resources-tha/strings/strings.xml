@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">กรอกโดยการเลือกใบสมัคร</string>
   <string id="oauthCodeTitle">รหัส OAuth - รหัสการให้สิทธิ์ OAuth2 สำหรับโครงการ Google Nest SDM API ของคุณ</string>
   <string id="oauthCodePrompt">วางผลลัพธ์จากหน้าเว็บ</string>
+  <string id="faceTitle">เลือกหน้าปัดมาตราส่วนอุณหภูมิ</string>
+  <string id="facePrompt">เลือก</string>
+  <string id="ticksFace">เห็บ</string>
+  <string id="minimalFace">น้อยที่สุด</string>
   <string id="tokenGroupTitle">โทเค็นการอนุญาต - แอปพลิเคชันจัดการสิ่งเหล่านี้ แต่มีการเปิดเผยที่นี่</string>
   <string id="accessTokenTitle">โทเค็นการเข้าถึง - โทเค็นการเข้าถึงการให้สิทธิ์ OAuth2 สำหรับโครงการ Google Nest SDM API ของคุณ มาจากรหัส OAuth และใช้เวลา 1 ชั่วโมง</string>
   <string id="accessTokenExpireTitle">Access Token Expire - ค่าเวลา UTC เมื่อโทเค็นการเข้าถึงหมดอายุ</string>

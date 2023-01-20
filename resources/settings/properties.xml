@@ -15,6 +15,7 @@
 <properties>
   <property id="deviceId"          type="string"></property>
   <property id="oauthCode"         type="string"></property>
+  <property id="faceSelect"        type="number">0</property>
   <property id="accessToken"       type="string"></property>
   <property id="accessTokenExpire" type="number">0</property>
   <property id="refreshToken"      type="string"></property>

@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Попълва се от в избора на приложение.</string>
   <string id="oauthCodeTitle">OAuth код – OAuth2 код за оторизация за вашия проект за API на Google Nest SDM.</string>
   <string id="oauthCodePrompt">Поставете резултат от уеб страница.</string>
+  <string id="faceTitle">Изберете лицето на температурната скала</string>
+  <string id="facePrompt">Изберете</string>
+  <string id="ticksFace">Кърлежи</string>
+  <string id="minimalFace">Минимална</string>
   <string id="tokenGroupTitle">Токени за упълномощаване – Приложението ги управлява, но тук се предоставя видимост.</string>
   <string id="accessTokenTitle">Access Token – OAuth2 Authorization Token за достъп за вашия проект за API на Google Nest SDM. Извлича се от OAuth код и продължава 1 час.</string>
   <string id="accessTokenExpireTitle">Изтичане на токена за достъп - времева стойност UTC за момента, в който изтича токенът за достъп.</string>

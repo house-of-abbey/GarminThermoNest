@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Täidetakse rakenduse valikus.</string>
   <string id="oauthCodeTitle">OAuth kood – OAuth2 autoriseerimiskood teie Google Nesti SDM API projekti jaoks.</string>
   <string id="oauthCodePrompt">Kleebi tulemus veebilehelt.</string>
+  <string id="faceTitle">Valige temperatuuriskaala nägu</string>
+  <string id="facePrompt">Valige</string>
+  <string id="ticksFace">Puugid</string>
+  <string id="minimalFace">Minimaalne</string>
   <string id="tokenGroupTitle">Autoriseerimismärgid – rakendus haldab neid, kuid siin pakutakse nähtavust.</string>
   <string id="accessTokenTitle">Juurdepääsuluba – OAuth2 autoriseerimisluba teie Google Nesti SDM API projekti jaoks. Tuletatud OAuthi koodist ja kestab 1 tund.</string>
   <string id="accessTokenExpireTitle">Juurdepääsuloa aegumine – UTC-aja väärtus, millal juurdepääsuluba aegub.</string>

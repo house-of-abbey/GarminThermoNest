@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Заповнюється у виборі програми.</string>
   <string id="oauthCodeTitle">Код OAuth – код авторизації OAuth2 для вашого проекту Google Nest SDM API.</string>
   <string id="oauthCodePrompt">Вставити результат із веб-сторінки.</string>
+  <string id="faceTitle">Виберіть грань температурної шкали</string>
+  <string id="facePrompt">Виберіть</string>
+  <string id="ticksFace">Кліщі</string>
+  <string id="minimalFace">Мінімальний</string>
   <string id="tokenGroupTitle">Маркери авторизації – ними керує програма, але тут надається видимість.</string>
   <string id="accessTokenTitle">Маркер доступу – маркер доступу авторизації OAuth2 для вашого проекту Google Nest SDM API. Отримано з коду OAuth і триває 1 годину.</string>
   <string id="accessTokenExpireTitle">Термін дії маркера доступу – значення часу UTC, коли закінчується термін дії маркера доступу.</string>

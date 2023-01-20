@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Udfyldt af i ansøgningsvalg.</string>
   <string id="oauthCodeTitle">OAuth-kode - OAuth2-autorisationskode til dit Google Nest SDM API-projekt.</string>
   <string id="oauthCodePrompt">Indsæt resultat fra webside.</string>
+  <string id="faceTitle">Vælg temperaturskalaens ansigt</string>
+  <string id="facePrompt">Vælg</string>
+  <string id="ticksFace">Flåter</string>
+  <string id="minimalFace">Minimal</string>
   <string id="tokenGroupTitle">Autorisationstokens - Applikationen administrerer disse, men synlighed er angivet her.</string>
   <string id="accessTokenTitle">Adgangstoken - OAuth2-autorisationsadgangstoken til dit Google Nest SDM API-projekt. Afledt af OAuth-kode og varer 1 time.</string>
   <string id="accessTokenExpireTitle">Adgangstoken udløber - En UTC-tidsværdi for, hvornår adgangstokenet udløber.</string>

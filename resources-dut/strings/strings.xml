@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Ingevuld door toepassingsselectie.</string>
   <string id="oauthCodeTitle">OAuth-code - OAuth2-autorisatiecode voor uw Google Nest SDM API-project.</string>
   <string id="oauthCodePrompt">Plak het resultaat van de webpagina.</string>
+  <string id="faceTitle">Kies het gezicht van de temperatuurschaal</string>
+  <string id="facePrompt">Selecteer</string>
+  <string id="ticksFace">Teken</string>
+  <string id="minimalFace">Minimaal</string>
   <string id="tokenGroupTitle">Autorisatietokens - De applicatie beheert deze, maar hier wordt zichtbaarheid geboden.</string>
   <string id="accessTokenTitle">Toegangstoken - OAuth2-autorisatietoegangstoken voor uw Google Nest SDM API-project. Afgeleid van OAuth-code en duurt 1 uur.</string>
   <string id="accessTokenExpireTitle">Access Token Expire - Een UTC-tijdwaarde voor wanneer het toegangstoken verloopt.</string>

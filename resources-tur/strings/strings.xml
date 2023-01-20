@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Uygulama seçiminde tarafından doldurulur.</string>
   <string id="oauthCodeTitle">OAuth Kodu - Google Nest SDM API projeniz için OAuth2 Yetkilendirme Kodu.</string>
   <string id="oauthCodePrompt">Web sayfasından sonucu yapıştırın.</string>
+  <string id="faceTitle">Sıcaklık ölçeği yüzünü seçin</string>
+  <string id="facePrompt">Seçme</string>
+  <string id="ticksFace">Keneler</string>
+  <string id="minimalFace">En az</string>
   <string id="tokenGroupTitle">Yetkilendirme Jetonları - Uygulama bunları yönetir, ancak görünürlük burada sağlanır.</string>
   <string id="accessTokenTitle">Erişim Simgesi - Google Nest SDM API projeniz için OAuth2 Yetkilendirme Erişim Simgesi. OAuth Kodundan türetilir ve 1 saat sürer.</string>
   <string id="accessTokenExpireTitle">Access Token Expire - Erişim belirtecinin sona erdiği zaman için bir UTC zaman değeri.</string>

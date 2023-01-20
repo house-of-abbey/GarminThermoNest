@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">تم تعبئتها في اختيار التطبيق.</string>
   <string id="oauthCodeTitle">كود OAuth - رمز مصادقة OAuth2 لمشروع Google Nest SDM API.</string>
   <string id="oauthCodePrompt">نتيجة لصق من صفحة الويب.</string>
+  <string id="faceTitle">اختر وجه مقياس درجة الحرارة</string>
+  <string id="facePrompt">يختار</string>
+  <string id="ticksFace">القراد</string>
+  <string id="minimalFace">الحد الأدنى</string>
   <string id="tokenGroupTitle">رموز التفويض - يدير التطبيق هذه الرموز ، ولكن يتم توفير إمكانية الرؤية هنا.</string>
   <string id="accessTokenTitle">رمز الوصول - رمز وصول مصادقة OAuth2 لمشروع Google Nest SDM API. مشتق من كود OAuth ويستمر لمدة ساعة واحدة.</string>
   <string id="accessTokenExpireTitle">انتهاء صلاحية رمز الوصول - قيمة وقت UTC عندما تنتهي صلاحية رمز الوصول.</string>

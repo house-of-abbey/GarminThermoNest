@@ -27,6 +27,10 @@
   <string id="deviceIdPrompt">Diisi dengan dalam pemilihan aplikasi.</string>
   <string id="oauthCodeTitle">Kode OAuth - Kode Otorisasi OAuth2 untuk proyek Google Nest SDM API Anda.</string>
   <string id="oauthCodePrompt">Tempel hasil dari halaman web.</string>
+  <string id="faceTitle">Pilih wajah skala suhu</string>
+  <string id="facePrompt">Pilih</string>
+  <string id="ticksFace">Kutu</string>
+  <string id="minimalFace">Minimal</string>
   <string id="tokenGroupTitle">Token Otorisasi - Aplikasi mengelola ini, tetapi visibilitas disediakan di sini.</string>
   <string id="accessTokenTitle">Token Akses - Token Akses Otorisasi OAuth2 untuk proyek Google Nest SDM API Anda. Berasal dari Kode OAuth dan berlangsung selama 1 jam.</string>
   <string id="accessTokenExpireTitle">Kedaluwarsa Token Akses - Nilai waktu UTC saat token akses kedaluwarsa.</string>
