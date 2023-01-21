@@ -231,7 +231,14 @@ class ThermoView extends WatchUi.View {
                 dc.setPenWidth(hct_tick_w);
                 drawTick(dc, coolArc, tick_st_r, tick_ren_r, null);
             }
-            dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(
+                mNestStatus.getHvac().equals("HEATING")
+                    ? Graphics.COLOR_RED
+                    : mNestStatus.getHvac().equals("COOLING")
+                        ? Graphics.COLOR_BLUE
+                        : Graphics.COLOR_YELLOW,
+                Graphics.COLOR_TRANSPARENT
+            );
             drawDiamond(dc, ambientArc, tick_st_r);
         }
     }

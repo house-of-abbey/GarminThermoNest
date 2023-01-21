@@ -25,9 +25,12 @@ using Toybox.Graphics;
 using Toybox.WatchUi;
 using Toybox.Lang;
 using Toybox.Timer;
+using Toybox.Math;
 
 class ViewNav extends WatchUi.Drawable {
+    hidden var olocX;
     hidden var ilocX;
+    hidden var ilocY;
     hidden var radius  = 5;
     hidden var panes   = 1;
     hidden var nth     = 1;
@@ -46,56 +49,81 @@ class ViewNav extends WatchUi.Drawable {
             :timeout    as Lang.Numeric,
             :period     as Lang.Numeric
         }) {
-        ilocX   = settings.get(:locX) - settings.get(:radius);
+        ilocX   = settings.get(:locX);
+        ilocY   = settings.get(:locY);
+        olocX   = ilocX - radius; // Original iLocX
         radius  = settings.get(:radius);
         panes   = settings.get(:panes);
         nth     = settings.get(:nth);
         timeout = settings.get(:timeout);
         period  = settings.get(:period);
+
+        var lr    = (System.getDeviceSettings().screenWidth / 2) - ilocX; // Large radius from the centre of the screen
+        var theta = Math.acos(1 - (2 * Math.pow(radius, 2) / Math.pow(lr, 2)));
+        var x0, y0, xn, yn;
+        if ((1-nth) * theta < Math.PI) {
+            x0 = ilocX + (lr * (1 - Math.cos((    1-nth) * theta)));
+        } else {
+            // Max out the horizonal width at PI
+            x0 = ilocX + 2 * lr;
+        }
+        if ((1-nth) * theta * 2.0f < Math.PI) {
+            y0 = ilocY + (lr * Math.sin((1-nth) * theta));
+        } else {
+            // Min out the vertical height at PI/2
+            y0 = ilocY - lr;
+        }
+        if ((panes-nth) * theta < Math.PI) {
+            xn = ilocX + (lr * (1 - Math.cos((panes-nth) * theta)));
+        } else {
+            // Max out the horizonal width at PI
+            xn = ilocX + 2 * lr;
+        }
+        if ((panes-nth) * theta * 2.0f < Math.PI) {
+            yn = ilocY + (lr * Math.sin((panes-nth) * theta));
+        } else {
+            // Max out the vertical height at PI/2
+            yn = ilocY + lr;
+        }
+
         Drawable.initialize({
             :identifier => settings.get(:identifier),
-            :locX       => ilocX,
-            :locY       => settings.get(:locY) - (settings.get(:radius) * (settings.get(:nth)*2 - 1)),
-            :width      => settings.get(:radius) * 2,
-            :height     => settings.get(:radius) * 2 * settings.get(:panes),
+            :locX       => olocX,
+            :locY       => NestStatus.round(y0 - radius, 1.0f),
+            :width      => NestStatus.round(radius * 2 + (((x0 > xn) ? x0 : xn) - ilocX), 1.0f),
+            :height     => NestStatus.round(radius * 2 + (yn - y0), 1.0f),
             :visible    => settings.get(:visible)
         });
         timer = new Timer.Timer();
     }
 
     function draw(dc as Graphics.Dc) as Void {
+        // Required for when we animate since locX gets altered and this method draws relative to ilocX
+        ilocX = locX + radius; // radius is always the difference between locX and ilocX
         if (isVisible) {
             dc.setPenWidth(1);
-            for (var i = 0; i < panes; i++) {
-                if (i == nth-1) {
+            var lr = (dc.getWidth() / 2) - ilocX; // Large radius from the centre of the screen
+            var theta = Math.acos(1 - (2 * Math.pow(radius, 2) / Math.pow(lr, 2)));
+            for (var i = 1-nth; i < (panes+1-nth); i++) {
+                var x = ilocX + (lr * (1 - Math.cos(i * theta)));
+                var y = ilocY + (lr *      Math.sin(i * theta) );
+                if (i == 0) {
                     dc.setColor(
                         Graphics.COLOR_WHITE,
                         Graphics.COLOR_TRANSPARENT
                     );
-                    dc.fillCircle(
-                        locX + radius,
-                        locY + radius + (i * radius * 2),
-                        radius-1
-                    );
+                    dc.fillCircle(x, y, radius-1);
                 } else {
                     dc.setColor(
                         Graphics.COLOR_BLACK,
                         Graphics.COLOR_TRANSPARENT
                     );
-                    dc.fillCircle(
-                        locX + radius,
-                        locY + radius + (i * radius * 2),
-                        radius-3
-                    );
+                    dc.fillCircle(x, y, radius-3);
                     dc.setColor(
                         Graphics.COLOR_WHITE,
                         Graphics.COLOR_TRANSPARENT
                     );
-                    dc.drawCircle(
-                        locX + radius,
-                        locY + radius + (i * radius * 2),
-                        radius-2
-                    );
+                    dc.drawCircle(x, y, radius-2);
                 }
             }
         }
@@ -104,7 +132,7 @@ class ViewNav extends WatchUi.Drawable {
     function animateCallback() as Void {
         // Have to add 1 to the width to get rid of the last circle pixels. Feature of
         // drawCircle/fillCircle? Perhaps anti-aliasing?
-        WatchUi.animate(self, :locX, WatchUi.ANIM_TYPE_LINEAR, ilocX, -width-1, Globals.navPeriod, null);
+        WatchUi.animate(self, :locX, WatchUi.ANIM_TYPE_LINEAR, olocX, -width, Globals.navPeriod, null);
     }
 
     function animate() as Void {
@@ -115,6 +143,6 @@ class ViewNav extends WatchUi.Drawable {
         timer.stop();
         WatchUi.cancelAllAnimations();
         // Put this widget back in its default location
-        locX = ilocX;
+        locX = olocX;
     }
 }
