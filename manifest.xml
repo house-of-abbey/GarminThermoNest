@@ -27,10 +27,11 @@
             "Monkey C: Edit Products" - Lets you add or remove any product
         -->
     <iq:products>
-      <!-- Work through this list systematically.
       <iq:product id="d2airx10"/>
       <iq:product id="d2mach1"/>
       <iq:product id="epix2"/>
+      <!--
+      Small face requires layout work and smaller icons.
       <iq:product id="fenix7"/>
       <iq:product id="fenix7s"/>
       <iq:product id="fenix7x"/>
@@ -39,14 +40,15 @@
       <iq:product id="legacyherofirstavenger"/>
       <iq:product id="legacysagadarthvader"/>
       <iq:product id="legacysagarey"/>
+      -->
       <iq:product id="marq2"/>
       <iq:product id="marq2aviator"/>
       <iq:product id="venu"/>
-      -->
       <iq:product id="venu2"/>
-      <!--
       <iq:product id="venu2plus"/>
       <iq:product id="venu2s"/>
+      <!--
+      Small face requires layout work and smaller icons.
       <iq:product id="venusq"/>
       <iq:product id="venusq2"/>
       <iq:product id="venusq2m"/>
