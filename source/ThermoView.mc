@@ -29,9 +29,9 @@ class ThermoView extends WatchUi.View {
     // Line width of the full range arc
     hidden const full_arc_w    = 4;
     // Line width of the range arc (thicker than full_arc_w)
-    hidden const range_arc_w   = 8;
+    hidden const range_arc_w   = 12;
     // Heat & cool line width of a tick mark
-    hidden const hct_tick_w    = 4;
+    hidden const hct_tick_w    = 6;
     // Ambient temperature line width of a tick mark
     hidden const at_tick_w     = 8;
     // Ticks start at: watch radius - tick_st_r
@@ -231,14 +231,7 @@ class ThermoView extends WatchUi.View {
                 dc.setPenWidth(hct_tick_w);
                 drawTick(dc, coolArc, tick_st_r, tick_ren_r, null);
             }
-            dc.setColor(
-                mNestStatus.getHvac().equals("HEATING")
-                    ? Graphics.COLOR_RED
-                    : mNestStatus.getHvac().equals("COOLING")
-                        ? Graphics.COLOR_BLUE
-                        : Graphics.COLOR_YELLOW,
-                Graphics.COLOR_TRANSPARENT
-            );
+            dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
             drawDiamond(dc, ambientArc, tick_st_r);
         }
     }
@@ -320,7 +313,7 @@ class ThermoView extends WatchUi.View {
                 drawTick(dc, coolArc, tick_st_r, tick_ren_r, null);
             }
 
-            dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(at_tick_w);
             drawTick(dc, ambientArc, tick_st_r, tick_aen_r, null);
         }

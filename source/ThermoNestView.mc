@@ -198,7 +198,7 @@ class ThermoNestView extends ThermoView {
                     );
                 }
 
-                dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
+                dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(
                     hw,
                     hh + tempSpace,

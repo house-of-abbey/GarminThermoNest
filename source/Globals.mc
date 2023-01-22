@@ -32,7 +32,7 @@ class Globals {
     static const navMarginX   = 40;
     static const navPanes     = 3;
     static const navDelay     = 2000; // ms
-    static const navPeriod    = 1.0f;  // s
+    static const navPeriod    = 1.0f; // s
 
     static const heatingColor = 0xEC7800; // Orange background
     static const coolingColor = 0x285DF7; // Blue background
