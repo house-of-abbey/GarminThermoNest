@@ -274,6 +274,8 @@ class ThermoNestView extends ThermoView {
         enableRefresh();
     }
 
+    // Actions to take when the 'refreshButton' is tapped.
+    //
     function onRefreshButton() as Void {
         // Assume the application has not been used in excess of 3600s such that the token has expired
         mNestStatus.getDeviceData();
@@ -281,6 +283,8 @@ class ThermoNestView extends ThermoView {
         timer.start(method(:enableRefresh), timeout, false);
     }
 
+    // Change the state of the refresh button.
+    //
     function enableRefresh() as Void {
         if (refreshButton != null) {
             refreshButton.setState(:stateDefault);

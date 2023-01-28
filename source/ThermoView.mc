@@ -109,6 +109,8 @@ class ThermoView extends WatchUi.View {
         }
     }
 
+    // Draw a diamond shape at various angles of rotation.
+    //
     function drawDiamond(dc as Graphics.Dc, theta as Lang.Number, start as Lang.Number) {
         var end  = start + diamondHeight;
         var crad = Math.toRadians(360 - theta);
@@ -124,6 +126,8 @@ class ThermoView extends WatchUi.View {
         ]);
     }
 
+    // Decide which temperature scale to draw on the face based on the application settings.
+    //
     function drawTempScale(dc as Graphics.Dc, ambientTemp as Lang.Float, heatTemp as Lang.Float, coolTemp as Lang.Float) as Void {
         if (Properties.getValue("faceSelect") == 0) {
             drawTempScaleTicks(dc, ambientTemp, heatTemp, coolTemp);
@@ -132,6 +136,8 @@ class ThermoView extends WatchUi.View {
         }
     }
 
+    // Draw the "Ticks" version of the temperature scale.
+    //
     function drawTempScaleTicks(dc as Graphics.Dc, ambientTemp as Lang.Float, heatTemp as Lang.Float, coolTemp as Lang.Float) as Void {
         var hw = dc.getWidth() / 2;
         var hh = dc.getHeight() / 2;
@@ -244,6 +250,8 @@ class ThermoView extends WatchUi.View {
         }
     }
 
+    // Draw the "Minimal" version of the temperature scale.
+    //
     function drawTempScaleMinimal(dc as Graphics.Dc, ambientTemp as Lang.Float, heatTemp as Lang.Float, coolTemp as Lang.Float) {
         var hw = dc.getWidth() / 2;
         var hh = dc.getHeight() / 2;

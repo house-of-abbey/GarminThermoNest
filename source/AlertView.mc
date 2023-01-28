@@ -102,6 +102,8 @@ class Alert extends WatchUi.View {
         dc.drawText(tX, tY, font, text, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
+    // Remove the alert from view, usually on user input, but that is defined by the calling function.
+    //
     function dismiss() {
         WatchUi.popView(SLIDE_IMMEDIATE);
     }

@@ -27,8 +27,9 @@ using Toybox.Communications;
 
 (:glance)
 class ErrorView extends WatchUi.View {
+    // Vertical spacing between the top of the face and the error icon
+    hidden const errorIconMargin = 30;
     hidden var text as Lang.String;
-
     hidden var errorIcon;
     hidden var textArea;
 
@@ -69,7 +70,7 @@ class ErrorView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
         dc.setAntiAlias(true);
-        dc.drawBitmap(hw - 24, 30, errorIcon);
+        dc.drawBitmap(hw - errorIcon.getWidth(), errorIconMargin, errorIcon);
         textArea.draw(dc);
     }
 }

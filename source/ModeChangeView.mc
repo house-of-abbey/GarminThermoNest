@@ -186,6 +186,8 @@ class ModeChangeView extends WatchUi.View {
         mViewNav.resetAnimation();
     }
 
+    // Action for tapping the mode button
+    //
     function onModeButton() as Void {
         thermoMode = availableThermoModes[(availableThermoModes.indexOf(thermoMode)+1) % availableThermoModes.size()];
         if (thermoMode.equals("OFF")) {
@@ -193,6 +195,8 @@ class ModeChangeView extends WatchUi.View {
         }
     }
 
+    // Action for tapping the eco button
+    //
     function onEcoButton() as Void {
         if (availableEcoModes.indexOf("MANUAL_ECO") != -1) {
             ecoMode = !ecoMode;

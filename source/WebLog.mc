@@ -26,6 +26,9 @@ using Toybox.Lang;
 (:glance)
 class WebLog {
 
+    // Create a debug log over the Internet to keep track of the watch's runtime
+    // execution.
+    //
     function print(a as Lang.String) {
         Communications.makeWebRequest(
             "https://joseph.abbey1.org.uk/test.php",

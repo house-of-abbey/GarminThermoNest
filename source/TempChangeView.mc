@@ -295,6 +295,8 @@ class TempChangeView extends ThermoView {
         mViewNav.resetAnimation();
     }
 
+    // Work to do when the increment temperature button is pressed.
+    //
     function onIncTempButton() as Void {
         if (mNestStatus.getScale() == 'C') {
             if (settingCool) {
@@ -320,6 +322,8 @@ class TempChangeView extends ThermoView {
         requestUpdate();
     }
 
+    // Work to do when the decrement temperature button is pressed.
+    //
     function onDecTempButton() as Void {
         if (mNestStatus.getScale() == 'C') {
             if (settingCool) {

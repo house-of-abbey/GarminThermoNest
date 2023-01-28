@@ -120,6 +120,7 @@ class NestStatus {
     }
 
     // Convert temperature to the units in 'scale'.
+    //
     function getAmbientTemp() as Lang.Float or Null {
         if (ambientTemp == null) {
             return null;
@@ -133,6 +134,7 @@ class NestStatus {
     }
 
     // Convert temperature to the units in 'scale'.
+    //
     function getHeatTemp() as Lang.Float or Null {
         if (heatTemp == null) {
             return null;
@@ -145,6 +147,8 @@ class NestStatus {
         }
     }
 
+    // Set the heat temperature, converting the units, C or F, as required.
+    //
     function setHeatTemp(value as Lang.Float) as Void {
         if (!eco) {
             if (scale == 'C') {
@@ -167,7 +171,8 @@ class NestStatus {
         }
     }
 
-    // Convert temperature to the units in 'scale'.
+    // Get the cool trigger temperature (in Celcius) and convert to the correct units C or F.
+    //
     function getCoolTemp() as Lang.Float or Null {
         if (coolTemp == null) {
             return null;
@@ -180,6 +185,8 @@ class NestStatus {
         }
     }
 
+    // Set the cool trigger temperature and convert from C or F to Celcius.
+    //
     function setCoolTemp(value as Lang.Float) as Void {
         if (!eco) {
             if (scale == 'C') {
@@ -203,6 +210,7 @@ class NestStatus {
     }
 
     // Convert temperature to the units in 'scale'.
+    //
     function getEcoHeatTemp() as Lang.Float or Null {
         if (ecoHeatTemp == null) {
             return null;
@@ -216,6 +224,7 @@ class NestStatus {
     }
 
     // Convert temperature to the units in 'scale'.
+    //
     function getEcoCoolTemp() as Lang.Float or Null {
         if (ecoCoolTemp == null) {
             return null;
@@ -228,6 +237,8 @@ class NestStatus {
         }
     }
 
+    // Callback function after completing the POST request to change the temperature.
+    //
     function onReturnChangeTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReturnChangeTemp() Response Code: " + responseCode);
@@ -245,6 +256,8 @@ class NestStatus {
         WatchUi.requestUpdate();
     }
 
+    // Initiate the POST request to change the temperature.
+    //
     function executeChangeTemp(ht as Lang.Float, ct as Lang.Float) as Void {
         if (scale == 'C') {
             if (ht != null) { ht = limitC(ht); }
@@ -339,18 +352,26 @@ class NestStatus {
          }
     }
 
+    // Return the humidity in %.
+    //
     function getHumidity() as Lang.Number {
         return humidity;
     }
 
+    // Return the available thermostat mode as an array of strings.
+    //
     function getAvailableThermoModes() as Lang.Array {
         return availableThermoModes;
     }
 
+    // Return the current HVAC mode.
+    //
     function getThermoMode() as Lang.String {
         return thermoMode;
     }
 
+    // Callback function after completing the POST request to change the themostat mode.
+    //
     function onReturnThermoMode(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
             System.println("onReturnThermoMode() Response Code: " + responseCode);
@@ -364,6 +385,8 @@ class NestStatus {
         executeMode(Thermo, context as Lang.Dictionary);
     }
 
+    // Initiate the POST request to change the HVAC mode.
+    //
     function executeThermoMode(params as Lang.Dictionary) as Void {
         var mode = params.get(:thermoMode);
         if (mode.equals(thermoMode)) {
@@ -385,18 +408,26 @@ class NestStatus {
         }
     }
 
+    // Return the current HVAC mode.
+    //
     function getHvac() as Lang.String {
         return hvac;
     }
 
+    // Return the list of available eco mode as an array of strings.
+    //
     function getAvailableEcoModes() as Lang.Array {
         return availableEcoModes;
     }
 
+    // Return the current eco mode setting.
+    //
     function getEco() as Lang.Boolean {
         return eco;
     }
 
+    // Callback function after completing the POST request to change the eco mode.
+    //
     function onReturnEco(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
             System.println("onReturnEco() Response Code: " + responseCode);
@@ -410,6 +441,8 @@ class NestStatus {
         executeMode(Eco, context as Lang.Dictionary);
     }
 
+    // Initiate the POST request to change the eco mode.
+    //
     function executeEco(
         params as {
             :thermoMode as Lang.String,
@@ -437,7 +470,18 @@ class NestStatus {
         }
     }
 
-    // Spawn sub-tasks from here and retain control of execution of asynchronous elements.
+    // Setting the themo and eco modes needs to be done with care as it results in rejected POST requests
+    // when trying to change a setting that is not allowed. This is complicated by the asynchronous nature
+    // of POST requests and callback functions when we need each call to be done sequentially. Therefore
+    // each thread of execution needs to return here after callback and we need to carry state via the
+    // function parameters of this stateless function.
+    //
+    // Parameters:
+    //  * r      - The state variable to retain knowledge of where we were in the actions
+    //  * params - The mode values to set returned from the user interface providing the selection. These
+    //             need to be passed to each subroutine in order for them to be passed back after the
+    //             callback function completes.
+    //
     function executeMode(
         r      as Lang.Number,
         params as {
@@ -487,9 +531,18 @@ class NestStatus {
         }
     }
 
+    // Generic function to create an SDM API execute POST request that can be customised.
+    //
+    // Parameters:
+    //  * payload  - The SDM API customisation
+    //  * callback - Call back function to execute on completion of the POST request.
+    //  * context  - The means by which to pass some additional information to the callback function, our
+    //               this case this might be the thermostat mode parameters that are required as part of
+    //               the state to 'executeMode()'.
+    //
     private function executeCommand(payload as Lang.Dictionary, callback, context as Lang.Object or Null) {
         var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_POST,
+            :method  => Communications.HTTP_REQUEST_METHOD_POST,
             :headers => {
                 "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_JSON,
                 "Authorization" => "Bearer " + Properties.getValue("accessToken")
@@ -508,7 +561,8 @@ class NestStatus {
         }
     }
 
-    // Set up the response callback function
+    // Callback function to execute when the GET request for the current thermostat status returns.
+    //
     function onReceiveDeviceData(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (responseCode == 200) {
             if (data != null) {
@@ -628,6 +682,8 @@ class NestStatus {
         WatchUi.requestUpdate();
     }
 
+    // Initiate the GET request to fetch the current thermostat status.
+    //
     function getDeviceData() as Void {
         var options = {
             :method  => Communications.HTTP_REQUEST_METHOD_GET,
@@ -647,6 +703,8 @@ class NestStatus {
         }
     }
 
+    // Callback function to execute when fetchign a list of thermostats to choose to query and control.
+    //
     function onReceiveDevices(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReceiveDevices() Response Code: " + responseCode);
@@ -692,6 +750,8 @@ class NestStatus {
         }
     }
 
+    // Initiate the GET request to fetch the list of devices to control from the user's Nest account.
+    //
     function getDevices() {
         var c = Properties.getValue("deviceId");
         if (c == null || c.equals("")) {
@@ -715,6 +775,8 @@ class NestStatus {
         }
     }
 
+    // Callback function to execute when returning from the POST request to re-OAuth the application's device access.
+    //
     function onReceiveRefreshToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onReceiveRefreshToken() Response Code: " + responseCode);
@@ -738,6 +800,8 @@ class NestStatus {
         }
     }
 
+    // Callback function to execute when returning from the POST request to re-OAuth the application's device access.
+    //
     function onRecieveAccessToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
             System.println("onRecieveAccessToken() Response Code: " + responseCode);
@@ -765,6 +829,9 @@ class NestStatus {
         }
     }
 
+    // Callback function to execute when returning from the POST request to establish the application's
+    // device access using the initial OAuth code completed on the web.
+    //
     function getAccessToken() as Void {
         // Both Access and Refresh tokens are truncated when authentication with them fails
         var e = Properties.getValue("accessTokenExpire");
@@ -828,6 +895,9 @@ class NestStatus {
     //     }
     // }
 
+    // Initiate the whole OAuth process based on a code in the settings, set by the user on completion of
+    // the initial web-based authoriation process.
+    //
     function getOAuthToken() as Void {
         var c = Properties.getValue("oauthCode");
         if (c == null || c.equals("")) {
