@@ -1,0 +1,18 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+th, td {
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+img.center {
+  margin-inline: auto;
+}
