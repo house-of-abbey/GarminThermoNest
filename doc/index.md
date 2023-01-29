@@ -1,5 +1,7 @@
 # GarminThermoNest
 
+**Please Note! Nest in no way endorses this application. They are probably blissfully unaware of it.** The application will only work with Nest thermostats, not Hive ones.
+
 ## Operation
 
 An application for Garmin IQ watches that allows you to control your Nest thermostat. This application requires a touch sensitive screen to operate the application. It has been design for the Venu 2 watch and those with a similar screen size.
