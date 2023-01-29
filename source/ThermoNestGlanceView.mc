@@ -30,6 +30,8 @@ using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestGlanceView extends WatchUi.GlanceView {
+    // Horizontal offset at which to draw the icon or write text
+    hidden const xOffset = 10;
     hidden var mNestStatus;
     hidden var phoneDisconnectedIcon;
     hidden var signalDisconnectedIcon;
@@ -62,36 +64,35 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
             if (System.getDeviceSettings().connectionAvailable) {
                 var c = Properties.getValue("oauthCode");
                 if (c == null || c.equals("")) {
-                    dc.drawBitmap(10, (dc.getHeight()-loggedOutIcon.getHeight())/2, loggedOutIcon);
+                    dc.drawBitmap(xOffset, (dc.getHeight()-loggedOutIcon.getHeight())/2, loggedOutIcon);
                     return;
                 } else {
                     if (d == null || d.equals("")) {
-                        dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
                         // Else drop through without a return to print text
                     } else {
                         if (mNestStatus.getGotDeviceData()) {
                             if (mNestStatus.getGotDeviceDataError()) {
-                                dc.drawBitmap(10, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
+                                dc.drawBitmap(xOffset, (dc.getHeight()-errorIcon.getHeight())/2, errorIcon);
                                 return;
                             } else {
                                 if (!mNestStatus.getOnline()) {
-                                    dc.drawBitmap(10, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
+                                    dc.drawBitmap(xOffset, (dc.getHeight()-thermostatOfflineIcon.getHeight())/2, thermostatOfflineIcon);
                                     return;
                                 }
                                 // Else drop through without a return and no icon to print text
                             }
                         } else {
-                            dc.drawBitmap(10, (dc.getHeight()-hourglassIcon.getHeight())/2, hourglassIcon);
+                            dc.drawBitmap(xOffset, (dc.getHeight()-hourglassIcon.getHeight())/2, hourglassIcon);
                             return;
                         }
                     }
                 }
             } else {
-                dc.drawBitmap(10, (dc.getHeight()-signalDisconnectedIcon.getHeight())/2, signalDisconnectedIcon);
+                dc.drawBitmap(xOffset, (dc.getHeight()-signalDisconnectedIcon.getHeight())/2, signalDisconnectedIcon);
                 return;
             }
         } else {
-            dc.drawBitmap(10, (dc.getHeight()-phoneDisconnectedIcon.getHeight())/2, phoneDisconnectedIcon);
+            dc.drawBitmap(xOffset, (dc.getHeight()-phoneDisconnectedIcon.getHeight())/2, phoneDisconnectedIcon);
             return;
         }
 
@@ -121,8 +122,8 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         );
         dc.clear();
         dc.drawText(
-            10,
-            dc.getHeight()/2,
+            xOffset,
+            dc.getHeight() / 2,
             Graphics.FONT_SMALL,
             text,
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER

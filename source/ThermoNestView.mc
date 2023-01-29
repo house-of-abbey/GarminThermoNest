@@ -126,7 +126,9 @@ class ThermoNestView extends ThermoView {
         var hw = w/2;
         var hh = h/2;
 
-        dc.setAntiAlias(true);
+        if(dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         dc.setColor(
             Graphics.COLOR_WHITE,
             mNestStatus.getHvac().equals("HEATING")

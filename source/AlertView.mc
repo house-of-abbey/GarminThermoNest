@@ -83,7 +83,9 @@ class Alert extends WatchUi.View {
         var bX      = (dc.getWidth()  - bWidth)  / 2;
         var bY      = (dc.getHeight() - bHeight) / 2;
 
-        dc.setAntiAlias(true);
+        if(dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         dc.setColor(bgcolor, bgcolor);
         dc.fillRoundedRectangle(bX, bY, bWidth, bHeight, bRadius);
 

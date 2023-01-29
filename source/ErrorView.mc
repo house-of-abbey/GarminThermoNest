@@ -66,11 +66,12 @@ class ErrorView extends WatchUi.View {
         var hw = w/2;
         var hh = h/2;
         var bg = 0x3B444C;
-        dc.setAntiAlias(true);
+        if(dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         dc.setColor(Graphics.COLOR_WHITE, bg);
         dc.clear();
-        dc.setAntiAlias(true);
-        dc.drawBitmap(hw - errorIcon.getWidth(), errorIconMargin, errorIcon);
+        dc.drawBitmap(hw - errorIcon.getWidth()/2, errorIconMargin, errorIcon);
         textArea.draw(dc);
     }
 }

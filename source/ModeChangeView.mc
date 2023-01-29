@@ -121,7 +121,9 @@ class ModeChangeView extends WatchUi.View {
         var w = dc.getWidth();
         var h = dc.getHeight();
 
-        dc.setAntiAlias(true);
+        if(dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
         dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.clear();
 

@@ -807,25 +807,29 @@ class NestStatus {
             System.println("onRecieveAccessToken() Response Code: " + responseCode);
             System.println("onRecieveAccessToken() Response Data: " + data);
         }
-        if (responseCode == 200) {
-            Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
-            Properties.setValue("refreshToken", data.get("refresh_token"));
-            if (Globals.debug) {
-                System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
-                System.println("onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
-            }
-            getDevices();
-            Properties.setValue("oauthCode", "Succeeded and deleted");
+        if (data == null) {
+            WatchUi.pushView(new ErrorView("API Request returned null data."), new ErrorDelegate(), WatchUi.SLIDE_UP);
         } else {
-            Properties.setValue("oauthCode", "FAILED, please try again");
-            if (!isGlance) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            if (responseCode == 200) {
+                Properties.setValue("accessToken", data.get("access_token"));
+                Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
+                Properties.setValue("refreshToken", data.get("refresh_token"));
+                if (Globals.debug) {
+                    System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
+                    System.println("onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
+                }
+                getDevices();
+                Properties.setValue("oauthCode", "Succeeded and deleted");
+            } else {
+                Properties.setValue("oauthCode", "FAILED, please try again");
+                if (!isGlance) {
+                    WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
+                if (Globals.debug) {
+                    System.println("onRecieveAccessToken() Display Update");
+                }
+                WatchUi.requestUpdate();
             }
-            if (Globals.debug) {
-                System.println("onRecieveAccessToken() Display Update");
-            }
-            WatchUi.requestUpdate();
         }
     }
 
