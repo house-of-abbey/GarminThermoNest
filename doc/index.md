@@ -152,3 +152,7 @@ You may have been expecting the application to present you with the first page s
 **Q: Your application is good, but I think I can design it better. How do I feedback?**
 
 **A:** The most preferable way is for you to amend the code and submit your changes for approval! Clone the code from [GitHub's GarminThermoNest project](https://github.com/house-of-abbey/GarminThermoNest/) and help yourself. Talk to us so we know what your thinking and why to smooth the way.
+
+**Q: When setting the temperature is says "Change Mode", how do I change the temperature**
+
+**A:** This is because you are in Eco Mode, and the API does not allow changing of the trigger temperatures when in Eco mode. Turn off Eco mode and try again.

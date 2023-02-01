@@ -323,7 +323,7 @@ class TempChangeView extends ThermoView {
                     coolTemp = coolTemp + Globals.celciusRes;
                 }
             } else {
-                if (heatTemp < Globals.maxTempC && (coolTemp == null || heatTemp < coolTemp)) {
+                if (heatTemp < Globals.maxTempC && (coolTemp == null || heatTemp + Globals.sepTempC < coolTemp)) {
                     heatTemp = heatTemp + Globals.celciusRes;
                 }
             }
@@ -333,7 +333,7 @@ class TempChangeView extends ThermoView {
                     coolTemp = coolTemp + Globals.farenheitRes;
                 }
             } else {
-                if (heatTemp < Globals.maxTempF && (coolTemp == null || heatTemp  < coolTemp)) {
+                if (heatTemp < Globals.maxTempF && (coolTemp == null || heatTemp + Globals.sepTempF < coolTemp)) {
                     heatTemp = heatTemp + Globals.farenheitRes;
                 }
             }
@@ -346,7 +346,7 @@ class TempChangeView extends ThermoView {
     function onDecTempButton() as Void {
         if (mNestStatus.getScale() == 'C') {
             if (settingCool) {
-                if (coolTemp > Globals.minTempC && (heatTemp == null || coolTemp > heatTemp)) {
+                if (coolTemp > Globals.minTempC && (heatTemp == null || coolTemp > heatTemp + Globals.sepTempC)) {
                     coolTemp = coolTemp - Globals.celciusRes;
                 }
             } else {
@@ -356,7 +356,7 @@ class TempChangeView extends ThermoView {
             }
         } else {
             if (settingCool) {
-                if (coolTemp > Globals.minTempF && (heatTemp == null || coolTemp > heatTemp)) {
+                if (coolTemp > Globals.minTempF && (heatTemp == null || coolTemp > heatTemp + Globals.sepTempF)) {
                     coolTemp = coolTemp - Globals.farenheitRes;
                 }
             } else {

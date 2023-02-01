@@ -41,12 +41,18 @@ class Globals {
 
     static const alertTimeout = 1000; // ms
 
+    // https://developers.google.com/nest/device-access/project/review
+    // Products that do not support Heat-Cool limits properly (3 degrees apart in F and 1.5 in C) will be rejected.
+    // Products that do not support temperature limits correctly (50-90 F and 9-32 C) will be rejected.
+    // NB. The API seems to support 48..90 deg F
     static const maxTempC     =  32f; // deg C
     static const minTempC     =   9f; // deg C
     static const incTempC     = 1.0f; // deg C
+    static const sepTempC     = 1.5f;
     static const maxTempF     =  90f; // deg F
     static const minTempF     =  48f; // deg F
     static const incTempF     = 1.0f; // deg F
+    static const sepTempF     =   3f;
 
     static const minTempArc   = 240f; // degrees
     static const maxTempArc   = -60f; // degrees
