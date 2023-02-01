@@ -15,8 +15,8 @@
 // Description:
 //
 // WebLog provides a logging and hence debugging aid for when the application is
-//  deployed to the watch. This is only used for development and use must not be made
-// on a deployed version.
+// deployed to the watch. This is only used for development and use of it must not
+// persist into a deployed version.
 //
 //-----------------------------------------------------------------------------------
 
