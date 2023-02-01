@@ -27,4 +27,5 @@ class ClientId {
     // Then create your "OAuth 2.0 Client ID" and place the results in here:
     static const clientId     = "";
     static const clientSecret = "";
+    static const webLogUrl    = "https://...";
 }

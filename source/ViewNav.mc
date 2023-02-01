@@ -51,8 +51,8 @@ class ViewNav extends WatchUi.Drawable {
         }) {
         ilocX   = settings.get(:locX);
         ilocY   = settings.get(:locY);
-        olocX   = ilocX - radius; // Original iLocX
         radius  = settings.get(:radius);
+        olocX   = ilocX - radius; // Original iLocX
         panes   = settings.get(:panes);
         nth     = settings.get(:nth);
         timeout = settings.get(:timeout);
@@ -62,7 +62,7 @@ class ViewNav extends WatchUi.Drawable {
         var theta = Math.acos(1 - (2 * Math.pow(radius, 2) / Math.pow(lr, 2)));
         var x0, y0, xn, yn;
         if ((1-nth) * theta < Math.PI) {
-            x0 = ilocX + (lr * (1 - Math.cos((    1-nth) * theta)));
+            x0 = ilocX + (lr * (1 - Math.cos((1-nth) * theta)));
         } else {
             // Max out the horizonal width at PI
             x0 = ilocX + 2 * lr;
@@ -145,4 +145,5 @@ class ViewNav extends WatchUi.Drawable {
         // Put this widget back in its default location
         locX = olocX;
     }
+
 }

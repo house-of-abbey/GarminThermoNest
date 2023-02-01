@@ -21,6 +21,7 @@
 
 using Toybox.Graphics;
 using Toybox.Application.Properties;
+using Toybox.Lang;
 
 (:glance)
 class Globals {
@@ -28,8 +29,8 @@ class Globals {
     // as the messages can't be read from a watch!)
     static const debug        = false;
     // Multi-dot navigation drawable on each View
-    static const navRadius    = 8;
-    static const navMarginX   = 40;
+    static const navRadius    = 2.0f;
+    static const navMarginX   = 10f;
     static const navPanes     = 3;
     static const navDelay     = 2000; // ms
     static const navPeriod    = 1.0f; // s
@@ -38,7 +39,7 @@ class Globals {
     static const coolingColor = 0x285DF7; // Blue background
     static const offColor     = Graphics.COLOR_BLACK;
 
-    static const alertTimeout = 2000; // ms
+    static const alertTimeout = 1000; // ms
 
     static const maxTempC     =  32f; // deg C
     static const minTempC     =   9f; // deg C

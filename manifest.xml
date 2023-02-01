@@ -11,6 +11,9 @@
 
    J D Abbey & P A Abbey, 28 December 2022
 
+   Device Reference:
+    * https://developer.garmin.com/connect-iq/reference-guides/devices-reference/
+
 -->
 
 <iq:manifest version="3" xmlns:iq="http://www.garmin.com/xml/connectiq">
@@ -27,35 +30,48 @@
             "Monkey C: Edit Products" - Lets you add or remove any product
         -->
     <iq:products>
+      <!-- Screen Size 416x416 launcher icon size 70x70 -->
       <iq:product id="d2airx10"/>
+      <!-- Screen Size 416x416 launcher icon size 60x60 -->
       <iq:product id="d2mach1"/>
       <iq:product id="epix2"/>
-      <!--
-      Small face requires layout work and smaller icons.
+      <!-- Screen Size 260x260 launcher icon size 40x40 -->
       <iq:product id="fenix7"/>
+      <!-- Screen Size 240x240 launcher icon size 40x40 -->
       <iq:product id="fenix7s"/>
+      <!-- Screen Size 280x280 launcher icon size 40x40 -->
       <iq:product id="fenix7x"/>
+      <!-- Screen Size 260x260 launcher icon size 40x40 -->
       <iq:product id="fr955"/>
+      <!-- Screen Size 218x218 launcher icon size 30x30 -->
       <iq:product id="legacyherocaptainmarvel"/>
+      <!-- Screen Size 260x260 launcher icon size 35x35 -->
       <iq:product id="legacyherofirstavenger"/>
       <iq:product id="legacysagadarthvader"/>
+      <!-- Screen Size 218x218 launcher icon size 30x30 -->
       <iq:product id="legacysagarey"/>
-      -->
+      <!-- Screen Size 390x390 launcher icon size 60x60 -->
       <iq:product id="marq2"/>
       <iq:product id="marq2aviator"/>
+      <!-- Screen Size 390x390 launcher icon size 60x60 -->
       <iq:product id="venu"/>
+      <!-- Screen Size 416x416 launcher icon size 70x70 -->
       <iq:product id="venu2"/>
       <iq:product id="venu2plus"/>
+      <!-- Screen Size 360x360 launcher icon size 61x61 -->
       <iq:product id="venu2s"/>
-      <!--
-      Small face requires layout work and smaller icons.
+      <!-- Screen Size 240x240 launcher icon size 36x36 -->
       <iq:product id="venusq"/>
+      <iq:product id="venusqm"/>
+      <!-- Screen Size 320x360 launcher icon size 40x40
+           Thermostat scale partially oval, partially not
       <iq:product id="venusq2"/>
       <iq:product id="venusq2m"/>
-      <iq:product id="venusqm"/>
-      <iq:product id="vivoactive4"/>
-      <iq:product id="vivoactive4s"/>
       -->
+      <!-- Screen Size 260x260 launcher icon size 35x35 -->
+      <iq:product id="vivoactive4"/>
+      <!-- Screen Size 218x218 launcher icon size 30x30 -->
+      <iq:product id="vivoactive4s"/>
     </iq:products>
     <!--
             Use "Monkey C: Edit Permissions" from the Visual Studio Code command

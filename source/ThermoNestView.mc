@@ -27,14 +27,22 @@ using Toybox.Timer;
 
 
 class ThermoNestView extends ThermoView {
+    private const settings as Lang.Dictionary = {
+        :modeHeight   => 14f,
+        :modeSpacing  => 1f,
+        :tempSpace    => 10f,
+        :statusHeight => 10f
+    };
     // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
-    hidden const modeHeight  = 60;
+    hidden var modeHeight;
     // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
     // icons are spaced at twice this value.
-    hidden const modeSpacing = 5;
-    // Vertical spacing either side of centre for the temperature values
-    hidden const tempSpace   = 40;
-    hidden const timeout     = 10000; // ms
+    hidden var modeSpacing;
+    // Vertical spacing either side of centre for the pair of temperature values
+    hidden var tempSpace;
+    // Vertical space of top centre icon for connectivity/refresh icon
+    hidden var statusHeight;
+    hidden const timeout = 10000; // ms
 
     hidden var mViewNav;
     hidden var refreshButton;
@@ -78,11 +86,15 @@ class ThermoNestView extends ThermoView {
         hourglassIcon          = Application.loadResource(Rez.Drawables.HourglassIcon         ) as Graphics.BitmapResource;
         loggedOutIcon          = Application.loadResource(Rez.Drawables.LoggedOutIcon         ) as Graphics.BitmapResource;
         errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
+        modeHeight             = pixelsForScreen(settings.get(:modeHeight  ) as Lang.Float);
+        modeSpacing            = pixelsForScreen(settings.get(:modeSpacing ) as Lang.Float);
+        tempSpace              = pixelsForScreen(settings.get(:tempSpace   ) as Lang.Float);
+        statusHeight           = pixelsForScreen(settings.get(:statusHeight) as Lang.Float);
         mViewNav               = new ViewNav({
             :identifier => "StatusPane",
-            :locX       => Globals.navMarginX,
-            :locY       => dc.getHeight()/2,
-            :radius     => Globals.navRadius,
+            :locX       => pixelsForScreen(Globals.navMarginX),
+            :locY       => dc.getHeight() / 2,
+            :radius     => pixelsForScreen(Globals.navRadius),
             :panes      => Globals.navPanes,
             :nth        => 2, // 1-based numbering
             :visible    => true,

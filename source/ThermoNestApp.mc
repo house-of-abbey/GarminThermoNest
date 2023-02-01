@@ -33,8 +33,13 @@ class ThermoNestApp extends Application.AppBase {
     }
 
     function getGlanceView() {
-        mGlanceView = new ThermoNestGlanceView(new NestStatus(true));
-        return [mGlanceView];
+        var mySettings = System.getDeviceSettings();
+        if ((mySettings has :isGlanceModeEnabled) && mySettings.isGlanceModeEnabled) {
+            mGlanceView = new ThermoNestGlanceView(new NestStatus(true));
+            return [mGlanceView];
+        } else {
+            return null;
+        }
     }
 
     // onStart() is called on application start up

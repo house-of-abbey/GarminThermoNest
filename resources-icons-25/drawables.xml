@@ -16,15 +16,14 @@
 -->
 
 <drawables>
-    <bitmap id="LauncherIcon"           filename="nest_home_70.png" />
-    <bitmap id="EcoOffIcon"             filename="nest_eco_leaf_off.svg" />
-    <bitmap id="EcoOnIcon"              filename="nest_eco_leaf_on.svg" />
+    <bitmap id="EcoOffIcon"             filename="eco_leaf_off.svg" />
+    <bitmap id="EcoOnIcon"              filename="eco_leaf_on.svg" />
     <bitmap id="HeatOffIcon"            filename="mode_heat_off.svg" />
     <bitmap id="HeatOnIcon"             filename="mode_heat_on.svg" />
     <bitmap id="CoolOnIcon"             filename="mode_cool_on.svg" />
     <bitmap id="HeatCoolIcon"           filename="mode_heat_cool.svg" />
     <bitmap id="HumidityIcon"           filename="humidity.svg" />
-    <bitmap id="ThermostatIcon"         filename="nest_thermostat.svg" />
+    <bitmap id="ThermostatIcon"         filename="thermostat.svg" />
     <bitmap id="RefreshIcon"            filename="refresh.svg" />
     <bitmap id="RefreshDisabledIcon"    filename="refresh_disabled.svg" />
     <bitmap id="ArrowDownIcon"          filename="arrow_down.svg" />
@@ -35,8 +34,8 @@
     <bitmap id="LoggedOutIcon"          filename="logged_out.svg"          scope="glance" />
     <bitmap id="HourglassIcon"          filename="hourglass.svg"           scope="glance" />
     <bitmap id="ErrorIcon"              filename="error.svg"               scope="glance" />
-    <bitmap id="EcoOffLgIcon"           filename="nest_eco_leaf_off_lg.svg" />
-    <bitmap id="EcoOnLgIcon"            filename="nest_eco_leaf_on_lg.svg" />
+    <bitmap id="EcoOffLgIcon"           filename="eco_leaf_off_lg.svg" />
+    <bitmap id="EcoOnLgIcon"            filename="eco_leaf_on_lg.svg" />
     <bitmap id="HeatOffLgIcon"          filename="mode_heat_off_lg.svg" />
     <bitmap id="HeatOnLgIcon"           filename="mode_heat_on_lg.svg" />
     <bitmap id="CoolOnLgIcon"           filename="mode_cool_on_lg.svg" />

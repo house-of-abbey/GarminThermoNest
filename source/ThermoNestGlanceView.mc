@@ -30,8 +30,12 @@ using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestGlanceView extends WatchUi.GlanceView {
+    hidden var screenWidth;
+    private const settings as Lang.Dictionary = {
+        :xOffset => 2.4f
+    };
     // Horizontal offset at which to draw the icon or write text
-    hidden const xOffset = 10;
+    hidden var xOffset;
     hidden var mNestStatus;
     hidden var phoneDisconnectedIcon;
     hidden var signalDisconnectedIcon;
@@ -47,6 +51,7 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         mNestStatus           = ns;
         setOffLabel           = WatchUi.loadResource($.Rez.Strings.offStatus   ) as Lang.String;
         selectDeviceMenuTitle = WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String;
+        xOffset               = pixelsForScreen(settings.get(:xOffset) as Lang.Float);
     }
 
     function onLayout(dc as Graphics.Dc) as Void {
@@ -129,4 +134,22 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }
+
+    // Convert a fraction expressed as a percentage (%) to a number of pixels for the
+    // screen's dimensions.
+    //
+    // Parameters:
+    //  * dc - Device context
+    //  * pc - Percentage (%) expressed as a number in the range 0.0..100.0
+    //
+    // Uses screen width rather than screen height as rectangular screens tend to have
+    // height > width.
+    //
+    function pixelsForScreen(pc as Lang.Float) as Lang.Number {
+        if (screenWidth == null) {
+            screenWidth = System.getDeviceSettings().screenWidth;
+        }
+        return Math.round(pc * screenWidth) / 100;
+    }
+
 }

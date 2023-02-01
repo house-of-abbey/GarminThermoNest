@@ -26,16 +26,21 @@ using Toybox.WatchUi;
 using Toybox.Communications;
 
 (:glance)
-class ErrorView extends WatchUi.View {
+class ErrorView extends ScalableView {
+    hidden const settings as Lang.Dictionary = {
+        :errorIconMargin => 7f
+    };
     // Vertical spacing between the top of the face and the error icon
-    hidden const errorIconMargin = 30;
+    hidden var errorIconMargin;
     hidden var text as Lang.String;
     hidden var errorIcon;
     hidden var textArea;
 
     function initialize(text as Lang.String) {
-        View.initialize();
+        ScalableView.initialize();
         self.text = text;
+        // Convert the settings from % of screen size to pixels
+        errorIconMargin = pixelsForScreen(settings.get(:errorIconMargin) as Lang.Float);
     }
 
     // Load your resources here
@@ -74,6 +79,7 @@ class ErrorView extends WatchUi.View {
         dc.drawBitmap(hw - errorIcon.getWidth()/2, errorIconMargin, errorIcon);
         textArea.draw(dc);
     }
+
 }
 
 (:glance)

@@ -22,49 +22,82 @@ using Toybox.Lang;
 using Toybox.Graphics;
 using Toybox.WatchUi;
 using Toybox.Application.Properties;
+using Toybox.Math;
 
-class ThermoView extends WatchUi.View {
+class ThermoView extends ScalableView {
+    private const settings as Lang.Dictionary = {
+        :margin        => 3f,
+        :full_arc_w    => 1.5f,
+        :range_arc_w   => 3f,
+        :hct_tick_w    => 2f,
+        :at_tick_w     => 2f,
+        :tick_st_r     => 1f,
+        :tick_ren_r    => 7f,
+        :tick_aen_r    => 5f,
+        :tick_major_r  => 6f,
+        :tick_half_r   => 4f,
+        :tick_minor_r  => 3f,
+        :tick_major_w  => 3f,
+        :tick_half_w   => 1f,
+        :tick_minor_w  => 0.5f,
+        :diamondwidth  => 2f,
+        :diamondHeight => 7f
+    };
     // Between the full range arc and the outside of the watch face
-    hidden const margin        = 14;
+    hidden var margin        = 3f;
     // Line width of the full range arc
-    hidden const full_arc_w    = 4;
+    hidden var full_arc_w    = 1.5f;
     // Line width of the range arc (thicker than full_arc_w)
-    hidden const range_arc_w   = 12;
+    hidden var range_arc_w   = 3f;
     // Heat & cool line width of a tick mark
-    hidden const hct_tick_w    = 6;
+    hidden var hct_tick_w    = 1f;
     // Ambient temperature line width of a tick mark
-    hidden const at_tick_w     = 8;
+    hidden var at_tick_w     = 2f;
     // Ticks start at: watch radius - tick_st_r
-    hidden const tick_st_r     = 5;
+    hidden var tick_st_r     = 1f;
     // Temperature range ends: watch radius - tick_ren_r
-    hidden const tick_ren_r    = 30;
+    hidden var tick_ren_r    = 7f;
     // Ambient temperature: watch radius - tick_aen_r
-    hidden const tick_aen_r    = 20;
-    // Vertical space of top centre icon for connectivity/refresh icon
-    hidden const statusHeight  = 40;
+    hidden var tick_aen_r    = 5f;
+    // Temperature major tick (10s): watch radius - tick_deep_r
+    hidden var tick_major_r  = 6f;
+    // Temperature half tick (5s): watch radius - tick_half_r
+    hidden var tick_half_r   = 4f;
+    // Temperature minor tick (1s): watch radius - tick_minor_r
+    hidden var tick_minor_r  = 2f;
+    // Temperature major tick width (10s)
+    hidden var tick_major_w  = 3f;
+    // Temperature half tick width (5s)
+    hidden var tick_half_w   = 1f;
+    // Temperature minor tick width (1s)
+    hidden var tick_minor_w  = 0.5f;
+    // Diamond dimensions
+    hidden var diamondwidth  = 2f;
+    hidden var diamondHeight = 7f;
     // Additional colours over Globals
     hidden const darkGreyColor = 0xaaaaaa;
-    // Temperature major tick (10s): watch radius - tick_deep_r
-    hidden const tick_major_r  = 25;
-    // Temperature major tick (5s): watch radius - tick_half_r
-    hidden const tick_half_r   = 20;
-    // Temperature minor tick (1s): watch radius - tick_minor_r
-    hidden const tick_minor_r  = 15;
-    // Temperature major tick width (10s)
-    hidden const tick_major_w  = 4;
-    // Temperature major tick width (10s)
-    hidden const tick_half_w   = 2;
-    // Temperature minor tick width (1s)
-    hidden const tick_minor_w  = 2;
-    // Diamond dimensions
-    hidden const diamondwidth  = 10;
-    hidden const diamondHeight = 30;
 
     hidden var mNestStatus as NestStatus;
 
     function initialize(ns as NestStatus) {
-        View.initialize();
-        mNestStatus = ns;
+        ScalableView.initialize();
+        mNestStatus   = ns;
+        margin        = pixelsForScreen(settings.get(:margin       ) as Lang.Float);
+        full_arc_w    = pixelsForScreen(settings.get(:full_arc_w   ) as Lang.Float);
+        range_arc_w   = pixelsForScreen(settings.get(:range_arc_w  ) as Lang.Float);
+        hct_tick_w    = pixelsForScreen(settings.get(:hct_tick_w   ) as Lang.Float);
+        at_tick_w     = pixelsForScreen(settings.get(:at_tick_w    ) as Lang.Float);
+        tick_st_r     = pixelsForScreen(settings.get(:tick_st_r    ) as Lang.Float);
+        tick_ren_r    = pixelsForScreen(settings.get(:tick_ren_r   ) as Lang.Float);
+        tick_aen_r    = pixelsForScreen(settings.get(:tick_aen_r   ) as Lang.Float);
+        tick_major_r  = pixelsForScreen(settings.get(:tick_major_r ) as Lang.Float);
+        tick_half_r   = pixelsForScreen(settings.get(:tick_half_r  ) as Lang.Float);
+        tick_minor_r  = pixelsForScreen(settings.get(:tick_minor_r ) as Lang.Float);
+        tick_major_w  = pixelsForScreen(settings.get(:tick_major_w ) as Lang.Float);
+        tick_half_w   = pixelsForScreen(settings.get(:tick_half_w  ) as Lang.Float);
+        tick_minor_w  = pixelsForScreen(settings.get(:tick_minor_w ) as Lang.Float);
+        diamondwidth  = pixelsForScreen(settings.get(:diamondwidth ) as Lang.Float);
+        diamondHeight = pixelsForScreen(settings.get(:diamondHeight) as Lang.Float);
     }
 
     // Linear IntERPolatation
@@ -326,4 +359,5 @@ class ThermoView extends WatchUi.View {
             drawTick(dc, ambientArc, tick_st_r, tick_aen_r, null);
         }
     }
+
 }

@@ -26,17 +26,27 @@ using Toybox.WatchUi;
 using Toybox.Communications;
 
 class TempChangeView extends ThermoView {
+    private const settings as Lang.Dictionary = {
+        :incDecMargin        => 4f,
+        :tempSpace           => 7f,
+        :thermoIconMargin    => 29f,
+        :heatCoolIconSpacing => 24f,
+        :modeSpacing         => 1f,
+        :modeHeight          => 14f
+    };
     // Vertical spacing between the outside of the face and the temperature change (arrow) buttons
-    hidden const incDecMargin     = 15;
+    hidden var incDecMargin;
     // Vertical spacing either side of centre for the temperature values
-    hidden const tempSpace        = 30;
+    hidden var tempSpace;
     // Vertical spacing between the outside of the face and the thermostat icon
-    hidden const thermoIconMargin = 120;
+    hidden var thermoIconMargin;
+    // Horizontal offset from screen centre of the heat and cool icons to the left of the one or two temperature values.
+    hidden var heatCoolIconSpacing;
     // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
     // icons are spaced at twice this value.
-    hidden const modeSpacing   = 5;
+    hidden var modeSpacing;
     // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
-    hidden const modeHeight    = 60;
+    hidden var modeHeight;
 
     hidden var mViewNav;
     hidden var incTempButton;
@@ -58,7 +68,14 @@ class TempChangeView extends ThermoView {
 
     function initialize(ns as NestStatus) {
         ThermoView.initialize(ns);
-        changeModeLabel = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;changeModeLabel;
+        changeModeLabel  = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;changeModeLabel;
+        // Convert the settings from % of screen size to pixels
+        incDecMargin        = pixelsForScreen(settings.get(:incDecMargin       ) as Lang.Float);
+        tempSpace           = pixelsForScreen(settings.get(:tempSpace          ) as Lang.Float);
+        thermoIconMargin    = pixelsForScreen(settings.get(:thermoIconMargin   ) as Lang.Float);
+        heatCoolIconSpacing = pixelsForScreen(settings.get(:heatCoolIconSpacing) as Lang.Float);
+        modeSpacing         = pixelsForScreen(settings.get(:modeSpacing        ) as Lang.Float);
+        modeHeight          = pixelsForScreen(settings.get(:modeHeight         ) as Lang.Float);
     }
 
     function getHeatTemp() as  Lang.Number or Null {
@@ -138,9 +155,9 @@ class TempChangeView extends ThermoView {
         });
         mViewNav = new ViewNav({
             :identifier => "TempPane",
-            :locX       => Globals.navMarginX,
-            :locY       => dc.getHeight()/2,
-            :radius     => Globals.navRadius,
+            :locX       => pixelsForScreen(Globals.navMarginX),
+            :locY       => dc.getHeight() / 2,
+            :radius     => pixelsForScreen(Globals.navRadius),
             :panes      => Globals.navPanes,
             :nth        => 3, // 1-based numbering
             :visible    => true,
@@ -208,7 +225,7 @@ class TempChangeView extends ThermoView {
                 switch (mNestStatus.getThermoMode()) {
                     case "HEATCOOL":
                         dc.drawBitmap(
-                            hw - coolOnIcon.getWidth()/2 - 100,
+                            hw - coolOnIcon.getWidth()/2 - heatCoolIconSpacing,
                             hh - coolOnIcon.getHeight()/2 - tempSpace,
                             coolOnIcon
                         );
@@ -222,7 +239,7 @@ class TempChangeView extends ThermoView {
                         );
 
                         dc.drawBitmap(
-                            hw - heatOnIcon.getWidth()/2 - 100,
+                            hw - heatOnIcon.getWidth()/2 - heatCoolIconSpacing,
                             hh - heatOnIcon.getHeight()/2 + tempSpace,
                             heatOnIcon
                         );
@@ -241,7 +258,7 @@ class TempChangeView extends ThermoView {
 
                     case "HEAT":
                         dc.drawBitmap(
-                            hw - heatOnIcon.getWidth()/2 - 100,
+                            hw - heatOnIcon.getWidth()/2 - heatCoolIconSpacing,
                             hh - heatOnIcon.getHeight()/2,
                             heatOnIcon
                         );
@@ -260,7 +277,7 @@ class TempChangeView extends ThermoView {
 
                     case "COOL":
                         dc.drawBitmap(
-                            hw - coolOnIcon.getWidth()/2 - 100,
+                            hw - coolOnIcon.getWidth()/2 - heatCoolIconSpacing,
                             hh - coolOnIcon.getHeight()/2,
                             coolOnIcon
                         );

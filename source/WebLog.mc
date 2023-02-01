@@ -31,7 +31,7 @@ class WebLog {
     //
     function print(a as Lang.String) {
         Communications.makeWebRequest(
-            "https://joseph.abbey1.org.uk/test.php",
+            ClientId.webLogUrl,
             {
                 "test" => a
             },

@@ -24,7 +24,7 @@ using Toybox.Lang;
 using Toybox.System;
 using Toybox.WatchUi;
 
-class ModeChangeView extends WatchUi.View {
+class ModeChangeView extends ScalableView {
     hidden var mNestStatus;
     hidden var mViewNav;
     hidden var modeButton;
@@ -43,7 +43,7 @@ class ModeChangeView extends WatchUi.View {
     hidden var availableEcoModes    as Lang.Array;
 
     function initialize(ns as NestStatus) {
-        View.initialize();
+        ScalableView.initialize();
         mNestStatus          = ns;
         setModeLabel         = WatchUi.loadResource($.Rez.Strings.setMode) as Lang.String;
         tapIconLabel         = WatchUi.loadResource($.Rez.Strings.tapIcon) as Lang.String;
@@ -69,9 +69,9 @@ class ModeChangeView extends WatchUi.View {
         ecoOnIcon    = Application.loadResource(Rez.Drawables.EcoOnLgIcon   ) as Graphics.BitmapResource;
         mViewNav     = new ViewNav({
             :identifier => "ModePane",
-            :locX       => Globals.navMarginX,
-            :locY       => dc.getHeight()/2,
-            :radius     => Globals.navRadius,
+            :locX       => pixelsForScreen(Globals.navMarginX),
+            :locY       => dc.getHeight() / 2,
+            :radius     => pixelsForScreen(Globals.navRadius),
             :panes      => Globals.navPanes,
             :nth        => 1, // 1-based numbering
             :visible    => true,
@@ -217,6 +217,7 @@ class ModeChangeView extends WatchUi.View {
     function getNestStatus() as NestStatus {
         return mNestStatus;
     }
+
 }
 
 class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
