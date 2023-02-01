@@ -24,17 +24,17 @@ To cancel your changes swipe right. A confirmation "Cancelled" message will be d
 
 | Icon                                                                | Mode        | Comment                                   |
 |:-------------------------------------------------------------------:|:-----------:|:------------------------------------------|
-| ![HVAC Off Icon](../resources/drawables/mode_heat_off.svg)          | Off         |                                           |
-| ![HVAC Heat Icon](../resources/drawables/mode_heat_on.svg)          | Heat        | Availability limited by the installation! |
-| ![HVAC Cool Icon](../resources/drawables/mode_cool_on.svg)          | Cool        | Availability limited by the installation! |
-| ![HVAC Heat & Cool Icon](../resources/drawables/mode_heat_cool.svg) | Heat & Cool | Availability limited by the installation! |
+| ![HVAC Off Icon](../resources-icons-48/mode_heat_off.svg)          | Off         |                                           |
+| ![HVAC Heat Icon](../resources-icons-48/mode_heat_on.svg)          | Heat        | Availability limited by the installation! |
+| ![HVAC Cool Icon](../resources-icons-48/mode_cool_on.svg)          | Cool        | Availability limited by the installation! |
+| ![HVAC Heat & Cool Icon](../resources-icons-48/mode_heat_cool.svg) | Heat & Cool | Availability limited by the installation! |
 
 #### Eco Mode
 
 | Icon                                                     | Mode | Comment                            |
 |:--------------------------------------------------------:|:----:|:-----------------------------------|
-| ![Eco Off](../resources/drawables/nest_eco_leaf_off.svg) | Off  | Availability limited by the model. |
-| ![Eco On](../resources/drawables/nest_eco_leaf_on.svg)   | Eco  | Availability limited by the model. |
+| ![Eco Off](../resources-icons-48/eco_leaf_off.svg) | Off  | Availability limited by the model. |
+| ![Eco On](../resources-icons-48/eco_leaf_on.svg)   | Eco  | Availability limited by the model. |
 
 ### Status
 
@@ -81,12 +81,12 @@ Note the refresh icon may not be displayed if there is an issue retrieving the s
 
 | Icon                                                                 | Meaning                                                      |
 |:--------------------------------------------------------------------:|:-------------------------------------------------------------|
-| ![Phone disconnected](../resources/drawables/phone_disconnected.svg) | Phone disconnected                                           |
-| ![No Internet](../resources/drawables/signal_disconnected.svg)       | No Internet connection                                       |
-| ![Authentication failed](../resources/drawables/logged_out.svg)      | The current credentials failed authentication                |
-| ![Waiting](../resources/drawables/hourglass.svg)                     | Waiting for the application to retrieve the Nest status      |
-| ![Error](../resources/drawables/error.svg)                           | Error fetching Nest status                                   |
-| ![Off Line](../resources/drawables/thermostat_offline.svg)           | Thermostat is offline according to the retrieved Nest status |
+| ![Phone disconnected](../resources-icons-48/phone_disconnected.svg) | Phone disconnected                                           |
+| ![No Internet](../resources-icons-48/signal_disconnected.svg)       | No Internet connection                                       |
+| ![Authentication failed](../resources-icons-48/logged_out.svg)      | The current credentials failed authentication                |
+| ![Waiting](../resources-icons-48/hourglass.svg)                     | Waiting for the application to retrieve the Nest status      |
+| ![Error](../resources-icons-48/error.svg)                           | Error fetching Nest status                                   |
+| ![Off Line](../resources-icons-48/thermostat_offline.svg)           | Thermostat is offline according to the retrieved Nest status |
 
 ### Set Temperatures
 
@@ -134,3 +134,21 @@ You may have been expecting the application to present you with the first page s
 
 * [Remediation for OAuth via WebView](https://support.google.com/faqs/answer/12284343?hl=en-AU)
 * [Upcoming security changes to Google's OAuth 2.0 authorization endpoint in embedded webviews](https://developers.googleblog.com/2021/06/upcoming-security-changes-to-googles-oauth-2.0-authorization-endpoint.html)
+
+## Frequently Asked Questions
+
+**Q: How do I manage two thermostats at the same time?**
+
+**A:** You don't presently. There are no plans to support more than one thermostat. If you installation is that clever, you probably want a more capable user interface than a watch.
+
+**Q: How do I change the selected thermostat device?**
+
+**A:** In the application settings, delete the Device ID and start the ThermoNest application on your watch. You will be prompted to select a device.
+
+**Q: The authentication method sucks, when are you going to fix it?**
+
+**A:** This requires an update to the SDK and is out of our control. Both the simulator and the mobile GarminIQ application need to use browsers that are compatible with Google's OAuth.
+
+**Q: Your application is good, but I think I can design it better. How do I feedback?**
+
+**A:** The most preferable way is for you to amend the code and submit your changes for approval! Clone the code from [GitHub's GarminThermoNest project](https://github.com/house-of-abbey/GarminThermoNest/) and help yourself. Talk to us so we know what your thinking and why to smooth the way.
