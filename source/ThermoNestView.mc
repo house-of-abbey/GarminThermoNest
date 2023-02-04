@@ -105,6 +105,11 @@ class ThermoNestView extends ThermoView {
 
         var bRefreshDisabledIcon = new WatchUi.Bitmap({ :rezId => $.Rez.Drawables.RefreshDisabledIcon });
 
+        var hw = dc.getWidth()/2;
+        var hh = dc.getHeight()/2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
+
         // A two element array containing the width and height of the Bitmap object
         var dim = bRefreshDisabledIcon.getDimensions();
         refreshButton = new WatchUi.Button({
@@ -115,8 +120,8 @@ class ThermoNestView extends ThermoView {
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onRefreshButton,
-            :locX                     => (dc.getWidth() - dim[0]) / 2,
-            :locY                     => statusHeight,
+            :locX                     => hw - dim[0]/2,
+            :locY                     => hh - hs + statusHeight,
             :width                    => dim[0],
             :height                   => dim[1]
         });
@@ -133,10 +138,10 @@ class ThermoNestView extends ThermoView {
         if (Globals.debug) {
             System.println("ThermoNestView onUpdate()");
         }
-        var w  = dc.getWidth();
-        var h  = dc.getHeight();
-        var hw = w/2;
-        var hh = h/2;
+        var hw = dc.getWidth()/2;
+        var hh = dc.getHeight()/2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
 
         if(dc has :setAntiAlias) {
             dc.setAntiAlias(true);
@@ -223,30 +228,30 @@ class ThermoNestView extends ThermoView {
             }
 
             var humidity = mNestStatus.getHumidity();
-            dc.drawBitmap(hw - humidityIcon.getWidth() - 15, h * 3/4 - humidityIcon.getHeight()/2, humidityIcon);
+            dc.drawBitmap(hw - humidityIcon.getWidth() - 15, hh + hs/2 - humidityIcon.getHeight()/2, humidityIcon);
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 hw + 25,
-                h * 3/4,
+                hh + hs/2,
                 Graphics.FONT_TINY,
                 Lang.format("$1$%", [humidity.format("%2.0f")]),
                 Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
             );
 
             if (mNestStatus.getEco()) {
-                dc.drawBitmap(hw - ecoOnIcon.getWidth() - modeSpacing, h - modeHeight, ecoOnIcon);
+                dc.drawBitmap(hw - ecoOnIcon.getWidth() - modeSpacing, hh + hs - modeHeight, ecoOnIcon);
             } else {
-                dc.drawBitmap(hw - ecoOffIcon.getWidth() - modeSpacing, h - modeHeight, ecoOffIcon);
+                dc.drawBitmap(hw - ecoOffIcon.getWidth() - modeSpacing, hh + hs - modeHeight, ecoOffIcon);
             }
 
             if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
-                dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatCoolIcon);
+                dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, heatCoolIcon);
             } else if (mNestStatus.getThermoMode().equals("HEAT")) {
-                dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOnIcon);
+                dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, heatOnIcon);
             } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                dc.drawBitmap(hw + modeSpacing, h - modeHeight, coolOnIcon);
+                dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, coolOnIcon);
             } else {
-                dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOffIcon);
+                dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, heatOffIcon);
             }
         }
 
@@ -259,23 +264,23 @@ class ThermoNestView extends ThermoView {
                     if (c != null && !c.equals("")) {
                         if (mNestStatus.getGotDeviceData()) {
                             if (mNestStatus.getGotDeviceDataError()) {
-                                dc.drawBitmap(hw - errorIcon.getWidth()/2, statusHeight, errorIcon);
+                                dc.drawBitmap(hw - errorIcon.getWidth()/2, hh - hs + statusHeight, errorIcon);
                             } else if (!mNestStatus.getOnline()) {
-                                dc.drawBitmap(hw - thermostatOfflineIcon.getWidth()/2, statusHeight, thermostatOfflineIcon);
+                                dc.drawBitmap(hw - thermostatOfflineIcon.getWidth()/2, hh - hs + statusHeight, thermostatOfflineIcon);
                             } else {
-                                dc.drawBitmap(hw - refreshIcon.getWidth()/2, statusHeight, refreshIcon);
+                                dc.drawBitmap(hw - refreshIcon.getWidth()/2, hh - hs + statusHeight, refreshIcon);
                             }
                         } else {
-                            dc.drawBitmap(hw - hourglassIcon.getWidth()/2, statusHeight, hourglassIcon);
+                            dc.drawBitmap(hw - hourglassIcon.getWidth()/2, hh - hs + statusHeight, hourglassIcon);
                         }
                     } else {
-                        dc.drawBitmap(hw - loggedOutIcon.getWidth()/2, statusHeight, loggedOutIcon);
+                        dc.drawBitmap(hw - loggedOutIcon.getWidth()/2, hh - hs + statusHeight, loggedOutIcon);
                     }
                 } else {
-                    dc.drawBitmap(hw - signalDisconnectedIcon.getWidth()/2, statusHeight, signalDisconnectedIcon);
+                    dc.drawBitmap(hw - signalDisconnectedIcon.getWidth()/2, hh - hs + statusHeight, signalDisconnectedIcon);
                 }
             } else {
-                dc.drawBitmap(hw - phoneDisconnectedIcon.getWidth()/2, statusHeight, phoneDisconnectedIcon);
+                dc.drawBitmap(hw - phoneDisconnectedIcon.getWidth()/2, hh - hs + statusHeight, phoneDisconnectedIcon);
             }
         }
 

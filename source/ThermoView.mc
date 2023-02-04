@@ -126,19 +126,21 @@ class ThermoView extends ScalableView {
         var cb   = Math.sin(crad); // Height component
         var hw   = dc.getWidth() / 2;
         var hh   = dc.getHeight() / 2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
         if (str != null) {
             // dc.getTextDimensions(str, Graphics.FONT_XTINY) returns the same as
             // [dc.getTextWidthInPixels(str, Graphics.FONT_XTINY), dc.getFontHeight(Graphics.FONT_XTINY)] only the
             // text height seems to include line spacing and is too large.
             dc.drawText(
-                ca * (hw - start - dc.getTextWidthInPixels(str, Graphics.FONT_XTINY)/2) + hw,
-                cb * (hh - start - dc.getFontHeight(Graphics.FONT_XTINY)/4) + hh,
+                ca * (hs - start - dc.getTextWidthInPixels(str, Graphics.FONT_XTINY)/2) + hw,
+                cb * (hs - start - dc.getFontHeight(Graphics.FONT_XTINY)/4) + hh,
                 Graphics.FONT_XTINY,
                 str,
                 Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
             );
         } else {
-            dc.drawLine(ca * (hw - end) + hw, cb * (hh - end) + hh, ca * (hw - start) + hw, cb * (hh - start) + hh);
+            dc.drawLine(ca * (hs - end) + hw, cb * (hs - end) + hh, ca * (hs - start) + hw, cb * (hs - start) + hh);
         }
     }
 
@@ -151,11 +153,13 @@ class ThermoView extends ScalableView {
         var cb   = Math.sin(crad); // Height component
         var hw   = dc.getWidth() / 2;
         var hh   = dc.getHeight() / 2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
         dc.fillPolygon([
-            [ca * (hw -          end   )                       + hw, cb * (hh -          end   )                       + hh],
-            [ca * (hw - (start + end)/2) + (cb * diamondwidth) + hw, cb * (hh - (start + end)/2) - (ca * diamondwidth) + hh],
-            [ca * (hw -  start         )                       + hw, cb * (hh -  start         )                       + hh],
-            [ca * (hw - (start + end)/2) - (cb * diamondwidth) + hw, cb * (hh - (start + end)/2) + (ca * diamondwidth) + hh]
+            [ca * (hs -          end   )                       + hw, cb * (hs -          end   )                       + hh],
+            [ca * (hs - (start + end)/2) + (cb * diamondwidth) + hw, cb * (hs - (start + end)/2) - (ca * diamondwidth) + hh],
+            [ca * (hs -  start         )                       + hw, cb * (hs -  start         )                       + hh],
+            [ca * (hs - (start + end)/2) - (cb * diamondwidth) + hw, cb * (hs - (start + end)/2) + (ca * diamondwidth) + hh]
         ]);
     }
 
@@ -174,6 +178,8 @@ class ThermoView extends ScalableView {
     function drawTempScaleTicks(dc as Graphics.Dc, ambientTemp as Lang.Float, heatTemp as Lang.Float, coolTemp as Lang.Float) as Void {
         var hw = dc.getWidth() / 2;
         var hh = dc.getHeight() / 2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
 
         var ambientArc = (ambientTemp == null)
             ? 0
@@ -196,18 +202,18 @@ class ThermoView extends ScalableView {
                 dc.setPenWidth(range_arc_w);
                 if (ambientTemp < heatTemp) {
                     dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientArc, heatArc);
+                    dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, ambientArc, heatArc);
                 } else {
                     dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
                     if (coolTemp != null) {
                         if (coolTemp > heatTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
                         }
                     } else {
                         if (ambientTemp > heatTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientArc);
                         }
                     }
                 }
@@ -217,18 +223,18 @@ class ThermoView extends ScalableView {
                 dc.setPenWidth(range_arc_w);
                 if (coolTemp < ambientTemp) {
                     dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-                    dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientArc);
+                    dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientArc);
                 } else {
                     dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
                     if (heatTemp != null) {
                         if (coolTemp > heatTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
                         }
                     } else {
                         if (coolTemp > ambientTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientArc, coolArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, ambientArc, coolArc);
                         }
                     }
                 }
@@ -288,6 +294,8 @@ class ThermoView extends ScalableView {
     function drawTempScaleMinimal(dc as Graphics.Dc, ambientTemp as Lang.Float, heatTemp as Lang.Float, coolTemp as Lang.Float) {
         var hw = dc.getWidth() / 2;
         var hh = dc.getHeight() / 2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
         dc.setColor(darkGreyColor, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(full_arc_w);
         dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, Globals.minTempArc, Globals.maxTempArc);
@@ -310,18 +318,18 @@ class ThermoView extends ScalableView {
                 dc.setPenWidth(range_arc_w);
                 if (ambientTemp < heatTemp) {
                     dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
-                    dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientArc, heatArc);
+                    dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, ambientArc, heatArc);
                 } else {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     if (coolTemp != null) {
                         if (coolTemp > heatTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
                         }
                     } else {
                         if (ambientTemp > heatTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, heatArc, ambientArc);
                         }
                     }
                 }
@@ -334,18 +342,18 @@ class ThermoView extends ScalableView {
                 dc.setPenWidth(range_arc_w);
                 if (coolTemp < ambientTemp) {
                     dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-                    dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientArc);
+                    dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, coolArc, ambientArc);
                 } else {
                     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
                     if (heatTemp != null) {
                         if (coolTemp > heatTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, heatArc, coolArc);
                         }
                     } else {
                         if (coolTemp > ambientTemp) {
                             // Test prevents full circle arc being drawn
-                            dc.drawArc(hw, hh, hw - margin, Graphics.ARC_CLOCKWISE, ambientArc, coolArc);
+                            dc.drawArc(hw, hh, hs - margin, Graphics.ARC_CLOCKWISE, ambientArc, coolArc);
                         }
                     }
                 }

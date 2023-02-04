@@ -63,11 +63,9 @@
       <!-- Screen Size 240x240 launcher icon size 36x36 -->
       <iq:product id="venusq"/>
       <iq:product id="venusqm"/>
-      <!-- Screen Size 320x360 launcher icon size 40x40
-           Thermostat scale partially oval, partially not
+      <!-- Screen Size 320x360 launcher icon size 40x40 -->
       <iq:product id="venusq2"/>
       <iq:product id="venusq2m"/>
-      -->
       <!-- Screen Size 260x260 launcher icon size 35x35 -->
       <iq:product id="vivoactive4"/>
       <!-- Screen Size 218x218 launcher icon size 30x30 -->

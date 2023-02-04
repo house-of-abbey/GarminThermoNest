@@ -64,8 +64,8 @@ venu2s.resourcePath = $(venu2s.resourcePath);resources-launcher-61-61;resources-
 venusq.resourcePath = $(venusq.resourcePath);resources-launcher-36-36;resources-icons-28
 venusqm.resourcePath = $(venusqm.resourcePath);resources-launcher-36-36;resources-icons-28
 # Screen Size 320x360 launcher icon size 40x40
-#venusq2.resourcePath = $(venusq2.resourcePath);resources-launcher-40-40;resources-icons-38
-#venusq2m.resourcePath = $(venusq2m.resourcePath);resources-launcher-40-40;resources-icons-38
+venusq2.resourcePath = $(venusq2.resourcePath);resources-launcher-40-40;resources-icons-38
+venusq2m.resourcePath = $(venusq2m.resourcePath);resources-launcher-40-40;resources-icons-38
 # Screen Size 260x260 launcher icon size 35x35
 vivoactive4.resourcePath = $(vivoactive4.resourcePath);resources-launcher-35-35;resources-icons-30
 # Screen Size 218x218 launcher icon size 30x30

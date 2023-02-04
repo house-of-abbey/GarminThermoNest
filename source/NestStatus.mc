@@ -823,7 +823,8 @@ class NestStatus {
             } else {
                 Properties.setValue("oauthCode", "FAILED, please try again");
                 if (!isGlance) {
-                    WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    var text = (data.get("error") as Lang.String) + ": " + (data.get("error_description") as Lang.String);
+                    WatchUi.pushView(new ErrorView(text), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
                 if (Globals.debug) {
                     System.println("onRecieveAccessToken() Display Update");

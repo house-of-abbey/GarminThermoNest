@@ -30,7 +30,7 @@ class TempChangeView extends ThermoView {
         :incDecMargin        => 4f,
         :tempSpace           => 7f,
         :thermoIconMargin    => 29f,
-        :heatCoolIconSpacing => 24f,
+        :heatCoolIconSpacing => 28f,
         :modeSpacing         => 1f,
         :modeHeight          => 14f
     };
@@ -88,6 +88,11 @@ class TempChangeView extends ThermoView {
 
     // Load your resources here
     function onLayout(dc as Graphics.Dc) as Void {
+        var hw = dc.getWidth()/2;
+        var hh = dc.getHeight()/2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
+
         thermostatIcon     = Application.loadResource(Rez.Drawables.ThermostatIcon) as Graphics.BitmapResource;
         ecoOffIcon         = Application.loadResource(Rez.Drawables.EcoOffIcon    ) as Graphics.BitmapResource;
         ecoOnIcon          = Application.loadResource(Rez.Drawables.EcoOnIcon     ) as Graphics.BitmapResource;
@@ -107,8 +112,8 @@ class TempChangeView extends ThermoView {
             :stateHighlightedSelected => bArrowUpIcon,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onIncTempButton,
-            :locX                     => (dc.getWidth() - dim[0]) / 2,
-            :locY                     => incDecMargin,
+            :locX                     => hw - dim[0]/2,
+            :locY                     => hh - hs + incDecMargin,
             :width                    => dim[0],
             :height                   => dim[1]
         });
@@ -122,8 +127,8 @@ class TempChangeView extends ThermoView {
             :stateHighlightedSelected => bArrowDownIcon,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onDecTempButton,
-            :locX                     => (dc.getWidth() - dim[0]) / 2,
-            :locY                     => (dc.getHeight() - dim[1] - incDecMargin),
+            :locX                     => hw - dim[0]/2,
+            :locY                     => hh + hs - dim[1] - incDecMargin,
             :width                    => dim[0],
             :height                   => dim[1]
         });
@@ -135,8 +140,8 @@ class TempChangeView extends ThermoView {
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onHeatTempButton,
-            :locX                     => dc.getWidth()/2 - 50,
-            :locY                     => dc.getHeight()/2 + 5,
+            :locX                     => hw - 50,
+            :locY                     => hh + 5,
             :width                    => 100,
             :height                   => 40
         });
@@ -148,8 +153,8 @@ class TempChangeView extends ThermoView {
             :stateHighlightedSelected => Graphics.COLOR_TRANSPARENT,
             :background               => Graphics.COLOR_TRANSPARENT,
             :behavior                 => :onCoolTempButton,
-            :locX                     => dc.getWidth()/2 - 50,
-            :locY                     => dc.getHeight()/2 - 45,
+            :locX                     => hw - 50,
+            :locY                     => hh - 45,
             :width                    => 100,
             :height                   => 40
         });
@@ -181,6 +186,8 @@ class TempChangeView extends ThermoView {
         var h = dc.getHeight();
         var hw = w/2;
         var hh = h/2;
+        // Rectangular faces need to use the largest square area.
+        var hs = (hh < hw) ? hh : hw;
 
         if(dc has :setAntiAlias) {
             dc.setAntiAlias(true);
@@ -188,7 +195,7 @@ class TempChangeView extends ThermoView {
         dc.setColor(Graphics.COLOR_WHITE, Globals.offColor);
         dc.clear();
 
-        dc.drawBitmap(hw - thermostatIcon.getWidth()/2, thermoIconMargin - thermostatIcon.getHeight()/2, thermostatIcon);
+        dc.drawBitmap(hw - thermostatIcon.getWidth()/2, hh - hs + thermoIconMargin - thermostatIcon.getHeight()/2, thermostatIcon);
 
         if (mNestStatus.getGotDeviceData()) {
             // https://developers.google.com/nest/device-access/traits/device/thermostat-temperature-setpoint
@@ -203,19 +210,19 @@ class TempChangeView extends ThermoView {
                 );
 
                 if (mNestStatus.getEco()) {
-                    dc.drawBitmap(hw - ecoOnIcon.getWidth() - modeSpacing, h - modeHeight, ecoOnIcon);
+                    dc.drawBitmap(hw - ecoOnIcon.getWidth() - modeSpacing, hh + hs - modeHeight, ecoOnIcon);
                 } else {
-                    dc.drawBitmap(hw - ecoOffIcon.getWidth() - modeSpacing, h - modeHeight, ecoOffIcon);
+                    dc.drawBitmap(hw - ecoOffIcon.getWidth() - modeSpacing, hh + hs - modeHeight, ecoOffIcon);
                 }
 
                 if (mNestStatus.getThermoMode().equals("HEATCOOL")) {
-                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatCoolIcon);
+                    dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, heatCoolIcon);
                 } else if (mNestStatus.getThermoMode().equals("HEAT")) {
-                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOnIcon);
+                    dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, heatOnIcon);
                 } else if (mNestStatus.getThermoMode().equals("COOL")) {
-                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, coolOnIcon);
+                    dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, coolOnIcon);
                 } else {
-                    dc.drawBitmap(hw + modeSpacing, h - modeHeight, heatOffIcon);
+                    dc.drawBitmap(hw + modeSpacing, hh + hs - modeHeight, heatOffIcon);
                 }
 
                 incTempButton.setState(:stateDisabled);
