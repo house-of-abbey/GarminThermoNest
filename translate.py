@@ -19,6 +19,7 @@
 #
 # Python installation:
 #   pip install BeautifulSoup
+#   pip install deep-translator
 # NB. For XML formatting:
 #   pip install lxml
 #

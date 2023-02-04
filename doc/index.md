@@ -156,3 +156,12 @@ You may have been expecting the application to present you with the first page s
 **Q: When setting the temperature is says "Change Mode", how do I change the temperature**
 
 **A:** This is because you are in Eco Mode, and the API does not allow changing of the trigger temperatures when in Eco mode. Turn off Eco mode and try again.
+
+
+## Limited Use
+
+This application complies with [Google's API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements, by quite simply not retaining any of your data, ever.
+
+* Data retrieved from the API is only presented in the watch application user interface, never logged.
+* All thermostat data evaporates on exit from the application. Even the GlanceView has to re-fetch the data when it comes into view.
+* Only user settings and OAuth tokens are persisted between uses of the application to avoid the need to re-authenticate (especially given the extra grief that is from the now broken OAuth function calls!)

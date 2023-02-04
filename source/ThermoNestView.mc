@@ -291,8 +291,14 @@ class ThermoNestView extends ThermoView {
     // Actions to take when the 'refreshButton' is tapped.
     //
     function onRefreshButton() as Void {
-        // Assume the application has not been used in excess of 3600s such that the token has expired
-        mNestStatus.getDeviceData();
+        var c = Properties.getValue("deviceId");
+        if (c == null || c.equals("")) {
+            // Device ID might have been invalidated, ask the user to select another
+            mNestStatus.getDevices();
+        } else {
+            // Assume the application has not been used in excess of 3600s such that the token has expired
+            mNestStatus.getDeviceData();
+        }
         refreshButton.setState(:stateDisabled);
         timer.start(method(:enableRefresh), timeout, false);
     }
