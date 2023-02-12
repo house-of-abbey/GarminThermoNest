@@ -89,12 +89,12 @@ From this pane you can:
 
 Note the refresh icon may not be displayed if there is an issue retrieving the status. The following alternative icons might be displayed:
 
-| Icon                                                                 | Meaning                                                      |
-|:--------------------------------------------------------------------:|:-------------------------------------------------------------|
+| Icon                                                                | Meaning                                                      |
+|:-------------------------------------------------------------------:|:-------------------------------------------------------------|
 | ![Phone disconnected](../resources-icons-48/phone_disconnected.svg) | Phone disconnected                                           |
 | ![No Internet](../resources-icons-48/signal_disconnected.svg)       | No Internet connection                                       |
 | ![Authentication failed](../resources-icons-48/logged_out.svg)      | The current credentials failed authentication                |
-| ![Waiting](../resources-icons-48/hourglass.svg)                     | Waiting for the application to retrieve the Nest status      |
+| ![Waiting](./images/hourglass-black.svg)                            | Waiting for the application to retrieve the Nest status      |
 | ![Error](../resources-icons-48/error.svg)                           | Error fetching Nest status                                   |
 | ![Off Line](../resources-icons-48/thermostat_offline.svg)           | Thermostat is offline according to the retrieved Nest status |
 
