@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Без промени</string>
   <string id="retrievingDataAlert">Извличане на данни</string>
   <!-- Текстови съобщения -->
-  <string id="getOAuthCodeMsg">Завършете OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Завършете OAuth</string>
   <!-- Съобщения за грешка в ErrorView -->
   <string id="nullDataErrMsg">API заявката върна нулеви данни.</string>
   <string id="oAuthErrMsg" scope="glance">Моля, въведете нов OAuth код чрез настройките.</string>

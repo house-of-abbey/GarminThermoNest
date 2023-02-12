@@ -49,7 +49,7 @@
   <string id="noChangeAlert">변경 사항 없음</string>
   <string id="retrievingDataAlert">데이터 검색</string>
   <!-- 문자 메시지 -->
-  <string id="getOAuthCodeMsg">완전한 OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">완전한 OAuth</string>
   <!-- ErrorView의 오류 메시지 -->
   <string id="nullDataErrMsg">API 요청에서 null 데이터를 반환했습니다.</string>
   <string id="oAuthErrMsg" scope="glance">설정을 통해 새 OAuth 코드를 제공하십시오.</string>

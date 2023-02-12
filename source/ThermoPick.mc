@@ -25,6 +25,7 @@ using Toybox.Lang;
 using Toybox.System;
 using Toybox.WatchUi;
 using Toybox.Application.Properties;
+using Toybox.Application.Storage;
 
 class ThermoPick extends WatchUi.Menu2 {
     // Assume all structure IDs, room IDs and device IDs are globally unique.
@@ -169,14 +170,14 @@ class ThermoPick extends WatchUi.Menu2 {
     // Initiate the GET request to fetch the list of structures from the user's Nest account.
     //
     hidden function getStructures() {
-        var at = Properties.getValue("accessToken");
+        var at = Storage.getValue("accessToken");
         if (at != null && !at.equals("")) {
             if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
                 var options  = {
                     :method  => Communications.HTTP_REQUEST_METHOD_GET,
                     :headers => {
                         "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                        "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                        "Authorization" => "Bearer " + Storage.getValue("accessToken")
                     },
                     :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
                 };
@@ -227,7 +228,7 @@ class ThermoPick extends WatchUi.Menu2 {
                 :method  => Communications.HTTP_REQUEST_METHOD_GET,
                 :headers => {
                     "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                    "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                    "Authorization" => "Bearer " + Storage.getValue("accessToken")
                 },
                 :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
             };
@@ -297,7 +298,7 @@ class ThermoPick extends WatchUi.Menu2 {
                 :method  => Communications.HTTP_REQUEST_METHOD_GET,
                 :headers => {
                     "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                    "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                    "Authorization" => "Bearer " + Storage.getValue("accessToken")
                 },
                 :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
             };

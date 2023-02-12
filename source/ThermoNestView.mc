@@ -160,6 +160,10 @@ class ThermoNestView extends ThermoView {
         var o = Properties.getValue("oauthCode") as Lang.String;
         var d = Properties.getValue("deviceId") as Lang.String;
         if (o == null || o.equals("") || o.equals(oAuthPropFail)) {
+            dc.setColor(
+                Graphics.COLOR_RED,
+                Graphics.COLOR_TRANSPARENT
+            );
             dc.drawText(
                 hw,
                 hh,
@@ -168,6 +172,10 @@ class ThermoNestView extends ThermoView {
                 Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
             );
         } else if (d == null || d.equals("")) {
+            dc.setColor(
+                Graphics.COLOR_RED,
+                Graphics.COLOR_TRANSPARENT
+            );
             dc.drawText(
                 hw,
                 hh,

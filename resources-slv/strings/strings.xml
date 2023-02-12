@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Brez sprememb</string>
   <string id="retrievingDataAlert">Pridobivanje podatkov</string>
   <!-- Tekstovna sporočila -->
-  <string id="getOAuthCodeMsg">Dokončaj OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Dokončaj OAuth</string>
   <!-- Sporočila o napakah v ErrorView -->
   <string id="nullDataErrMsg">Zahteva API je vrnila ničelne podatke.</string>
   <string id="oAuthErrMsg" scope="glance">Vnesite novo kodo OAuth v nastavitvah.</string>

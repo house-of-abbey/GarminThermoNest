@@ -49,7 +49,7 @@ class ThermoNestApp extends Application.AppBase {
     function onStart(state as Lang.Dictionary?) as Void {
         if (Globals.debug) {
             System.println("ThermoNestApp onStart() oauthCode:   " + Properties.getValue("oauthCode"));
-            System.println("ThermoNestApp onStart() accessToken: " + Properties.getValue("accessToken"));
+            System.println("ThermoNestApp onStart() accessToken: " + Storage.getValue("accessToken"));
             System.println("ThermoNestApp onStart() deviceId:    " + Properties.getValue("deviceId"));
         }
     }
@@ -69,22 +69,26 @@ class ThermoNestApp extends Application.AppBase {
         var d = Properties.getValue("deviceId");
         if (Globals.debug) {
             System.println("ThermoNestApp onSettingsChanged() oauthCode:   " + o);
-            System.println("ThermoNestApp onSettingsChanged() accessToken: " + Properties.getValue("accessToken"));
+            System.println("ThermoNestApp onSettingsChanged() accessToken: " + Storage.getValue("accessToken"));
             System.println("ThermoNestApp onSettingsChanged() deviceId:    " + d);
         }
-        if (o != null && !o.equals("") && !o.equals(oAuthPropUsed) && !o.equals(oAuthPropFail)) {
-            if (Globals.debug) {
-                System.println("ThermoNestApp onSettingsChanged() New OAuth Code, getting new access token.");
+        if (o != null && !o.equals("")) {
+            if (!o.equals(oAuthPropUsed) && !o.equals(oAuthPropFail)) {
+                if (Globals.debug) {
+                    System.println("ThermoNestApp onSettingsChanged() New OAuth Code, getting new access token.");
+                }
+                // New oauthCode
+                mNestStatus.getAccessToken();
+                WatchUi.requestUpdate();
+            } else if (d != null && !d.equals("")) {
+                if (Globals.debug) {
+                    System.println("ThermoNestApp onSettingsChanged() Getting Device Data");
+                }
+                // Setting change might be a new devide ID
+                mNestStatus.getDeviceData();
             }
-            // New oauthCode
-            mNestStatus.getAccessToken();
-            // mNestStatus.getDeviceData() call included in the above chain of calls
-        } else if (d != null && !d.equals("")) {
-            if (Globals.debug) {
-                System.println("ThermoNestApp onSettingsChanged() Getting Device Data");
-            }
-            // Setting change might be a new devide ID
-            mNestStatus.getDeviceData();
+        } else {
+            WatchUi.requestUpdate();
         }
     }
 }

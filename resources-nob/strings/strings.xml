@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Ingen forandringer</string>
   <string id="retrievingDataAlert">Henter data</string>
   <!-- Tekstmeldinger -->
-  <string id="getOAuthCodeMsg">Fullfør OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Fullfør OAuth</string>
   <!-- Feilmeldinger i en ErrorView -->
   <string id="nullDataErrMsg">API-forespørsel returnerte nulldata.</string>
   <string id="oAuthErrMsg" scope="glance">Vennligst oppgi en ny OAuth-kode via innstillingene.</string>

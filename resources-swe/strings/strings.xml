@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Inga förändringar</string>
   <string id="retrievingDataAlert">Hämtar data</string>
   <!-- Textmeddelanden -->
-  <string id="getOAuthCodeMsg">Slutför OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Slutför OAuth</string>
   <!-- Felmeddelanden i en ErrorView -->
   <string id="nullDataErrMsg">API-begäran returnerade nolldata.</string>
   <string id="oAuthErrMsg" scope="glance">Ange en ny OAuth-kod via inställningarna.</string>

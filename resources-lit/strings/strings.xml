@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Jokių pakeitimų</string>
   <string id="retrievingDataAlert">Duomenų gavimas</string>
   <!-- Teksto žinutės -->
-  <string id="getOAuthCodeMsg">Užbaigti OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Užbaigti OAuth</string>
   <!-- Klaidos pranešimai ErrorView -->
   <string id="nullDataErrMsg">API užklausa grąžino nulinius duomenis.</string>
   <string id="oAuthErrMsg" scope="glance">Nustatymuose pateikite naują OAuth kodą.</string>

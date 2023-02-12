@@ -49,7 +49,7 @@
     <string id="noChangeAlert">No Changes</string>
     <string id="retrievingDataAlert">Retrieving data</string>
     <!-- Text Messages -->
-    <string id="getOAuthCodeMsg">Complete OAuth</string>
+    <string id="getOAuthCodeMsg" scope="glance">Complete OAuth</string>
     <!-- Error Messages in an ErrorView -->
     <string id="nullDataErrMsg">API Request returned null data.</string>
     <string id="oAuthErrMsg" scope="glance">Please supply a new OAuth Code via the settings.</string>

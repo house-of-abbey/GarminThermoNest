@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Χωρίς αλλαγές</string>
   <string id="retrievingDataAlert">Ανάκτηση δεδομένων</string>
   <!-- Μηνύματα κειμένου -->
-  <string id="getOAuthCodeMsg">Ολοκληρώστε το OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Ολοκληρώστε το OAuth</string>
   <!-- Μηνύματα λάθους σε ένα ErrorView -->
   <string id="nullDataErrMsg">Το αίτημα API επέστρεψε μηδενικά δεδομένα.</string>
   <string id="oAuthErrMsg" scope="glance">Δώστε έναν νέο κωδικό OAuth μέσω των ρυθμίσεων.</string>

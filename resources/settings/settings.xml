@@ -48,6 +48,7 @@
     </settingConfig>
   </setting>
 
+  <!--
   <group
     id="tokenGroup"
     title="@Strings.tokenGroupTitle"
@@ -84,4 +85,5 @@
     </setting>
 
   </group>
+  -->
 </settings>

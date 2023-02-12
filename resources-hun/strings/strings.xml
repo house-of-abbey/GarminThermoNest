@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Nincs változás</string>
   <string id="retrievingDataAlert">Adatok lekérése</string>
   <!-- Szöveges üzenetek -->
-  <string id="getOAuthCodeMsg">Teljes OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Teljes OAuth</string>
   <!-- Hibaüzenetek az ErrorView-ban -->
   <string id="nullDataErrMsg">Az API-kérés null adatot adott vissza.</string>
   <string id="oAuthErrMsg" scope="glance">Adjon meg egy új OAuth-kódot a beállításokon keresztül.</string>

@@ -49,7 +49,7 @@
   <string id="noChangeAlert">لا تغيرات</string>
   <string id="retrievingDataAlert">استرجاع البيانات</string>
   <!-- رسائل نصية -->
-  <string id="getOAuthCodeMsg">أكمل بروتوكول OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">أكمل بروتوكول OAuth</string>
   <!-- رسائل الخطأ في ErrorView -->
   <string id="nullDataErrMsg">أرجع طلب API بيانات فارغة.</string>
   <string id="oAuthErrMsg" scope="glance">الرجاء تقديم رمز OAuth جديد عبر الإعدادات.</string>

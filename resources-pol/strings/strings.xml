@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Bez zmian</string>
   <string id="retrievingDataAlert">Pobieranie danych</string>
   <!-- Wiadomości SMS -->
-  <string id="getOAuthCodeMsg">Ukończ uwierzytelnianie OA</string>
+  <string id="getOAuthCodeMsg" scope="glance">Ukończ uwierzytelnianie OA</string>
   <!-- Komunikaty o błędach w ErrorView -->
   <string id="nullDataErrMsg">Żądanie interfejsu API zwróciło dane o wartości null.</string>
   <string id="oAuthErrMsg" scope="glance">Podaj nowy kod OAuth w ustawieniach.</string>

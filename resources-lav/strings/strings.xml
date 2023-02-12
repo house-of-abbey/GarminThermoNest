@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Nav izmaiņu</string>
   <string id="retrievingDataAlert">Datu izgūšana</string>
   <!-- Isziņas -->
-  <string id="getOAuthCodeMsg">Pabeigt OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Pabeigt OAuth</string>
   <!-- Kļūdu ziņojumi ErrorView -->
   <string id="nullDataErrMsg">API pieprasījums atgrieza nulles datus.</string>
   <string id="oAuthErrMsg" scope="glance">Lūdzu, ievadiet jaunu OAuth kodu, izmantojot iestatījumus.</string>

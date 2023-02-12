@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Muutusteta</string>
   <string id="retrievingDataAlert">Andmete toomine</string>
   <!-- Tekstisõnumid -->
-  <string id="getOAuthCodeMsg">Täitke OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Täitke OAuth</string>
   <!-- Veateated ErrorView's -->
   <string id="nullDataErrMsg">API taotlus tagastas nullandmed.</string>
   <string id="oAuthErrMsg" scope="glance">Sisestage seadete kaudu uus OAuth-kood.</string>

@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Žádné změny</string>
   <string id="retrievingDataAlert">Načítání dat</string>
   <!-- Textové zprávy -->
-  <string id="getOAuthCodeMsg">Dokončete protokol OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Dokončete protokol OAuth</string>
   <!-- Chybové zprávy v ErrorView -->
   <string id="nullDataErrMsg">Požadavek API vrátil nulová data.</string>
   <string id="oAuthErrMsg" scope="glance">Zadejte prosím nový kód OAuth prostřednictvím nastavení.</string>

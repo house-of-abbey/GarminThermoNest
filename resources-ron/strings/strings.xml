@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Nici o schimbare</string>
   <string id="retrievingDataAlert">Recuperarea datelor</string>
   <!-- Mesaje text -->
-  <string id="getOAuthCodeMsg">OAuth complet</string>
+  <string id="getOAuthCodeMsg" scope="glance">OAuth complet</string>
   <!-- Mesaje de eroare într-un ErrorView -->
   <string id="nullDataErrMsg">Solicitarea API a returnat date nule.</string>
   <string id="oAuthErrMsg" scope="glance">Vă rugăm să furnizați un nou cod OAuth prin intermediul setărilor.</string>

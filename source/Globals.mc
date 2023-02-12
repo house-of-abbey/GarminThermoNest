@@ -27,7 +27,7 @@ using Toybox.Lang;
 class Globals {
     // Enable printing of messages to the debug console (don't make this a Property
     // as the messages can't be read from a watch!)
-    static const debug        = true;
+    static const debug        = false;
     // Multi-dot navigation drawable on each View
     static const navRadius    = 2.0f;
     static const navMarginX   = 10f;

@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Tiada perubahan</string>
   <string id="retrievingDataAlert">Mendapatkan semula data</string>
   <!-- Mesej teks -->
-  <string id="getOAuthCodeMsg">Lengkapkan OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Lengkapkan OAuth</string>
   <!-- Mesej Ralat dalam ErrorView -->
   <string id="nullDataErrMsg">Permintaan API mengembalikan data nol.</string>
   <string id="oAuthErrMsg" scope="glance">Sila berikan Kod OAuth baharu melalui tetapan.</string>

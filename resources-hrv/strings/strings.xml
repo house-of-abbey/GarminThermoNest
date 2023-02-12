@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Nema promjena</string>
   <string id="retrievingDataAlert">Dohvaćanje podataka</string>
   <!-- SMS poruke -->
-  <string id="getOAuthCodeMsg">Dovršite OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Dovršite OAuth</string>
   <!-- Poruke o pogreškama u ErrorViewu -->
   <string id="nullDataErrMsg">API zahtjev vratio je nulte podatke.</string>
   <string id="oAuthErrMsg" scope="glance">Unesite novi OAuth kod putem postavki.</string>

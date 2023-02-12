@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Keine Änderungen</string>
   <string id="retrievingDataAlert">Abrufen von Daten</string>
   <!-- Textnachrichten -->
-  <string id="getOAuthCodeMsg">Vollständige OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Vollständige OAuth</string>
   <!-- Fehlermeldungen in einer ErrorView -->
   <string id="nullDataErrMsg">Die API-Anforderung hat Nulldaten zurückgegeben.</string>
   <string id="oAuthErrMsg" scope="glance">Bitte geben Sie über die Einstellungen einen neuen OAuth-Code ein.</string>

@@ -49,7 +49,7 @@
   <string id="noChangeAlert">没有变化</string>
   <string id="retrievingDataAlert">检索数据</string>
   <!-- 短信 -->
-  <string id="getOAuthCodeMsg">完成 OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">完成 OAuth</string>
   <!-- ErrorView 中的错误消息 -->
   <string id="nullDataErrMsg">API 请求返回空数据。</string>
   <string id="oAuthErrMsg" scope="glance">请通过设置提供新的 OAuth 代码。</string>

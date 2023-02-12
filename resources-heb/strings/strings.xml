@@ -49,7 +49,7 @@
   <string id="noChangeAlert">אין שינויים</string>
   <string id="retrievingDataAlert">משחזר נתונים</string>
   <!-- הודעות טקסט -->
-  <string id="getOAuthCodeMsg">השלם OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">השלם OAuth</string>
   <!-- הודעות שגיאה ב-ErrorView -->
   <string id="nullDataErrMsg">בקשת API החזירה נתונים null.</string>
   <string id="oAuthErrMsg" scope="glance">אנא ספק קוד OAuth חדש דרך ההגדרות.</string>

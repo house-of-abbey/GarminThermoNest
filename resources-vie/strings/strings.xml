@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Không thay đổi</string>
   <string id="retrievingDataAlert">Lấy dữ liệu</string>
   <!-- Tin nhắn -->
-  <string id="getOAuthCodeMsg">Hoàn thành OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Hoàn thành OAuth</string>
   <!-- Thông báo lỗi trong ErrorView -->
   <string id="nullDataErrMsg">Yêu cầu API trả về dữ liệu rỗng.</string>
   <string id="oAuthErrMsg" scope="glance">Vui lòng cung cấp Mã OAuth mới thông qua cài đặt.</string>

@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Ei muutoksia</string>
   <string id="retrievingDataAlert">Haetaan tietoja</string>
   <!-- Tekstiviestit -->
-  <string id="getOAuthCodeMsg">Täydellinen OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">Täydellinen OAuth</string>
   <!-- Virheilmoitukset ErrorView-näkymässä -->
   <string id="nullDataErrMsg">API-pyyntö palautti tyhjät tiedot.</string>
   <string id="oAuthErrMsg" scope="glance">Anna uusi OAuth-koodi asetusten kautta.</string>

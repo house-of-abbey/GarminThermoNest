@@ -8,9 +8,9 @@
             prefix += " ";
         }
         wl.println(prefix + "oauthCode:         " + Properties.getValue("oauthCode"));
-        wl.println(prefix + "accessToken:       " + Properties.getValue("accessToken"));
-        wl.println(prefix + "accessTokenExpire: " + Properties.getValue("accessTokenExpire"));
-        wl.println(prefix + "refreshToken:      " + Properties.getValue("refreshToken"));
+        wl.println(prefix + "accessToken:       " + Storage.getValue("accessToken"));
+        wl.println(prefix + "accessTokenExpire: " + Storage.getValue("accessTokenExpire"));
+        wl.println(prefix + "refreshToken:      " + Storage.getValue("refreshToken"));
     }
 
                 wl.println("Authentication failed, deleting access and refresh tokens.");

@@ -49,7 +49,7 @@
   <string id="noChangeAlert">Değişiklik yok</string>
   <string id="retrievingDataAlert">Veriler alınıyor</string>
   <!-- Metin mesajları -->
-  <string id="getOAuthCodeMsg">OAuth'u tamamlayın</string>
+  <string id="getOAuthCodeMsg" scope="glance">OAuth'u tamamlayın</string>
   <!-- Bir ErrorView'daki Hata Mesajları -->
   <string id="nullDataErrMsg">API İsteği boş veri döndürdü.</string>
   <string id="oAuthErrMsg" scope="glance">Lütfen ayarlar aracılığıyla yeni bir OAuth Kodu girin.</string>

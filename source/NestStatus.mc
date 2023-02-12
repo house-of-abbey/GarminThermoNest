@@ -32,6 +32,7 @@ using Toybox.Authentication;
 using Toybox.Lang;
 using Toybox.WatchUi;
 using Toybox.Application.Properties;
+using Toybox.Application.Storage;
 using Toybox.Time;
 using Toybox.Math;
 
@@ -561,7 +562,7 @@ class NestStatus {
             :method  => Communications.HTTP_REQUEST_METHOD_POST,
             :headers => {
                 "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_JSON,
-                "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                "Authorization" => "Bearer " + Storage.getValue("accessToken")
             },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
@@ -679,9 +680,9 @@ class NestStatus {
                     WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.noDeviceErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             } else if (responseCode == 401) {
-                Properties.setValue("accessToken", "");
-                Properties.setValue("accessTokenExpire", 0);
-                Properties.setValue("refreshToken", "");
+                Storage.setValue("accessToken", "");
+                Storage.setValue("accessTokenExpire", 0);
+                Storage.setValue("refreshToken", "");
                 if (!isGlance) {
                     WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.authTokenErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
@@ -708,7 +709,7 @@ class NestStatus {
             :method  => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
                 "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                "Authorization" => "Bearer " + Properties.getValue("accessToken")
+                "Authorization" => "Bearer " + Storage.getValue("accessToken")
             },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
@@ -730,10 +731,10 @@ class NestStatus {
             System.println("NestStatus onReceiveRefreshToken() Response Data: " + data);
         }
         if (responseCode == 200) {
-            Properties.setValue("accessToken", data.get("access_token"));
-            Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
+            Storage.setValue("accessToken", data.get("access_token"));
+            Storage.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
             if (Globals.debug) {
-                System.println("NestStatus onReceiveRefreshToken() accessToken: " + Properties.getValue("accessToken"));
+                System.println("NestStatus onReceiveRefreshToken() accessToken: " + Storage.getValue("accessToken"));
             }
             var d = Properties.getValue("deviceId");
             if (d == null || d.equals("")) {
@@ -742,9 +743,9 @@ class NestStatus {
                 getDeviceData();
             }
         } else {
-            Properties.setValue("accessToken", "");
-            Properties.setValue("accessTokenExpire", 0);
-            Properties.setValue("refreshToken", "");
+            Storage.setValue("accessToken", "");
+            Storage.setValue("accessTokenExpire", 0);
+            Storage.setValue("refreshToken", "");
             if (Globals.debug) {
                 System.println("NestStatus onReceiveRefreshToken() Display Update");
             }
@@ -763,12 +764,12 @@ class NestStatus {
             WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.nullDataErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
         } else {
             if (responseCode == 200) {
-                Properties.setValue("accessToken", data.get("access_token"));
-                Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
-                Properties.setValue("refreshToken", data.get("refresh_token"));
+                Storage.setValue("accessToken", data.get("access_token"));
+                Storage.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
+                Storage.setValue("refreshToken", data.get("refresh_token"));
                 if (Globals.debug) {
-                    System.println("NestStatus onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
-                    System.println("NestStatus onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
+                    System.println("NestStatus onRecieveAccessToken() accessToken:  " + Storage.getValue("accessToken"));
+                    System.println("NestStatus onRecieveAccessToken() refreshToken: " + Storage.getValue("refreshToken"));
                 }
                 var d = Properties.getValue("deviceId");
                 if (d != null && !d.equals("")) {
@@ -793,10 +794,10 @@ class NestStatus {
     //
     function getAccessToken() as Void {
         // Both Access and Refresh tokens are truncated when authentication with them fails
-        var e = Properties.getValue("accessTokenExpire");
+        var e = Storage.getValue("accessTokenExpire");
         if (e == null || Time.now().value() > e) {
             // Access token expired, use refresh token to get a new one
-            var c = Properties.getValue("refreshToken");
+            var c = Storage.getValue("refreshToken");
             if (c == null || c.equals("")) {
                 // Full OAuth
                 var payload = {

@@ -19,6 +19,25 @@
 // persist into a deployed version.
 //
 //-----------------------------------------------------------------------------------
+// 
+// https://domain.name/path/test_clear.php
+// 
+// <?php
+//   $myfile = fopen("test", "w");
+//   fwrite("");
+// ?>
+// 
+// https://domain.name/path/test.php
+// 
+// <?php
+//   $myfile = fopen("test", "a");
+//   $queries = array();
+//   parse_str($_SERVER['QUERY_STRING'], $queries);
+//   fwrite($myfile, $queries['test']);
+// ?>
+// 
+// Logs published to: https://domain.name/path/test
+//
 
 using Toybox.Communications;
 using Toybox.Lang;

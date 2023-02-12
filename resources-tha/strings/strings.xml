@@ -49,7 +49,7 @@
   <string id="noChangeAlert">ไม่มีการเปลี่ยนแปลง</string>
   <string id="retrievingDataAlert">กำลังดึงข้อมูล</string>
   <!-- ข้อความ -->
-  <string id="getOAuthCodeMsg">กรอก OAuth</string>
+  <string id="getOAuthCodeMsg" scope="glance">กรอก OAuth</string>
   <!-- ข้อความแสดงข้อผิดพลาดใน ErrorView -->
   <string id="nullDataErrMsg">คำขอ API ส่งคืนข้อมูลว่าง</string>
   <string id="oAuthErrMsg" scope="glance">โปรดระบุรหัส OAuth ใหม่ผ่านการตั้งค่า</string>
