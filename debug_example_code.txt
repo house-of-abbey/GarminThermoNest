@@ -17,5 +17,5 @@
                 logAuth("onReceiveDeviceData()");
 
 
-Logs: https://joseph.abbey1.org.uk/test
-Clear with: https://joseph.abbey1.org.uk/test_clear.php
+Logs: https://domain.name/path/test
+Clear with: https://domain.name/path/test_clear.php
