@@ -28,7 +28,7 @@
   <string id="oauthCodeTitle">Código OAuth: código de autorización OAuth2 para su proyecto API de Google Nest SDM.</string>
   <string id="oauthCodePrompt">Pegar el resultado de la página web.</string>
   <string id="faceTitle">Elija la cara de la escala de temperatura</string>
-  <string id="facePrompt">Seleccione</string>
+  <string id="facePrompt">Seleccionar</string>
   <string id="ticksFace">garrapatas</string>
   <string id="minimalFace">Mínimo</string>
   <string id="tokenGroupTitle">Tokens de autorización: la aplicación los administra, pero aquí se proporciona visibilidad.</string>
@@ -39,12 +39,24 @@
   <!-- Para habilitar la localización del idioma -->
   <string id="setMode">Establecer Modos</string>
   <string id="tapIcon">Toca Iconos</string>
-  <string id="selectDevice" scope="glance">Seleccione el dispositivo</string>
-  <string id="deviceList">Lista de dispositivos</string>
-  <string id="thermostat">Termostato</string>
+  <string id="selectDevice" scope="glance">Seleccione un dispositivo</string>
+  <string id="changeModeLabel">Modo de cambio</string>
+  <string id="thermostats">Termostatos</string>
   <string id="offStatus" scope="glance">Apagado</string>
+  <!-- Cadenas de alerta -->
   <string id="cancelledAlert">Cancelado</string>
   <string id="sendingAlert">Enviando</string>
   <string id="noChangeAlert">Sin cambios</string>
-  <string id="changeModeLabel">Modo de cambio</string>
+  <string id="retrievingDataAlert">Recuperando datos</string>
+  <!-- Mensajes de texto -->
+  <string id="getOAuthCodeMsg">OAuth completo</string>
+  <!-- Mensajes de error en un ErrorView -->
+  <string id="nullDataErrMsg">La solicitud de API devolvió datos nulos.</string>
+  <string id="oAuthErrMsg" scope="glance">Proporcione un nuevo código OAuth a través de la configuración.</string>
+  <string id="authTokenErrMsg">Problema de autenticación, tokens de acceso y actualización eliminados.</string>
+  <string id="noDevicesErrMsg">¡Muy rápido! Aún no se han recuperado todas las estructuras y habitaciones de Nest.</string>
+  <string id="noDeviceErrMsg">Dispositivo no encontrado</string>
+  <!-- Mensajes de propiedad -->
+  <string id="oAuthPropUsed" scope="glance">Correcto y eliminado</string>
+  <string id="oAuthPropFail" scope="glance">ERROR, inténtalo de nuevo</string>
 </strings>

@@ -40,11 +40,23 @@
   <string id="setMode">设置模式</string>
   <string id="tapIcon">点击图标</string>
   <string id="selectDevice" scope="glance">选择设备</string>
-  <string id="deviceList">设备列表</string>
-  <string id="thermostat">温控器</string>
+  <string id="changeModeLabel">改变模式</string>
+  <string id="thermostats">温控器</string>
   <string id="offStatus" scope="glance">离开</string>
+  <!-- 警报字符串 -->
   <string id="cancelledAlert">取消</string>
   <string id="sendingAlert">发送中</string>
   <string id="noChangeAlert">没有变化</string>
-  <string id="changeModeLabel">改变模式</string>
+  <string id="retrievingDataAlert">检索数据</string>
+  <!-- 短信 -->
+  <string id="getOAuthCodeMsg">完成 OAuth</string>
+  <!-- ErrorView 中的错误消息 -->
+  <string id="nullDataErrMsg">API 请求返回空数据。</string>
+  <string id="oAuthErrMsg" scope="glance">请通过设置提供新的 OAuth 代码。</string>
+  <string id="authTokenErrMsg">身份验证问题、访问和刷新令牌已删除。</string>
+  <string id="noDevicesErrMsg">太快了！尚未从 Nest 中检索所有结构和房间。</string>
+  <string id="noDeviceErrMsg">找不到设备</string>
+  <!-- 属性消息 -->
+  <string id="oAuthPropUsed" scope="glance">成功并删除</string>
+  <string id="oAuthPropFail" scope="glance">失败，请重试</string>
 </strings>

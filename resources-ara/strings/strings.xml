@@ -39,12 +39,24 @@
   <!-- لتمكين توطين اللغة -->
   <string id="setMode">ضبط الأوضاع</string>
   <string id="tapIcon">اضغط على الأيقونات</string>
-  <string id="selectDevice" scope="glance">اختر جهاز</string>
-  <string id="deviceList">قائمة الأجهزة</string>
-  <string id="thermostat">منظم الحراره</string>
-  <string id="offStatus" scope="glance">إيقاف</string>
+  <string id="selectDevice" scope="glance">اختر جهازا</string>
+  <string id="changeModeLabel">غير الطريقة</string>
+  <string id="thermostats">ثرموستات</string>
+  <string id="offStatus" scope="glance">عن</string>
+  <!-- سلاسل التنبيه -->
   <string id="cancelledAlert">ألغيت</string>
   <string id="sendingAlert">إرسال</string>
-  <string id="noChangeAlert">لا تغييرات</string>
-  <string id="changeModeLabel">غير الطريقة</string>
+  <string id="noChangeAlert">لا تغيرات</string>
+  <string id="retrievingDataAlert">استرجاع البيانات</string>
+  <!-- رسائل نصية -->
+  <string id="getOAuthCodeMsg">أكمل بروتوكول OAuth</string>
+  <!-- رسائل الخطأ في ErrorView -->
+  <string id="nullDataErrMsg">أرجع طلب API بيانات فارغة.</string>
+  <string id="oAuthErrMsg" scope="glance">الرجاء تقديم رمز OAuth جديد عبر الإعدادات.</string>
+  <string id="authTokenErrMsg">تم حذف مشكلة المصادقة والوصول والتحديث.</string>
+  <string id="noDevicesErrMsg">سريع جدا! لم يتم استرداد جميع الهياكل والغرف من نيست بعد.</string>
+  <string id="noDeviceErrMsg">لم يتم العثور علي الجهاز</string>
+  <!-- رسائل الملكية -->
+  <string id="oAuthPropUsed" scope="glance">نجح وحذف</string>
+  <string id="oAuthPropFail" scope="glance">فشل ، يرجى المحاولة مرة أخرى</string>
 </strings>

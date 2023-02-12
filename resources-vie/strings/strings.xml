@@ -39,12 +39,24 @@
   <!-- Để bật bản địa hóa ngôn ngữ -->
   <string id="setMode">Đặt Chế Độ</string>
   <string id="tapIcon">Nhấn Vào Biểu Tượng</string>
-  <string id="selectDevice" scope="glance">Chọn thiết bị</string>
-  <string id="deviceList">Danh sách thiết bị</string>
-  <string id="thermostat">máy điều nhiệt</string>
+  <string id="selectDevice" scope="glance">Chọn một thiết bị</string>
+  <string id="changeModeLabel">Thay đổi chế độ</string>
+  <string id="thermostats">máy điều nhiệt</string>
   <string id="offStatus" scope="glance">Tắt</string>
+  <!-- Chuỗi cảnh báo -->
   <string id="cancelledAlert">Đã hủy</string>
   <string id="sendingAlert">Gửi</string>
   <string id="noChangeAlert">Không thay đổi</string>
-  <string id="changeModeLabel">Thay đổi chế độ</string>
+  <string id="retrievingDataAlert">Lấy dữ liệu</string>
+  <!-- Tin nhắn -->
+  <string id="getOAuthCodeMsg">Hoàn thành OAuth</string>
+  <!-- Thông báo lỗi trong ErrorView -->
+  <string id="nullDataErrMsg">Yêu cầu API trả về dữ liệu rỗng.</string>
+  <string id="oAuthErrMsg" scope="glance">Vui lòng cung cấp Mã OAuth mới thông qua cài đặt.</string>
+  <string id="authTokenErrMsg">Đã xóa sự cố xác thực, truy cập và làm mới mã thông báo.</string>
+  <string id="noDevicesErrMsg">Quá nhanh! Chưa lấy tất cả các cấu trúc và phòng từ Nest.</string>
+  <string id="noDeviceErrMsg">Không tìm thấy thiết bị</string>
+  <!-- Tin nhắn thuộc tính -->
+  <string id="oAuthPropUsed" scope="glance">Đã xóa thành công</string>
+  <string id="oAuthPropFail" scope="glance">KHÔNG THÀNH CÔNG, vui lòng thử lại</string>
 </strings>

@@ -40,11 +40,23 @@
   <string id="setMode">Tetapkan Mod</string>
   <string id="tapIcon">Ketik Ikon</string>
   <string id="selectDevice" scope="glance">Pilih Peranti</string>
-  <string id="deviceList">Senarai Peranti</string>
-  <string id="thermostat">Termostat</string>
+  <string id="changeModeLabel">Tukar Mod</string>
+  <string id="thermostats">Termostat</string>
   <string id="offStatus" scope="glance">Mati</string>
+  <!-- Rentetan Makluman -->
   <string id="cancelledAlert">Dibatalkan</string>
   <string id="sendingAlert">Menghantar</string>
   <string id="noChangeAlert">Tiada perubahan</string>
-  <string id="changeModeLabel">Tukar Mod</string>
+  <string id="retrievingDataAlert">Mendapatkan semula data</string>
+  <!-- Mesej teks -->
+  <string id="getOAuthCodeMsg">Lengkapkan OAuth</string>
+  <!-- Mesej Ralat dalam ErrorView -->
+  <string id="nullDataErrMsg">Permintaan API mengembalikan data nol.</string>
+  <string id="oAuthErrMsg" scope="glance">Sila berikan Kod OAuth baharu melalui tetapan.</string>
+  <string id="authTokenErrMsg">Isu pengesahan, akses dan muat semula token dipadamkan.</string>
+  <string id="noDevicesErrMsg">Terlalu cepat! Belum mendapatkan semula semua struktur dan bilik daripada Nest.</string>
+  <string id="noDeviceErrMsg">Peranti tidak dijumpai</string>
+  <!-- Mesej Harta -->
+  <string id="oAuthPropUsed" scope="glance">Berjaya dan dipadamkan</string>
+  <string id="oAuthPropFail" scope="glance">GAGAL, ​​sila cuba lagi</string>
 </strings>

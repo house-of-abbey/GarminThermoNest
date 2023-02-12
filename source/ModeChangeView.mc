@@ -224,7 +224,7 @@ class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
     hidden var mView;
     hidden var cancelledAlert;
 
-    function initialize(view) {
+    function initialize(view as ModeChangeView) {
         WatchUi.BehaviorDelegate.initialize();
         mView = view;
         cancelledAlert = new Alert({
@@ -237,21 +237,21 @@ class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function onModeButton() {
-        return mView.onModeButton(); 
+        mView.onModeButton(); 
     }
 
     function onEcoButton() {
-        return mView.onEcoButton(); 
+        mView.onEcoButton(); 
     }
 
-    function onBack() {
+    function onBack() as Lang.Boolean {
         WatchUi.popView(WatchUi.SLIDE_UP);
         cancelledAlert.pushView(WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
 
-    function onNextPage() {
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
+    function onNextPage() as Lang.Boolean {
+        WatchUi.popView(WatchUi.SLIDE_UP);
         mView.getNestStatus().executeMode(
             NestStatus.Start,
             {

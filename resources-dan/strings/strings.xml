@@ -39,12 +39,24 @@
   <!-- For at aktivere sproglokalisering -->
   <string id="setMode">Indstil Tilstande</string>
   <string id="tapIcon">Tryk På Ikoner</string>
-  <string id="selectDevice" scope="glance">Vælg Enhed</string>
-  <string id="deviceList">Enhedsliste</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Vælg En enhed</string>
+  <string id="changeModeLabel">Skift tilstand</string>
+  <string id="thermostats">Termostater</string>
   <string id="offStatus" scope="glance">Af</string>
-  <string id="cancelledAlert">Annulleret</string>
+  <!-- Alarmstrenge -->
+  <string id="cancelledAlert">Aflyst</string>
   <string id="sendingAlert">Sender</string>
   <string id="noChangeAlert">Ingen ændringer</string>
-  <string id="changeModeLabel">Skift tilstand</string>
+  <string id="retrievingDataAlert">Henter data</string>
+  <!-- Tekstbeskeder -->
+  <string id="getOAuthCodeMsg">Gennemfør OAuth</string>
+  <!-- Fejlmeddelelser i en ErrorView -->
+  <string id="nullDataErrMsg">API-anmodning returnerede null-data.</string>
+  <string id="oAuthErrMsg" scope="glance">Angiv venligst en ny OAuth-kode via indstillingerne.</string>
+  <string id="authTokenErrMsg">Godkendelsesproblem, adgangs- og opdateringstokens slettet.</string>
+  <string id="noDevicesErrMsg">For hurtigt! Endnu ikke hentet alle strukturer og værelser fra Nest.</string>
+  <string id="noDeviceErrMsg">Enhed ikke fundet</string>
+  <!-- Ejendomsmeddelelser -->
+  <string id="oAuthPropUsed" scope="glance">Lykkedes og blev slettet</string>
+  <string id="oAuthPropFail" scope="glance">FAILED, prøv venligst igen</string>
 </strings>

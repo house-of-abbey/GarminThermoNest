@@ -40,11 +40,23 @@
   <string id="setMode">設置模式</string>
   <string id="tapIcon">點擊圖標</string>
   <string id="selectDevice" scope="glance">選擇設備</string>
-  <string id="deviceList">設備清單</string>
-  <string id="thermostat">溫控器</string>
+  <string id="changeModeLabel">改變模式</string>
+  <string id="thermostats">溫控器</string>
   <string id="offStatus" scope="glance">離開</string>
+  <!-- 警報字符串 -->
   <string id="cancelledAlert">取消</string>
   <string id="sendingAlert">發送中</string>
   <string id="noChangeAlert">沒有變化</string>
-  <string id="changeModeLabel">改變模式</string>
+  <string id="retrievingDataAlert">檢索數據</string>
+  <!-- 短信 -->
+  <string id="getOAuthCodeMsg">完成 OAuth</string>
+  <!-- ErrorView 中的錯誤消息 -->
+  <string id="nullDataErrMsg">API 請求返回空數據。</string>
+  <string id="oAuthErrMsg" scope="glance">請通過設置提供新的 OAuth 代碼。</string>
+  <string id="authTokenErrMsg">身份驗證問題、訪問和刷新令牌已刪除。</string>
+  <string id="noDevicesErrMsg">太快了！尚未從 Nest 中檢索所有結構和房間。</string>
+  <string id="noDeviceErrMsg">找不到設備</string>
+  <!-- 屬性消息 -->
+  <string id="oAuthPropUsed" scope="glance">成功並刪除</string>
+  <string id="oAuthPropFail" scope="glance">失敗，請重試</string>
 </strings>

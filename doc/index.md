@@ -6,12 +6,22 @@
 
 An application for Garmin IQ watches that allows you to control your Nest thermostat. This application requires a touch sensitive screen to operate the application. It has been design for the Venu 2 watch and those with a similar screen size.
 
-The functionality is divide into 3 panes
+The functionality is divide into 4 panes
 
-* Set Mode
 * Status
-* Set Temperature
+* Select Device (swipe left)
+* Set Mode (swipe up)
+* Set Temperature (swipe down)
 
+### Navigation
+
+Swipe the touch screen to change the view.
+
+![Application Navigation](./images/navigation.png)
+
+### Select Device
+
+Swipe left to bring the thermostat selector into view and tap on the desired device. The initial swipe may take a short while to populate the devices, after that the selcetor view will already have been constructed. If you change the layout of your structures, e.g. move the device to another room, you will need to exit the application to cause the selection list to be revised.
 ### Set Mode
 
 You can change two modes on this pain, by taping the relevant icon. Then the icon changes in a rotation according to the following table and depending on the availability of that mode via your Heating, Ventilation and Air-Conditioning (HVAC) installation, and the thermostat model's functionality.

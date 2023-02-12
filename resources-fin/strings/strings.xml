@@ -39,12 +39,24 @@
   <!-- Ota käyttöön kielen lokalisointi -->
   <string id="setMode">Aseta Tilat</string>
   <string id="tapIcon">Napauta Kuvakkeet</string>
-  <string id="selectDevice" scope="glance">Valitse Laite</string>
-  <string id="deviceList">Laiteluettelo</string>
-  <string id="thermostat">Termostaatti</string>
+  <string id="selectDevice" scope="glance">Valitse laite</string>
+  <string id="changeModeLabel">Vaihda tila</string>
+  <string id="thermostats">Termostaatit</string>
   <string id="offStatus" scope="glance">Vinossa</string>
+  <!-- Varoitusmerkkijonot -->
   <string id="cancelledAlert">Peruutettu</string>
   <string id="sendingAlert">Lähetetään</string>
   <string id="noChangeAlert">Ei muutoksia</string>
-  <string id="changeModeLabel">Vaihda tila</string>
+  <string id="retrievingDataAlert">Haetaan tietoja</string>
+  <!-- Tekstiviestit -->
+  <string id="getOAuthCodeMsg">Täydellinen OAuth</string>
+  <!-- Virheilmoitukset ErrorView-näkymässä -->
+  <string id="nullDataErrMsg">API-pyyntö palautti tyhjät tiedot.</string>
+  <string id="oAuthErrMsg" scope="glance">Anna uusi OAuth-koodi asetusten kautta.</string>
+  <string id="authTokenErrMsg">Todennusongelma, käyttö- ja päivitystunnukset poistettu.</string>
+  <string id="noDevicesErrMsg">Liian nopeasti! Kaikkia rakenteita ja huoneita ei ole vielä haettu Nestistä.</string>
+  <string id="noDeviceErrMsg">Laitetta ei löydy</string>
+  <!-- Kiinteistöjen viestit -->
+  <string id="oAuthPropUsed" scope="glance">Onnistui ja poistettiin</string>
+  <string id="oAuthPropFail" scope="glance">Epäonnistui, yritä uudelleen</string>
 </strings>

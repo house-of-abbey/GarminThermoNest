@@ -49,7 +49,7 @@
       <button onclick="copyText()">Copy code</button>
     </div>
 
-    <p>Terminology is a bit loose here, this is not the access nor refresh OAuth tokens, but the step before that you may never see as it completes in the background and is usually picked up by a waiting embedded browser to extract the <tt>&code=</tt> value and continue the OAuth process.</p>
+    <p>Terminology is a bit loose here, this is not the access nor refresh OAuth tokens, but the step before that you may never see as it completes in the background and is usually picked up by a waiting embedded browser to extract the <tt>&code=</tt> value and continue the OAuth process. Note, the OAuth 2.0 spec recommends that the <a href="https://www.oauth.com/oauth2-servers/authorization/the-authorization-response/">authorization response</a> has a maximum lifetime of 10 minutes, but in practice, most services set the expiration much shorter, around 30-60 seconds.</p>
 
     <p>On your mobile device, start the Connect IQ App and find the ThermoNest application settings. The red box indicates where to paste the value. You do not need to enter a code for the device as a selection box will be presented to you on first use.</p>
 

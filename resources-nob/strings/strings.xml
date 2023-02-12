@@ -28,7 +28,7 @@
   <string id="oauthCodeTitle">OAuth-kode – OAuth2-autorisasjonskode for Google Nest SDM API-prosjektet ditt.</string>
   <string id="oauthCodePrompt">Lim inn resultat fra nettsiden.</string>
   <string id="faceTitle">Velg ansiktet på temperaturskalaen</string>
-  <string id="facePrompt">Å velge</string>
+  <string id="facePrompt">Plukke ut</string>
   <string id="ticksFace">Flått</string>
   <string id="minimalFace">Minimal</string>
   <string id="tokenGroupTitle">Authorization Tokens - Applikasjonen administrerer disse, men synlighet er gitt her.</string>
@@ -39,12 +39,24 @@
   <!-- For å aktivere språklokalisering -->
   <string id="setMode">Still Inn Moduser</string>
   <string id="tapIcon">Trykk På Ikoner</string>
-  <string id="selectDevice" scope="glance">Velg Enhet</string>
-  <string id="deviceList">Enhetsliste</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Velg En enhet</string>
+  <string id="changeModeLabel">Endre modus</string>
+  <string id="thermostats">Termostater</string>
   <string id="offStatus" scope="glance">Av</string>
+  <!-- Varslingsstrenger -->
   <string id="cancelledAlert">avbrutt</string>
   <string id="sendingAlert">Sender</string>
   <string id="noChangeAlert">Ingen forandringer</string>
-  <string id="changeModeLabel">Endre modus</string>
+  <string id="retrievingDataAlert">Henter data</string>
+  <!-- Tekstmeldinger -->
+  <string id="getOAuthCodeMsg">Fullfør OAuth</string>
+  <!-- Feilmeldinger i en ErrorView -->
+  <string id="nullDataErrMsg">API-forespørsel returnerte nulldata.</string>
+  <string id="oAuthErrMsg" scope="glance">Vennligst oppgi en ny OAuth-kode via innstillingene.</string>
+  <string id="authTokenErrMsg">Autentiseringsproblem, tilgangs- og oppdateringstokener slettet.</string>
+  <string id="noDevicesErrMsg">For raskt! Foreløpig ikke hentet alle strukturer og rom fra Nest.</string>
+  <string id="noDeviceErrMsg">Enhet ikke funnet</string>
+  <!-- Eiendomsmeldinger -->
+  <string id="oAuthPropUsed" scope="glance">Vellykket og slettet</string>
+  <string id="oAuthPropFail" scope="glance">FAILED. Prøv igjen</string>
 </strings>

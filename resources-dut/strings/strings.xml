@@ -39,12 +39,24 @@
   <!-- Om taallokalisatie in te schakelen -->
   <string id="setMode">Modi Instellen</string>
   <string id="tapIcon">Tik Op Pictogrammen</string>
-  <string id="selectDevice" scope="glance">Selecteer apparaat</string>
-  <string id="deviceList">Lijst met apparaten</string>
-  <string id="thermostat">Thermostaat</string>
+  <string id="selectDevice" scope="glance">Selecteer een apparaat</string>
+  <string id="changeModeLabel">Modus wijzigen</string>
+  <string id="thermostats">Thermostaten</string>
   <string id="offStatus" scope="glance">Uit</string>
+  <!-- Waarschuwingsstrings -->
   <string id="cancelledAlert">Geannuleerd</string>
   <string id="sendingAlert">Bezig met verzenden</string>
   <string id="noChangeAlert">Geen veranderingen</string>
-  <string id="changeModeLabel">Modus wijzigen</string>
+  <string id="retrievingDataAlert">Het ophalen van gegevens</string>
+  <!-- Tekstberichten -->
+  <string id="getOAuthCodeMsg">Voltooi OAuth</string>
+  <!-- Foutmeldingen in een ErrorView -->
+  <string id="nullDataErrMsg">API Request heeft null-gegevens geretourneerd.</string>
+  <string id="oAuthErrMsg" scope="glance">Geef een nieuwe OAuth-code op via de instellingen.</string>
+  <string id="authTokenErrMsg">Verificatieprobleem, toegangs- en vernieuwingstokens verwijderd.</string>
+  <string id="noDevicesErrMsg">Te snel! Nog niet alle gebouwen en kamers van Nest opgehaald.</string>
+  <string id="noDeviceErrMsg">Apparaat niet gevonden</string>
+  <!-- Eigendomsberichten -->
+  <string id="oAuthPropUsed" scope="glance">Geslaagd en verwijderd</string>
+  <string id="oAuthPropFail" scope="glance">MISLUKT, probeer het opnieuw</string>
 </strings>

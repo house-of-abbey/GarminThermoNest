@@ -28,7 +28,7 @@
   <string id="oauthCodeTitle">OAuth kod - OAuth2 autorizacijski kod za vaš Google Nest SDM API projekt.</string>
   <string id="oauthCodePrompt">Zalijepi rezultat s web stranice.</string>
   <string id="faceTitle">Odaberite lice temperaturne ljestvice</string>
-  <string id="facePrompt">Odaberi</string>
+  <string id="facePrompt">Izaberi</string>
   <string id="ticksFace">Krpelji</string>
   <string id="minimalFace">Minimalno</string>
   <string id="tokenGroupTitle">Tokeni autorizacije - njima upravlja aplikacija, ali ovdje je omogućena vidljivost.</string>
@@ -40,11 +40,23 @@
   <string id="setMode">Postavite Načine Rada</string>
   <string id="tapIcon">Dodirnite Ikone</string>
   <string id="selectDevice" scope="glance">Odaberite uređaj</string>
-  <string id="deviceList">Popis uređaja</string>
-  <string id="thermostat">Termostat</string>
+  <string id="changeModeLabel">Promjena načina rada</string>
+  <string id="thermostats">Termostati</string>
   <string id="offStatus" scope="glance">Isključeno</string>
+  <!-- Nizovi upozorenja -->
   <string id="cancelledAlert">Otkazano</string>
   <string id="sendingAlert">Slanje</string>
   <string id="noChangeAlert">Nema promjena</string>
-  <string id="changeModeLabel">Promjena načina rada</string>
+  <string id="retrievingDataAlert">Dohvaćanje podataka</string>
+  <!-- SMS poruke -->
+  <string id="getOAuthCodeMsg">Dovršite OAuth</string>
+  <!-- Poruke o pogreškama u ErrorViewu -->
+  <string id="nullDataErrMsg">API zahtjev vratio je nulte podatke.</string>
+  <string id="oAuthErrMsg" scope="glance">Unesite novi OAuth kod putem postavki.</string>
+  <string id="authTokenErrMsg">Problem s autentifikacijom, tokeni za pristup i osvježavanje izbrisani.</string>
+  <string id="noDevicesErrMsg">Prebrzo! Još nisu dohvaćene sve strukture i prostorije iz Nesta.</string>
+  <string id="noDeviceErrMsg">Uređaj nije pronađen</string>
+  <!-- Poruke o nekretninama -->
+  <string id="oAuthPropUsed" scope="glance">Uspjelo i izbrisano</string>
+  <string id="oAuthPropFail" scope="glance">NIJE USPJELO, pokušajte ponovo</string>
 </strings>

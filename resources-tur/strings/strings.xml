@@ -39,12 +39,24 @@
   <!-- Dil yerelleştirmesini etkinleştirmek için -->
   <string id="setMode">Modları Ayarla</string>
   <string id="tapIcon">Simgelere Dokunun</string>
-  <string id="selectDevice" scope="glance">Cihaz seç</string>
-  <string id="deviceList">Cihaz listesi</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Bir Cihaz Seçin</string>
+  <string id="changeModeLabel">Modu Değiştir</string>
+  <string id="thermostats">Termostatlar</string>
   <string id="offStatus" scope="glance">Kapalı</string>
+  <!-- Uyarı Dizileri -->
   <string id="cancelledAlert">İptal edildi</string>
   <string id="sendingAlert">gönderme</string>
   <string id="noChangeAlert">Değişiklik yok</string>
-  <string id="changeModeLabel">Modu Değiştir</string>
+  <string id="retrievingDataAlert">Veriler alınıyor</string>
+  <!-- Metin mesajları -->
+  <string id="getOAuthCodeMsg">OAuth'u tamamlayın</string>
+  <!-- Bir ErrorView'daki Hata Mesajları -->
+  <string id="nullDataErrMsg">API İsteği boş veri döndürdü.</string>
+  <string id="oAuthErrMsg" scope="glance">Lütfen ayarlar aracılığıyla yeni bir OAuth Kodu girin.</string>
+  <string id="authTokenErrMsg">Kimlik doğrulama sorunu, erişim ve yenileme belirteçleri silindi.</string>
+  <string id="noDevicesErrMsg">Çok hızlı! Henüz tüm yapılar ve odalar Nest'ten alınmadı.</string>
+  <string id="noDeviceErrMsg">Cihaz bulunamadı</string>
+  <!-- Özellik Mesajları -->
+  <string id="oAuthPropUsed" scope="glance">Başarılı oldu ve silindi</string>
+  <string id="oAuthPropFail" scope="glance">BAŞARISIZ, lütfen tekrar deneyin</string>
 </strings>

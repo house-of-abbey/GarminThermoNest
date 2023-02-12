@@ -40,11 +40,23 @@
   <string id="setMode">モードの設定</string>
   <string id="tapIcon">アイコンをタップ</string>
   <string id="selectDevice" scope="glance">デバイスを選択</string>
-  <string id="deviceList">デバイス リスト</string>
-  <string id="thermostat">サーモスタット</string>
+  <string id="changeModeLabel">モード変更</string>
+  <string id="thermostats">サーモスタット</string>
   <string id="offStatus" scope="glance">オフ</string>
+  <!-- アラート文字列 -->
   <string id="cancelledAlert">キャンセル</string>
   <string id="sendingAlert">送信</string>
   <string id="noChangeAlert">変更なし</string>
-  <string id="changeModeLabel">モード変更</string>
+  <string id="retrievingDataAlert">データの取得</string>
+  <!-- テキストメッセージ -->
+  <string id="getOAuthCodeMsg">完全な OAuth</string>
+  <!-- ErrorView のエラー メッセージ -->
+  <string id="nullDataErrMsg">API リクエストが null データを返しました。</string>
+  <string id="oAuthErrMsg" scope="glance">設定から新しい OAuth コードを入力してください。</string>
+  <string id="authTokenErrMsg">認証発行、アクセス、リフレッシュ トークンが削除されました。</string>
+  <string id="noDevicesErrMsg">速すぎる！ Nest からすべての構造物と部屋をまだ取得していません。</string>
+  <string id="noDeviceErrMsg">デバイスが見つかりません</string>
+  <!-- プロパティ メッセージ -->
+  <string id="oAuthPropUsed" scope="glance">成功して削除されました</string>
+  <string id="oAuthPropFail" scope="glance">失敗しました。もう一度お試しください</string>
 </strings>

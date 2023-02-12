@@ -40,11 +40,23 @@
   <string id="setMode">Nastavit Režimy</string>
   <string id="tapIcon">Klepněte Na Ikonu</string>
   <string id="selectDevice" scope="glance">Vyberte Zařízení</string>
-  <string id="deviceList">Seznam zařízení</string>
-  <string id="thermostat">Termostat</string>
+  <string id="changeModeLabel">Změnit režim</string>
+  <string id="thermostats">Termostaty</string>
   <string id="offStatus" scope="glance">Vypnuto</string>
+  <!-- Varovné řetězce -->
   <string id="cancelledAlert">Zrušeno</string>
   <string id="sendingAlert">Odesílání</string>
   <string id="noChangeAlert">Žádné změny</string>
-  <string id="changeModeLabel">Změnit režim</string>
+  <string id="retrievingDataAlert">Načítání dat</string>
+  <!-- Textové zprávy -->
+  <string id="getOAuthCodeMsg">Dokončete protokol OAuth</string>
+  <!-- Chybové zprávy v ErrorView -->
+  <string id="nullDataErrMsg">Požadavek API vrátil nulová data.</string>
+  <string id="oAuthErrMsg" scope="glance">Zadejte prosím nový kód OAuth prostřednictvím nastavení.</string>
+  <string id="authTokenErrMsg">Problém s autentizací, přístupové a obnovovací tokeny byly odstraněny.</string>
+  <string id="noDevicesErrMsg">Příliš rychle! Dosud nebyly získány všechny struktury a místnosti z Nest.</string>
+  <string id="noDeviceErrMsg">Zařízení nenalezeno</string>
+  <!-- Zprávy o vlastnostech -->
+  <string id="oAuthPropUsed" scope="glance">Úspěšné a smazané</string>
+  <string id="oAuthPropFail" scope="glance">FAILED, zkuste to prosím znovu</string>
 </strings>

@@ -39,12 +39,24 @@
   <!-- Lai iespējotu valodas lokalizāciju -->
   <string id="setMode">Iestatīt Režīmus</string>
   <string id="tapIcon">Pieskarieties Ikonas</string>
-  <string id="selectDevice" scope="glance">Atlasiet Ierīce</string>
-  <string id="deviceList">Ierīču saraksts</string>
-  <string id="thermostat">Termostats</string>
+  <string id="selectDevice" scope="glance">Atlasiet ierīci</string>
+  <string id="changeModeLabel">Mainīt režīmu</string>
+  <string id="thermostats">Termostati</string>
   <string id="offStatus" scope="glance">Izslēgts</string>
+  <!-- Brīdinājumu virknes -->
   <string id="cancelledAlert">Atcelts</string>
   <string id="sendingAlert">Nosūtīšana</string>
   <string id="noChangeAlert">Nav izmaiņu</string>
-  <string id="changeModeLabel">Mainīt režīmu</string>
+  <string id="retrievingDataAlert">Datu izgūšana</string>
+  <!-- Isziņas -->
+  <string id="getOAuthCodeMsg">Pabeigt OAuth</string>
+  <!-- Kļūdu ziņojumi ErrorView -->
+  <string id="nullDataErrMsg">API pieprasījums atgrieza nulles datus.</string>
+  <string id="oAuthErrMsg" scope="glance">Lūdzu, ievadiet jaunu OAuth kodu, izmantojot iestatījumus.</string>
+  <string id="authTokenErrMsg">Autentifikācijas problēma, piekļuves un atsvaidzināšanas pilnvaras ir izdzēstas.</string>
+  <string id="noDevicesErrMsg">Pārāk ātri! Vēl nav izgūtas visas struktūras un telpas no Nest.</string>
+  <string id="noDeviceErrMsg">Ierīce nav atrasta</string>
+  <!-- Īpašuma ziņojumi -->
+  <string id="oAuthPropUsed" scope="glance">Izdevās un izdzēsts</string>
+  <string id="oAuthPropFail" scope="glance">NEizdevās, lūdzu, mēģiniet vēlreiz</string>
 </strings>

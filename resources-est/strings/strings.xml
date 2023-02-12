@@ -39,12 +39,24 @@
   <!-- Keele lokaliseerimise lubamiseks -->
   <string id="setMode">Määra Režiimid</string>
   <string id="tapIcon">Puudutage Valikut Ikoonid</string>
-  <string id="selectDevice" scope="glance">Valige Seade</string>
-  <string id="deviceList">Seadmete loend</string>
-  <string id="thermostat">Termostaat</string>
+  <string id="selectDevice" scope="glance">Valige seade</string>
+  <string id="changeModeLabel">Muuda režiimi</string>
+  <string id="thermostats">Termostaadid</string>
   <string id="offStatus" scope="glance">Väljas</string>
+  <!-- Hoiatuste stringid -->
   <string id="cancelledAlert">Tühistatud</string>
   <string id="sendingAlert">Saatmine</string>
   <string id="noChangeAlert">Muutusteta</string>
-  <string id="changeModeLabel">Muuda režiimi</string>
+  <string id="retrievingDataAlert">Andmete toomine</string>
+  <!-- Tekstisõnumid -->
+  <string id="getOAuthCodeMsg">Täitke OAuth</string>
+  <!-- Veateated ErrorView's -->
+  <string id="nullDataErrMsg">API taotlus tagastas nullandmed.</string>
+  <string id="oAuthErrMsg" scope="glance">Sisestage seadete kaudu uus OAuth-kood.</string>
+  <string id="authTokenErrMsg">Autentimisprobleem, juurdepääsu- ja värskendusmärgid on kustutatud.</string>
+  <string id="noDevicesErrMsg">Liiga kiire! Pole veel kõiki konstruktsioone ja ruume Nestist kätte saanud.</string>
+  <string id="noDeviceErrMsg">Seadet ei leitud</string>
+  <!-- Omandi sõnumid -->
+  <string id="oAuthPropUsed" scope="glance">Õnnestus ja kustutati</string>
+  <string id="oAuthPropFail" scope="glance">EBAÕNNUS, proovige uuesti</string>
 </strings>

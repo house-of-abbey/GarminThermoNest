@@ -61,12 +61,14 @@ class ThermoNestView extends ThermoView {
     hidden var hourglassIcon;
     hidden var loggedOutIcon;
     hidden var errorIcon;
-    hidden var setOffLabel as Lang.String;
+    hidden var setOffLabel   as Lang.String;
+    hidden var oAuthPropFail as Lang.String;
     hidden var timer;
 
     function initialize(ns as NestStatus) {
         ThermoView.initialize(ns);
-        setOffLabel = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
+        setOffLabel   = WatchUi.loadResource($.Rez.Strings.offStatus) as Lang.String;
+        oAuthPropFail = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
     }
 
     // Load your resources here
@@ -155,7 +157,25 @@ class ThermoNestView extends ThermoView {
                     : Globals.offColor
         );
         dc.clear();
-        if (mNestStatus.getGotDeviceData()) {
+        var o = Properties.getValue("oauthCode") as Lang.String;
+        var d = Properties.getValue("deviceId") as Lang.String;
+        if (o == null || o.equals("") || o.equals(oAuthPropFail)) {
+            dc.drawText(
+                hw,
+                hh,
+                Graphics.FONT_XTINY,
+                WatchUi.loadResource($.Rez.Strings.getOAuthCodeMsg) as Lang.String,
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
+        } else if (d == null || d.equals("")) {
+            dc.drawText(
+                hw,
+                hh,
+                Graphics.FONT_XTINY,
+                WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String,
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+            );
+        } else if (mNestStatus.getGotDeviceData()) {
             var ambientTemp = mNestStatus.getAmbientTemp();
             if (ambientTemp != null) {
                 var heatTemp = null;
@@ -296,11 +316,8 @@ class ThermoNestView extends ThermoView {
     // Actions to take when the 'refreshButton' is tapped.
     //
     function onRefreshButton() as Void {
-        var c = Properties.getValue("deviceId");
-        if (c == null || c.equals("")) {
-            // Device ID might have been invalidated, ask the user to select another
-            mNestStatus.getDevices();
-        } else {
+        var d = Properties.getValue("deviceId");
+        if (d != null && !d.equals("")) {
             // Assume the application has not been used in excess of 3600s such that the token has expired
             mNestStatus.getDeviceData();
         }
@@ -324,28 +341,74 @@ class ThermoNestView extends ThermoView {
 
 class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
     hidden var mView;
+    hidden var tp;
+    hidden var retrievingDataAlert as Lang.String;
 
-    function initialize(view) {
+    function initialize(view as ThermoNestView) {
         WatchUi.BehaviorDelegate.initialize();
-        mView = view;
+        mView               = view;
+        // When to re-init this to pick up any changes?
+        tp                  = new ThermoPick({ :title => WatchUi.loadResource($.Rez.Strings.thermostats) as Lang.String });
+        view.getNestStatus().setAuthViewUpdate(tp);
+        retrievingDataAlert = WatchUi.loadResource($.Rez.Strings.retrievingDataAlert) as Lang.String;
     }
 
-    function onRefreshButton() {
-        return mView.onRefreshButton();
+    function onRefreshButton() as Void {
+        mView.onRefreshButton();
     }
 
-    function onPreviousPage() {
-        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-            var v = new ModeChangeView(mView.getNestStatus());
-            WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_UP);
+    // WatchUi.SWIPE_DOWN
+    function onPreviousPage() as Lang.Boolean {
+        var d = Properties.getValue("deviceId") as Lang.String;
+        if (d != null && !d.equals("")) {
+            if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
+                var v = new ModeChangeView(mView.getNestStatus());
+                WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_DOWN);
+            }
         }
         return true;
     }
 
-    function onNextPage() {
-        if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-            var v = new TempChangeView(mView.getNestStatus());
-            WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
+    // WatchUi.SWIPE_UP
+    function onNextPage() as Lang.Boolean {
+        var d = Properties.getValue("deviceId") as Lang.String;
+        if (d != null && !d.equals("")) {
+            if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
+                var v = new TempChangeView(mView.getNestStatus());
+                WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
+            }
+        }
+        return true;
+    }
+
+    function onSwipe(swipeEvent) as Lang.Boolean {
+        switch (swipeEvent.getDirection()) {
+            case WatchUi.SWIPE_RIGHT:
+                // Exit application
+                WatchUi.popView(WatchUi.SLIDE_RIGHT);
+                break;
+
+            case WatchUi.SWIPE_LEFT:
+                var o = Properties.getValue("oauthCode") as Lang.String;
+                if (o != null && !o.equals("")) {
+                    tp.initMenu();
+                    if (tp.isInit()) {
+                        WatchUi.pushView(tp, new ThermoPickDelegate(tp, mView.getNestStatus()), WatchUi.SLIDE_LEFT);
+                    } else {
+                        new Alert({
+                            :timeout => Globals.alertTimeout,
+                            :font    => Graphics.FONT_MEDIUM,
+                            :text    => retrievingDataAlert,
+                            :fgcolor => Graphics.COLOR_RED,
+                            :bgcolor => Graphics.COLOR_BLACK
+                        }).pushView(WatchUi.SLIDE_IMMEDIATE);
+                    }
+                }
+                break;
+
+            default:
+                // Do nothing
+                break;
         }
         return true;
     }

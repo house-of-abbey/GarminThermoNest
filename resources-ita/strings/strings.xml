@@ -39,12 +39,24 @@
   <!-- Per abilitare la localizzazione della lingua -->
   <string id="setMode">Imposta Modalità</string>
   <string id="tapIcon">Tocca Icone</string>
-  <string id="selectDevice" scope="glance">Seleziona dispositivo</string>
-  <string id="deviceList">Elenco dispositivi</string>
-  <string id="thermostat">Termostato</string>
+  <string id="selectDevice" scope="glance">Seleziona un dispositivo</string>
+  <string id="changeModeLabel">Cambia modalità</string>
+  <string id="thermostats">Termostati</string>
   <string id="offStatus" scope="glance">Spento</string>
+  <!-- Stringhe di avviso -->
   <string id="cancelledAlert">Annullato</string>
   <string id="sendingAlert">Invio</string>
   <string id="noChangeAlert">Nessun cambiamento</string>
-  <string id="changeModeLabel">Cambia modalità</string>
+  <string id="retrievingDataAlert">Recupero dati</string>
+  <!-- Messaggi di testo -->
+  <string id="getOAuthCodeMsg">Completa OAuth</string>
+  <!-- Messaggi di errore in un ErrorView -->
+  <string id="nullDataErrMsg">La richiesta API ha restituito dati nulli.</string>
+  <string id="oAuthErrMsg" scope="glance">Fornisci un nuovo codice OAuth tramite le impostazioni.</string>
+  <string id="authTokenErrMsg">Problema di autenticazione, token di accesso e aggiornamento eliminati.</string>
+  <string id="noDevicesErrMsg">Troppo veloce! Non ancora recuperate tutte le strutture e le stanze da Nest.</string>
+  <string id="noDeviceErrMsg">Dispositivo non trovato</string>
+  <!-- Proprietà Messaggi -->
+  <string id="oAuthPropUsed" scope="glance">Riuscito ed eliminato</string>
+  <string id="oAuthPropFail" scope="glance">FALLITO, riprova</string>
 </strings>

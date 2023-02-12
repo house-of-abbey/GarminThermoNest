@@ -39,12 +39,24 @@
   <!-- Untuk mengaktifkan lokalisasi bahasa -->
   <string id="setMode">Atur Mode</string>
   <string id="tapIcon">Ketuk Ikon</string>
-  <string id="selectDevice" scope="glance">Pilih alat</string>
-  <string id="deviceList">Daftar perangkat</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Pilih Perangkat</string>
+  <string id="changeModeLabel">Ubah Modus</string>
+  <string id="thermostats">Termostat</string>
   <string id="offStatus" scope="glance">Mati</string>
+  <!-- String Peringatan -->
   <string id="cancelledAlert">Dibatalkan</string>
   <string id="sendingAlert">Mengirim</string>
   <string id="noChangeAlert">Tidak ada perubahan</string>
-  <string id="changeModeLabel">Ubah Modus</string>
+  <string id="retrievingDataAlert">Mengambil data</string>
+  <!-- Pesan teks -->
+  <string id="getOAuthCodeMsg">Selesaikan OAuth</string>
+  <!-- Pesan Kesalahan dalam ErrorView -->
+  <string id="nullDataErrMsg">Permintaan API mengembalikan data null.</string>
+  <string id="oAuthErrMsg" scope="glance">Berikan Kode OAuth baru melalui pengaturan.</string>
+  <string id="authTokenErrMsg">Masalah autentikasi, akses dan refresh token dihapus.</string>
+  <string id="noDevicesErrMsg">Terlalu cepat! Belum mengambil semua bangunan dan ruangan dari Nest.</string>
+  <string id="noDeviceErrMsg">Perangkat tidak ditemukan</string>
+  <!-- Pesan Properti -->
+  <string id="oAuthPropUsed" scope="glance">Berhasil dan dihapus</string>
+  <string id="oAuthPropFail" scope="glance">GAGAL, ​​silakan coba lagi</string>
 </strings>

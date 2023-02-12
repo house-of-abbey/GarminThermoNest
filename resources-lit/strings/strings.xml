@@ -39,12 +39,24 @@
   <!-- Norėdami įjungti kalbos lokalizaciją -->
   <string id="setMode">Nustatyti Režimus</string>
   <string id="tapIcon">Bakstelėkite Piktogramos</string>
-  <string id="selectDevice" scope="glance">Pasirinkite Įrenginys</string>
-  <string id="deviceList">Įrenginių sąrašas</string>
-  <string id="thermostat">Termostatas</string>
+  <string id="selectDevice" scope="glance">Pasirinkite įrenginį</string>
+  <string id="changeModeLabel">Keisti režimą</string>
+  <string id="thermostats">Termostatai</string>
   <string id="offStatus" scope="glance">Išjungta</string>
+  <!-- Įspėjimo eilutės -->
   <string id="cancelledAlert">Atšauktas</string>
   <string id="sendingAlert">Siuntimas</string>
   <string id="noChangeAlert">Jokių pakeitimų</string>
-  <string id="changeModeLabel">Keisti režimą</string>
+  <string id="retrievingDataAlert">Duomenų gavimas</string>
+  <!-- Teksto žinutės -->
+  <string id="getOAuthCodeMsg">Užbaigti OAuth</string>
+  <!-- Klaidos pranešimai ErrorView -->
+  <string id="nullDataErrMsg">API užklausa grąžino nulinius duomenis.</string>
+  <string id="oAuthErrMsg" scope="glance">Nustatymuose pateikite naują OAuth kodą.</string>
+  <string id="authTokenErrMsg">Autentifikavimo problema, prieigos ir atnaujinimo prieigos raktai ištrinti.</string>
+  <string id="noDevicesErrMsg">Per greitai! Dar negavo visų konstrukcijų ir kambarių iš „Nest“.</string>
+  <string id="noDeviceErrMsg">Įrenginys nerastas</string>
+  <!-- Nuosavybės pranešimai -->
+  <string id="oAuthPropUsed" scope="glance">Pavyko ir ištrinta</string>
+  <string id="oAuthPropFail" scope="glance">NEPASIEKĖ, bandykite dar kartą</string>
 </strings>

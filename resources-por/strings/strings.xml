@@ -39,12 +39,24 @@
   <!-- Para ativar a localização de idioma -->
   <string id="setMode">Definir Modos</string>
   <string id="tapIcon">Toque Nos Ícones</string>
-  <string id="selectDevice" scope="glance">Selecionar dispositivo</string>
-  <string id="deviceList">Lista de dispositivos</string>
-  <string id="thermostat">Termostato</string>
+  <string id="selectDevice" scope="glance">Selecione um dispositivo</string>
+  <string id="changeModeLabel">Alterar Modo</string>
+  <string id="thermostats">Termostatos</string>
   <string id="offStatus" scope="glance">Desligado</string>
+  <!-- Cadeias de Alerta -->
   <string id="cancelledAlert">Cancelado</string>
   <string id="sendingAlert">Enviando</string>
   <string id="noChangeAlert">Sem alterações</string>
-  <string id="changeModeLabel">Alterar modo</string>
+  <string id="retrievingDataAlert">Recuperando dados</string>
+  <!-- Mensagens de texto -->
+  <string id="getOAuthCodeMsg">OAuth completo</string>
+  <!-- Mensagens de erro em um ErrorView -->
+  <string id="nullDataErrMsg">A solicitação de API retornou dados nulos.</string>
+  <string id="oAuthErrMsg" scope="glance">Forneça um novo código OAuth por meio das configurações.</string>
+  <string id="authTokenErrMsg">Problema de autenticação, tokens de acesso e atualização excluídos.</string>
+  <string id="noDevicesErrMsg">Muito rápido! Ainda não recuperou todas as estruturas e quartos do Nest.</string>
+  <string id="noDeviceErrMsg">Dispositivo não encontrado</string>
+  <!-- Mensagens de propriedade -->
+  <string id="oAuthPropUsed" scope="glance">Bem-sucedido e excluído</string>
+  <string id="oAuthPropFail" scope="glance">FALHA, tente novamente</string>
 </strings>

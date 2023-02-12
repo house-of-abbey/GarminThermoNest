@@ -27,17 +27,22 @@ Help is sought for testing the following:
 
 _"After completing a Sandbox integration, if you would like to create a Commercial integration, you need to apply for Commercial Development by submitting a use case for review and approval. Upon approval, partners go through a certification process."_
 
-#### Compliance Matrix
+### Compliance Matrix
 
-So I wonder if Google Device Access has considered how appropriate their review guidelines are for a watch application. I would suggest a watch application:
+So I wonder if Google Device Access has considered how appropriate their review guidelines are for a watch application. I suggest a watch application lives in a world where the primary function of the watch is to tell the time. Telling anything else brings us to the point of this application. It is not an "always on" application, but a "fleeting glance" one. You fire the application up, make the changes required and then revert to telling the time or tracking an activity.
+
+This changes the requirements against which I think Google should review applications:
+
 * Does not need to be up to date within seconds.
 * Does not need to track changes to structures and rooms since it will just be a fleeting check. Changes will be picked up next time.
 * Could benefit from a "refresh" button instead of polling the API continuously (and exceeding the 5 queries per minute limits imposed for thermostats in the sandbox for testing). In fact a refresh button can then be disabled for a few seconds to prevent refreshing too often and exhausting the query budget!
 * The PubSub mechanism is available. It was slightly painful to set up, and avoids the sandbox limits. Its a good candidate replacement but how does monkey C perform a streaming pull? It could perform a one object at a time pull and then post the `AckId`, and loop forever. Is that really necessary for this application? Just glance perform an action and return to the watch face.
 
-I also wonder how on earth any reviewer will manage to perform the review at all. Will they have the right device for the application? Will they just review the source code in a potentially unfamiliar Monkey C language.
+I also wonder how any reviewer will manage to perform the review at all. Will they have the right device for the application? Will they just review the source code in a potentially unfamiliar Monkey C language.
 
-##### 1. Functionality
+#### 1. Functionality
+
+The following is our personal assessment of compliance with Google's product review guidelines.
 
 | ID   | Requirement                                                                                                                                                                                                                                                                                                                                                                        | Compliant | Comment |
 |-----:|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|---------|
@@ -64,7 +69,7 @@ I also wonder how on earth any reviewer will manage to perform the review at all
 | 1.21 | Products that call the SDM API without an initial direct and explicit end-user directed request will be rejected.                                                                                                                                                                                                                                                                  | Yes       |         |
 | 1.22 | Products that record, collect, use, or store any information or data from a query or result, including without limitation any audio data, or metadata related to any queries, received as a result of an end user's use of, or authentication with, the Google Assistant, if the product or the services used are integrated with or distribute Google Assistant will be rejected. | Yes       |         |
 
-##### 2. Branding and User Interface
+#### 2. Branding and User Interface
 
 | ID   | Requirement                                                                                                                                                                                  | Compliant | Comment |
 |-----:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|---------|
@@ -81,7 +86,7 @@ I also wonder how on earth any reviewer will manage to perform the review at all
 | 2.11 | Products that use a URL that incorporates any Google name (including, but not limited to Google or Nest) may be rejected.                                                                    | Yes       |         |
 | 2.12 | Google Nest reserves the right to reject any marketing materials even if the prohibitions are not mentioned in this section.                                                                 | Yes       |         |
 
-##### 3. Metadata
+#### 3. Metadata
 
 |  ID | Requirement                                                                                                                                                             | Compliant | Comment |
 |----:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|---------|
@@ -93,7 +98,7 @@ I also wonder how on earth any reviewer will manage to perform the review at all
 | 3.6 | Products that do not have a valid working Support URL will be rejected.                                                                                                 | Yes       | [GitHub Support URL](https://house-of-abbey.github.io/GarminThermoNest/doc/), [Garmin IQ Application URL](https://apps.garmin.com/) pending some (limited) form of release. |
 | 3.7 | Products that appear to copy UI elements from other apps may be rejected.                                                                                               | Yes       | [The pane indicator](index.md#navigation) has been deliberately copied from other Garmin IQ applications in order to retain the Garmin IQ App look and feel. |
 
-##### 4. Authorization
+#### 4. Authorisation
 
 |   ID | Requirement                                                                                                                                                                                                                                                                                                                                       | Compliant | Comment |
 |-----:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|---------|
@@ -109,7 +114,7 @@ I also wonder how on earth any reviewer will manage to perform the review at all
 | 4.10 | Products that force users to reauthorize, after authorization has already been established, will be rejected.                                                                                                                                                                                                                                     | Yes       |         |
 | 4.11 | Developer must place a "Limited Use" snippet on their project's homepage or on a page one click away from the homepage calling out the app's compliance with the Google API Services User Data Policy, including the Limited Use requirements. The snippet must be visible to all users and must be under 500 characters.                         | Yes       | ["Limited Use" snippet](index.md#limited-use). |
 
-##### 5. Structures/Homes
+#### 5. Structures/Homes
 
 |   ID | Requirement                                                                                                                                                | Compliant | Comment |
 |-----:|------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|---------|
@@ -119,21 +124,21 @@ I also wonder how on earth any reviewer will manage to perform the review at all
 |  5.4 | Products that cannot support multiple homes, each containing multiple devices of the same or different types, will be rejected.                            | Yes       |         |
 |  5.5 | Products that cannot support empty homes (structures) or a combination of empty and non-empty homes will be rejected.                                      | Yes       |         |
 
-##### 6. Google Nest Thermostats
+#### 6. Google Nest Thermostats
 
 |   ID | Requirement                                                                                                                                                                     | Compliant | Comment |
 |-----:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|---------|
 |  6.1 | Products that instruct the user to turn off sensors and learning features of the Google Nest Thermostat will be rejected.                                                       | Yes       |         |
 |  6.2 | Products that trigger thermostat updates without user interaction (for example, triggers and rules) and do not provide an indicator of any action that failed will be rejected. | Yes       | No automation. |
 |  6.3 | Products that do not maintain temperatures, setpoints and ambient, in sync with the actual device temperatures, within seconds, may be rejected.                                | No        | Unrealistic for a Garmin IQ Watch application. The sandbox API [limits thermostat status checks to 5 QPM](https://developers.google.com/nest/device-access/project/limits), so polling the SDM API gives an error message in the sandbox when testing. There is an events PubSub mechanism that could potentially be used, calling [`makeWebRequest`](https://developer.garmin.com/connect-iq/api-docs/Toybox/Communications.html#makeWebRequest-instance_function) more frequently, but the SDK is currently deficient in two ways. Firstly the PubSub sends out based64 encoded data as the message part of the event. The Garmin IQ Monkey C API code does not include a base64 decode function. Secondly the base63 decoded message is then in JSON format. Whilst the [`makeWebRequest`](https://developer.garmin.com/connect-iq/api-docs/Toybox/Communications.html#makeWebRequest-instance_function) method can manage the JSON to [`Lang.Dictionary`](https://developer.garmin.com/connect-iq/api-docs/Toybox/Lang/Dictionary.html) conversion, those JSON functions are not made available in the API to be called on strings outside of [`makeWebRequest`](https://developer.garmin.com/connect-iq/api-docs/Toybox/Communications.html#makeWebRequest-instance_function), and hence the decoded JSON cannot immediately be parsed. Therefore two missing library functions/methods/classes need to be created to handle base64 decoding and JSON parsing before the PubSub API can be used to "within seconds" updates. Instead we provide a manual refresh button to tap which includes prevention of refresh within 10 seconds to mitigate the 5 QPM rate limit. |
-|  6.4 | Products that do not handle multiple thermostats in one or multiple structures may be rejected.                                                                                 | Not yet   | Need to add the ability to switch thermostats. |
+|  6.4 | Products that do not handle multiple thermostats in one or multiple structures may be rejected.                                                                                 | Yes       |         |
 |  6.5 | Products that do not update when thermostat data updates will be rejected.                                                                                                      | Yes       | Manual refresh button provided. |
-|  6.6 | Products that do not update upon thermostat addition/removal will be rejected.                                                                                                  | Yes       | Error message then device reselection. |
+|  6.6 | Products that do not update upon thermostat addition/removal will be rejected.                                                                                                  | Yes       | Error message then device reselection. As this is not an "always on" application, but a "fleeting glance" one, structure changes are managed by re-entering the application to refresh. |
 |  6.7 | Products that do not support all possible thermostat modes, for example Heat, Cool, Heat-Cool, Off, Eco, may be rejected.                                                       | Yes       |         |
 |  6.8 | Products that do not support Heat-Cool limits properly (3 degrees apart in F and 1.5 in C) will be rejected.                                                                    | Yes       |         |
 |  6.9 | Products that do not support temperature limits correctly (50-90 F and 9-32 C) will be rejected.                                                                                | Yes       | 48-90 F supported since that's the range on our Nest product. |
 | 6.10 | Products that provide fan functionality and do not support starting and stopping of a fan timer will be rejected.                                                               | Yes       | No support for fans |
-| 6.11 | Products that do not display and update, within seconds of updates, correct thermostat locations and names will be rejected.                                                    | Yes       | No names displayed except when selecting one, which uses a fresh list. |
+| 6.11 | Products that do not display and update, within seconds of updates, correct thermostat locations and names will be rejected.                                                    | Yes       | No names displayed except when selecting one. As this is not an "always on" application, but a "fleeting glance" one, structure changes are managed by re-entering the application to refresh. |
 | 6.12 | Products that do not support C to F transitions by reading and updating or writing the units back to Google Nest may be rejected.                                               | Yes       |         |
 
 #### 7. Google Nest Cameras, Google Nest Doorbells, and Nest Hub Max

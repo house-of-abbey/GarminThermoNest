@@ -39,12 +39,24 @@
   <!-- Pentru a activa localizarea limbii -->
   <string id="setMode">Setați Moduri</string>
   <string id="tapIcon">Atingeți Pictograme</string>
-  <string id="selectDevice" scope="glance">Selecteaza dispozitivul</string>
-  <string id="deviceList">Lista de dispozitive</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Selectați Un dispozitiv</string>
+  <string id="changeModeLabel">Schimbați modul</string>
+  <string id="thermostats">Termostate</string>
   <string id="offStatus" scope="glance">Oprit</string>
+  <!-- Șiruri de alertă -->
   <string id="cancelledAlert">Anulat</string>
   <string id="sendingAlert">Trimiterea</string>
   <string id="noChangeAlert">Nici o schimbare</string>
-  <string id="changeModeLabel">Schimbați modul</string>
+  <string id="retrievingDataAlert">Recuperarea datelor</string>
+  <!-- Mesaje text -->
+  <string id="getOAuthCodeMsg">OAuth complet</string>
+  <!-- Mesaje de eroare într-un ErrorView -->
+  <string id="nullDataErrMsg">Solicitarea API a returnat date nule.</string>
+  <string id="oAuthErrMsg" scope="glance">Vă rugăm să furnizați un nou cod OAuth prin intermediul setărilor.</string>
+  <string id="authTokenErrMsg">Problemă de autentificare, jetoane de acces și de reîmprospătare șterse.</string>
+  <string id="noDevicesErrMsg">Prea repede! Nu au fost încă recuperate toate structurile și camerele din Nest.</string>
+  <string id="noDeviceErrMsg">Dispozitivul nu a fost găsit</string>
+  <!-- Mesaje de proprietate -->
+  <string id="oAuthPropUsed" scope="glance">Reușit și șters</string>
+  <string id="oAuthPropFail" scope="glance">A ESCUT, vă rugăm să încercați din nou</string>
 </strings>

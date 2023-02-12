@@ -39,12 +39,24 @@
   <!-- כדי לאפשר לוקליזציה של שפה -->
   <string id="setMode">הגדר מצבים</string>
   <string id="tapIcon">הקש על אייקונים</string>
-  <string id="selectDevice" scope="glance">תבחר מכשיר</string>
-  <string id="deviceList">רשימת התקנים</string>
-  <string id="thermostat">תֶרמוֹסטָט</string>
+  <string id="selectDevice" scope="glance">בחר התקן</string>
+  <string id="changeModeLabel">שינוי מצב</string>
+  <string id="thermostats">תרמוסטטים</string>
   <string id="offStatus" scope="glance">כבוי</string>
+  <!-- מחרוזות התראה -->
   <string id="cancelledAlert">מבוטל</string>
   <string id="sendingAlert">שְׁלִיחָה</string>
   <string id="noChangeAlert">אין שינויים</string>
-  <string id="changeModeLabel">שינוי מצב</string>
+  <string id="retrievingDataAlert">משחזר נתונים</string>
+  <!-- הודעות טקסט -->
+  <string id="getOAuthCodeMsg">השלם OAuth</string>
+  <!-- הודעות שגיאה ב-ErrorView -->
+  <string id="nullDataErrMsg">בקשת API החזירה נתונים null.</string>
+  <string id="oAuthErrMsg" scope="glance">אנא ספק קוד OAuth חדש דרך ההגדרות.</string>
+  <string id="authTokenErrMsg">בעיית אימות, אסימוני גישה ורענון נמחקו.</string>
+  <string id="noDevicesErrMsg">מהר מדי! עדיין לא שלפו את כל המבנים והחדרים מ-Nest.</string>
+  <string id="noDeviceErrMsg">מכשיר לא נמצא</string>
+  <!-- הודעות נכס -->
+  <string id="oAuthPropUsed" scope="glance">הצליח ונמחק</string>
+  <string id="oAuthPropFail" scope="glance">נכשל, נסה שוב</string>
 </strings>

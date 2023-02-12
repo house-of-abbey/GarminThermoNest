@@ -39,12 +39,24 @@
   <!-- Ak chcete povoliť jazykovú lokalizáciu -->
   <string id="setMode">Nastaviť Režimy</string>
   <string id="tapIcon">Klepnite Na Ikony</string>
-  <string id="selectDevice" scope="glance">Vyberte položku Zariadenie</string>
-  <string id="deviceList">Zoznam zariadení</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Vyberte A Device</string>
+  <string id="changeModeLabel">Zmeniť režim</string>
+  <string id="thermostats">Termostaty</string>
   <string id="offStatus" scope="glance">Vypnuté</string>
+  <!-- Reťazce upozornení -->
   <string id="cancelledAlert">Zrušené</string>
   <string id="sendingAlert">Odosielanie</string>
   <string id="noChangeAlert">Bez zmien</string>
-  <string id="changeModeLabel">Zmeniť režim</string>
+  <string id="retrievingDataAlert">Načítavanie údajov</string>
+  <!-- Textové správy -->
+  <string id="getOAuthCodeMsg">Dokončite protokol OAuth</string>
+  <!-- Chybové hlásenia v ErrorView -->
+  <string id="nullDataErrMsg">Požiadavka API vrátila nulové údaje.</string>
+  <string id="oAuthErrMsg" scope="glance">Zadajte nový kód OAuth prostredníctvom nastavení.</string>
+  <string id="authTokenErrMsg">Problém s autentifikáciou, prístupové a obnovovacie tokeny boli odstránené.</string>
+  <string id="noDevicesErrMsg">Príliš rýchlo! Ešte neboli nájdené všetky štruktúry a miestnosti z Nest.</string>
+  <string id="noDeviceErrMsg">Zariadenie nebolo nájdené</string>
+  <!-- Správy o vlastnostiach -->
+  <string id="oAuthPropUsed" scope="glance">Úspešné a odstránené</string>
+  <string id="oAuthPropFail" scope="glance">ZLYHALO, skúste to znova</string>
 </strings>

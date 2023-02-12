@@ -25,18 +25,21 @@ using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestApp extends Application.AppBase {
-    hidden var mView;
-    hidden var mGlanceView;
+    hidden var mNestStatus;
+    hidden var oAuthPropUsed as Lang.String;
+    hidden var oAuthPropFail as Lang.String;
 
     function initialize() {
         AppBase.initialize();
+        oAuthPropUsed = WatchUi.loadResource($.Rez.Strings.oAuthPropUsed) as Lang.String;
+        oAuthPropFail = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
     }
 
     function getGlanceView() {
         var mySettings = System.getDeviceSettings();
         if ((mySettings has :isGlanceModeEnabled) && mySettings.isGlanceModeEnabled) {
-            mGlanceView = new ThermoNestGlanceView(new NestStatus(true));
-            return [mGlanceView];
+            mNestStatus = new NestStatus(true);
+            return [new ThermoNestGlanceView(mNestStatus)];
         } else {
             return null;
         }
@@ -45,8 +48,9 @@ class ThermoNestApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state as Lang.Dictionary?) as Void {
         if (Globals.debug) {
-            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-            System.println(Lang.format("deviceId: $1$",    [Properties.getValue("deviceId")]));
+            System.println("ThermoNestApp onStart() oauthCode:   " + Properties.getValue("oauthCode"));
+            System.println("ThermoNestApp onStart() accessToken: " + Properties.getValue("accessToken"));
+            System.println("ThermoNestApp onStart() deviceId:    " + Properties.getValue("deviceId"));
         }
     }
 
@@ -55,14 +59,32 @@ class ThermoNestApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
-        mView = new ThermoNestView(new NestStatus(false));
+        mNestStatus = new NestStatus(false);
+        var mView   = new ThermoNestView(mNestStatus);
         return [mView, new ThermoNestDelegate(mView)] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
     }
 
     function onSettingsChanged() {
+        var o = Properties.getValue("oauthCode");
+        var d = Properties.getValue("deviceId");
         if (Globals.debug) {
-            System.println(Lang.format("accessToken: $1$", [Properties.getValue("accessToken")]));
-            System.println(Lang.format("deviceId: $1$",    [Properties.getValue("deviceId")]));
+            System.println("ThermoNestApp onSettingsChanged() oauthCode:   " + o);
+            System.println("ThermoNestApp onSettingsChanged() accessToken: " + Properties.getValue("accessToken"));
+            System.println("ThermoNestApp onSettingsChanged() deviceId:    " + d);
+        }
+        if (o != null && !o.equals("") && !o.equals(oAuthPropUsed) && !o.equals(oAuthPropFail)) {
+            if (Globals.debug) {
+                System.println("ThermoNestApp onSettingsChanged() New OAuth Code, getting new access token.");
+            }
+            // New oauthCode
+            mNestStatus.getAccessToken();
+            // mNestStatus.getDeviceData() call included in the above chain of calls
+        } else if (d != null && !d.equals("")) {
+            if (Globals.debug) {
+                System.println("ThermoNestApp onSettingsChanged() Getting Device Data");
+            }
+            // Setting change might be a new devide ID
+            mNestStatus.getDeviceData();
         }
     }
 }

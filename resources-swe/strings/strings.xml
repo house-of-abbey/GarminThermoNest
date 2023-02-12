@@ -39,12 +39,24 @@
   <!-- För att möjliggöra språklokalisering -->
   <string id="setMode">Ställ In Lägen</string>
   <string id="tapIcon">Tryck På Ikoner</string>
-  <string id="selectDevice" scope="glance">Välj enhet</string>
-  <string id="deviceList">Enhetslista</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Välj En enhet</string>
+  <string id="changeModeLabel">Ändra läge</string>
+  <string id="thermostats">Termostater</string>
   <string id="offStatus" scope="glance">Av</string>
+  <!-- Varningssträngar -->
   <string id="cancelledAlert">Inställt</string>
   <string id="sendingAlert">Sändning</string>
   <string id="noChangeAlert">Inga förändringar</string>
-  <string id="changeModeLabel">Ändra läge</string>
+  <string id="retrievingDataAlert">Hämtar data</string>
+  <!-- Textmeddelanden -->
+  <string id="getOAuthCodeMsg">Slutför OAuth</string>
+  <!-- Felmeddelanden i en ErrorView -->
+  <string id="nullDataErrMsg">API-begäran returnerade nolldata.</string>
+  <string id="oAuthErrMsg" scope="glance">Ange en ny OAuth-kod via inställningarna.</string>
+  <string id="authTokenErrMsg">Autentiseringsproblem, åtkomst- och uppdateringstoken raderade.</string>
+  <string id="noDevicesErrMsg">För snabbt! Ännu inte hämtat alla strukturer och rum från Nest.</string>
+  <string id="noDeviceErrMsg">Enheten hittades inte</string>
+  <!-- Fastighetsmeddelanden -->
+  <string id="oAuthPropUsed" scope="glance">Lyckades och raderades</string>
+  <string id="oAuthPropFail" scope="glance">FAILED, försök igen</string>
 </strings>

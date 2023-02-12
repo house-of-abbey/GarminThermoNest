@@ -47,10 +47,11 @@ class NestStatus {
     }
 
     public var isGlance             = false as Lang.Boolean;
+    hidden var authViewUpdate; // ThermoPick to update
 
     hidden var online               = false as Lang.Boolean;
     hidden var name                 = ""    as Lang.String;
-    // Set this to 'C' or '         F' for temperature scale
+    // Set this to 'C' or 'F' for temperature scale
     hidden var scale                = '-'   as Lang.Char;
     // Always Celsius
     hidden var ambientTemp          = 0.0   as Lang.Number;
@@ -74,7 +75,7 @@ class NestStatus {
     hidden var alertNoChange;
 
     // Parameters:
-    //  * ig = isGlance, true when initialised from a GlanceView, otherwise false.
+    //  * isGlance = true when initialised from a GlanceView, otherwise false.
     //
     function initialize(isGlance) {
         self.isGlance = isGlance;
@@ -96,6 +97,21 @@ class NestStatus {
         }
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             getOAuthToken();
+        }
+    }
+
+    // When authorisation completes, update this view.
+    //
+    function setAuthViewUpdate(v as ThermoPick or Null) as Void {
+        authViewUpdate = v;
+    }
+
+    // There can be 0 or 1 'listeners' for auth updates. If more than one is
+    // required, make 'authViewUpdate' into a list.
+    //
+    hidden function updateAuthView() {
+        if (authViewUpdate != null) {
+            authViewUpdate.initData();
         }
     }
 
@@ -156,7 +172,7 @@ class NestStatus {
                     heatTemp = limitC(value);
                 } else {
                     if (Globals.debug) {
-                        System.println("setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
+                        System.println("NestStatus setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
                     }
                 }
             } else {
@@ -164,7 +180,7 @@ class NestStatus {
                     heatTemp = fToC(value, Globals.celciusRes);
                 } else {
                     if (Globals.debug) {
-                        System.println("setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
+                        System.println("NestStatus setHeatTemp() temperature: " + value + "°" + scale + " is out of range.");
                     }
                 }
             }
@@ -194,7 +210,7 @@ class NestStatus {
                     coolTemp = value;
                 } else {
                     if (Globals.debug) {
-                        System.println("setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
+                        System.println("NestStatus setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
                     }
                 }
             } else {
@@ -202,7 +218,7 @@ class NestStatus {
                     coolTemp = fToC(value, Globals.celciusRes);
                 } else {
                     if (Globals.debug) {
-                        System.println("setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
+                        System.println("NestStatus setCoolTemp() temperature: " + value + "°" + scale + " is out of range.");
                     }
                 }
             }
@@ -241,8 +257,8 @@ class NestStatus {
     //
     function onReturnChangeTemp(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
-            System.println("onReturnChangeTemp() Response Code: " + responseCode);
-            System.println("onReturnChangeTemp() Response Data: " + data);
+            System.println("NestStatus onReturnChangeTemp() Response Code: " + responseCode);
+            System.println("NestStatus onReturnChangeTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
@@ -251,7 +267,7 @@ class NestStatus {
             getDeviceData();
         }
         if (Globals.debug) {
-            System.println("onReturnChangeTemp() Display Update");
+            System.println("NestStatus onReturnChangeTemp() Display Update");
         }
         WatchUi.requestUpdate();
     }
@@ -289,7 +305,7 @@ class NestStatus {
                         alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                     } else {
                         if (Globals.debug) {
-                            System.println("Skipping executeChangeTemp() as no change.");
+                            System.println("NestStatus Skipping executeChangeTemp() as no change.");
                         }
                         alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
                     }
@@ -312,7 +328,7 @@ class NestStatus {
                         alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                     } else {
                         if (Globals.debug) {
-                            System.println("Skipping executeChangeTemp() as no change.");
+                            System.println("NestStatus Skipping executeChangeTemp() as no change.");
                         }
                         alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
                     }
@@ -337,7 +353,7 @@ class NestStatus {
                         alertSending.pushView(WatchUi.SLIDE_IMMEDIATE);
                     } else {
                         if (Globals.debug) {
-                            System.println("Skipping executeChangeTemp() as no change.");
+                            System.println("NestStatus Skipping executeChangeTemp() as no change.");
                         }
                         alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
                     }
@@ -345,7 +361,7 @@ class NestStatus {
 
                 default:
                     if (Globals.debug) {
-                        System.print("ERROR - ModeChangeView: Unsupported HVAC mode '" + thermoMode + "'");
+                        System.print("NestStatus ERROR - ModeChangeView: Unsupported HVAC mode '" + thermoMode + "'");
                     }
                     break;
             }
@@ -374,8 +390,8 @@ class NestStatus {
     //
     function onReturnThermoMode(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
-            System.println("onReturnThermoMode() Response Code: " + responseCode);
-            System.println("onReturnThermoMode() Response Data: " + data);
+            System.println("NestStatus onReturnThermoMode() Response Code: " + responseCode);
+            System.println("NestStatus onReturnThermoMode() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
@@ -391,7 +407,7 @@ class NestStatus {
         var mode = params.get(:thermoMode);
         if (mode.equals(thermoMode)) {
             if (Globals.debug) {
-                System.println("Skipping executeThermoMode() as no change.");
+                System.println("NestStatus Skipping executeThermoMode() as no change.");
             }
             executeMode(NoThermo, params);
         } else {
@@ -430,8 +446,8 @@ class NestStatus {
     //
     function onReturnEco(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String, context as Lang.Object) as Void {
         if (Globals.debug) {
-            System.println("onReturnEco() Response Code: " + responseCode);
-            System.println("onReturnEco() Response Data: " + data);
+            System.println("NestStatus onReturnEco() Response Code: " + responseCode);
+            System.println("NestStatus onReturnEco() Response Data: " + data);
         }
         if (responseCode != 200) {
             if (!isGlance) {
@@ -452,7 +468,7 @@ class NestStatus {
         var e = params.get(:ecoMode);
         if (eco == e) {
             if (Globals.debug) {
-                System.println("Skipping executeEco() as no change.");
+                System.println("NestStatus Skipping executeEco() as no change.");
             }
             executeMode(NoEco, params);
         } else {
@@ -492,7 +508,7 @@ class NestStatus {
         switch (r) {
             case Start:
                 if (Globals.debug) {
-                    System.println("executeMode() Start: thermoMode=" + params.get(:thermoMode) + ", ecoMode=" + params.get(:ecoMode));
+                    System.println("NestStatus executeMode() Start: thermoMode=" + params.get(:thermoMode) + ", ecoMode=" + params.get(:ecoMode));
                 }
                 if (params.get(:thermoMode) == thermoMode && params.get(:ecoMode) == eco) {
                     alertNoChange.pushView(WatchUi.SLIDE_IMMEDIATE);
@@ -504,13 +520,13 @@ class NestStatus {
                 break;
             case NoThermo:
                 if (Globals.debug) {
-                    System.println("executeMode() NoThermo");
+                    System.println("NestStatus executeMode() NoThermo");
                 }
                 executeEco(params);
                 break;
             case Thermo:
                 if (Globals.debug) {
-                    System.println("executeMode() Thermo");
+                    System.println("NestStatus executeMode() Thermo");
                 }
                 // At this point Eco is always OFF as we set the ThermoMode.
                 if (params.get(:ecoMode)) {
@@ -523,7 +539,7 @@ class NestStatus {
             case NoEco: // Fall through
             case Eco:
                 if (Globals.debug) {
-                    System.println("executeMode() NoEco & Eco");
+                    System.println("NestStatus executeMode() NoEco & Eco");
                 }
                 // The end
                 getDeviceData();
@@ -556,7 +572,7 @@ class NestStatus {
             Communications.makeWebRequest(Globals.getExecuteCommandUrl(), payload, options, callback);
         } else {
             if (Globals.debug) {
-                System.println("Note - executeCommand(): No Internet connection, skipping API call.");
+                System.println("NestStatus Note - executeCommand(): No Internet connection, skipping API call.");
             }
         }
     }
@@ -651,8 +667,8 @@ class NestStatus {
             gotDeviceDataError = false;
         } else {
             if (Globals.debug) {
-                System.println("onReceiveDeviceData() Response Code: " + responseCode);
-                System.println("onReceiveDeviceData() Response Data: " + data);
+                System.println("NestStatus onReceiveDeviceData() Response Code: " + responseCode);
+                System.println("NestStatus onReceiveDeviceData() Response Data: " + data);
             }
             gotDeviceData      = true;
             gotDeviceDataError = true;
@@ -660,14 +676,14 @@ class NestStatus {
             if (responseCode == 404) {
                 Properties.setValue("deviceId", "");
                 if (!isGlance) {
-                    WatchUi.pushView(new ErrorView("Device not found."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.noDeviceErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             } else if (responseCode == 401) {
                 Properties.setValue("accessToken", "");
                 Properties.setValue("accessTokenExpire", 0);
                 Properties.setValue("refreshToken", "");
                 if (!isGlance) {
-                    WatchUi.pushView(new ErrorView("Authentication issue, access and refresh tokens deleted."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.authTokenErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             } else {
                 // This method might be called before authorisation has completed.
@@ -677,7 +693,7 @@ class NestStatus {
             }
         }
         if (Globals.debug) {
-            System.println("onReceiveDeviceData() Display Update");
+            System.println("NestStatus onReceiveDeviceData() Display Update");
         }
         WatchUi.requestUpdate();
     }
@@ -685,6 +701,9 @@ class NestStatus {
     // Initiate the GET request to fetch the current thermostat status.
     //
     function getDeviceData() as Void {
+        if (Globals.debug) {
+            System.println("NestStatus getDeviceData() fetching.");
+        }
         var options = {
             :method  => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
@@ -698,80 +717,8 @@ class NestStatus {
             Communications.makeWebRequest(Globals.getDeviceDataUrl(), null, options, method(:onReceiveDeviceData));
         } else {
             if (Globals.debug) {
-                System.println("Note - getDeviceData(): No Internet connection, skipping API call.");
+                System.println("NestStatus Note - getDeviceData(): No Internet connection, skipping API call.");
             }
-        }
-    }
-
-    // Callback function to execute when fetchign a list of thermostats to choose to query and control.
-    //
-    function onReceiveDevices(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
-        if (Globals.debug) {
-            System.println("onReceiveDevices() Response Code: " + responseCode);
-            System.println("onReceiveDevices() Response Data: " + data);
-        }
-        if (responseCode == 200) {
-            if (!isGlance) {
-                var devices = data.get("devices") as Lang.Array;
-                var menu = new WatchUi.Menu2({ :title => WatchUi.loadResource($.Rez.Strings.deviceList) });
-                var thermStr = WatchUi.loadResource($.Rez.Strings.thermostat) as Lang.String;
-                var o = 21 + ClientId.projectId.length();
-                for (var i = 0; i < devices.size(); i++) {
-                    var device = devices[i];
-                    // API documentation says not to rely on this value remaining unchanged.
-                    // See https://developers.google.com/nest/device-access/traits#device-types
-                    if (device.get("type").equals("sdm.devices.types.THERMOSTAT")) {
-                        var n = device.get("traits").get("sdm.devices.traits.Info").get("customName");
-                        var r = (device.get("parentRelations") as Lang.Array<Lang.Dictionary>)[0].get("displayName");
-                        if (n.equals("")) {
-                            n = r + " " + thermStr;
-                        }
-                        menu.addItem(
-                            new WatchUi.MenuItem(
-                                n,
-                                r,
-                                device.get("name").substring(o, null),
-                                {}
-                            )
-                        );
-                    }
-                }
-                WatchUi.pushView(menu, new DevicesMenuInputDelegate(self), WatchUi.SLIDE_IMMEDIATE);
-            }
-        } else {
-            if (!isGlance && (data != null)) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
-            } else {
-                if (Globals.debug) {
-                    System.println("onReceiveDevices() Response Code: " + responseCode);
-                    System.println("onReceiveDevices() Response Data: " + data);
-                }
-            }
-        }
-    }
-
-    // Initiate the GET request to fetch the list of devices to control from the user's Nest account.
-    //
-    function getDevices() {
-        var c = Properties.getValue("deviceId");
-        if (c == null || c.equals("")) {
-            if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-                var options  = {
-                    :method  => Communications.HTTP_REQUEST_METHOD_GET,
-                    :headers => {
-                        "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                        "Authorization" => "Bearer " + Properties.getValue("accessToken")
-                    },
-                    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-                };
-                Communications.makeWebRequest(Globals.getDevicesUrl(), null, options, method(:onReceiveDevices));
-            } else {
-                if (Globals.debug) {
-                    System.println("Note - getDevices(): No Internet connection, skipping API call.");
-                }
-            }
-        } else {
-            getDeviceData();
         }
     }
 
@@ -779,22 +726,27 @@ class NestStatus {
     //
     function onReceiveRefreshToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
-            System.println("onReceiveRefreshToken() Response Code: " + responseCode);
-            System.println("onReceiveRefreshToken() Response Data: " + data);
+            System.println("NestStatus onReceiveRefreshToken() Response Code: " + responseCode);
+            System.println("NestStatus onReceiveRefreshToken() Response Data: " + data);
         }
         if (responseCode == 200) {
             Properties.setValue("accessToken", data.get("access_token"));
             Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
             if (Globals.debug) {
-                System.println("onReceiveRefreshToken() accessToken: " + Properties.getValue("accessToken"));
+                System.println("NestStatus onReceiveRefreshToken() accessToken: " + Properties.getValue("accessToken"));
             }
-            getDevices();
+            var d = Properties.getValue("deviceId");
+            if (d == null || d.equals("")) {
+                updateAuthView();
+            } else {
+                getDeviceData();
+            }
         } else {
             Properties.setValue("accessToken", "");
             Properties.setValue("accessTokenExpire", 0);
             Properties.setValue("refreshToken", "");
             if (Globals.debug) {
-                System.println("onReceiveRefreshToken() Display Update");
+                System.println("NestStatus onReceiveRefreshToken() Display Update");
             }
             WatchUi.requestUpdate();
         }
@@ -804,30 +756,32 @@ class NestStatus {
     //
     function onRecieveAccessToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
-            System.println("onRecieveAccessToken() Response Code: " + responseCode);
-            System.println("onRecieveAccessToken() Response Data: " + data);
+            System.println("NestStatus onRecieveAccessToken() Response Code: " + responseCode);
+            System.println("NestStatus onRecieveAccessToken() Response Data: " + data);
         }
         if (data == null) {
-            WatchUi.pushView(new ErrorView("API Request returned null data."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.nullDataErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
         } else {
             if (responseCode == 200) {
                 Properties.setValue("accessToken", data.get("access_token"));
                 Properties.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
                 Properties.setValue("refreshToken", data.get("refresh_token"));
                 if (Globals.debug) {
-                    System.println("onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
-                    System.println("onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
+                    System.println("NestStatus onRecieveAccessToken() accessToken:  " + Properties.getValue("accessToken"));
+                    System.println("NestStatus onRecieveAccessToken() refreshToken: " + Properties.getValue("refreshToken"));
                 }
-                getDevices();
-                Properties.setValue("oauthCode", "Succeeded and deleted");
+                var d = Properties.getValue("deviceId");
+                if (d != null && !d.equals("")) {
+                    getDeviceData();
+                }
+                Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropUsed) as Lang.String);
             } else {
-                Properties.setValue("oauthCode", "FAILED, please try again");
+                Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String);
                 if (!isGlance) {
-                    var text = (data.get("error") as Lang.String) + ": " + (data.get("error_description") as Lang.String);
-                    WatchUi.pushView(new ErrorView(text), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.oAuthErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
                 if (Globals.debug) {
-                    System.println("onRecieveAccessToken() Display Update");
+                    System.println("NestStatus onRecieveAccessToken() Display Update");
                 }
                 WatchUi.requestUpdate();
             }
@@ -883,7 +837,12 @@ class NestStatus {
             }
         } else {
             // Token is current, just use it
-            getDevices();
+            var d = Properties.getValue("deviceId");
+            if (d == null || d.equals("")) {
+                updateAuthView();
+            } else {
+                getDeviceData();
+            }
         }
     }
 
@@ -895,7 +854,7 @@ class NestStatus {
     //         getAccessToken();
     //     } else {
     //         if (Globals.debug) {
-    //             System.println("onOAuthMessage() message.data was null.");
+    //             System.println("NestStatus onOAuthMessage() message.data was null.");
     //         }
     //     }
     // }
@@ -907,7 +866,24 @@ class NestStatus {
         var c = Properties.getValue("oauthCode");
         if (c == null || c.equals("")) {
             if (!isGlance) {
-                WatchUi.pushView(new ErrorView("Need to complete OAuth externally first"), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                // For the time being, we cannot use the OAuth API because Google does not allow sign in in a
+                // webview. Instead we will do it manually outside the application. This call opens the correct
+                // page for the user in the default (compatible) broswer.
+                Communications.openWebPage(
+                    "https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth",
+                    {
+                        "access_type"            => "offline",
+                        "client_id"              => ClientId.clientId,
+                        "include_granted_scopes" => "true",
+                        "prompt"                 => "consent",
+                        "redirect_uri"           => Globals.getRedirectUrl(),
+                        "response_type"          => "code",
+                        "scope"                  => "https://www.googleapis.com/auth/sdm.service",
+                        "state"                  => "pass-through value"
+                    },
+                    {}
+                );
+                WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.getOAuthCodeMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             return;
         } else {
@@ -915,23 +891,6 @@ class NestStatus {
             return;
         }
 
-        // For the time being, we cannot use the OAuth API because Google does not allow sign in in a
-        // webview. Instead we will do it manually outside the application.
-        //
-        // Communications.openWebPage(
-        //     "https://nestservices.google.com/partnerconnections/" + ClientId.projectId + "/auth",
-        //     {
-        //         "access_type"            => "offline",
-        //         "client_id"              => ClientId.clientId,
-        //         "include_granted_scopes" => "true",
-        //         "prompt"                 => "consent",
-        //         "redirect_uri"           => Globals.getRedirectUrl(),
-        //         "response_type"          => "code",
-        //         "scope"                  => "https://www.googleapis.com/auth/sdm.service",
-        //         "state"                  => "pass-through value"
-        //     },
-        //     {}
-        // );
         // Communications.registerForOAuthMessages(method(:onOAuthMessage));
         //
         // var params = {
@@ -1007,15 +966,16 @@ class NestStatus {
 
 class DevicesMenuInputDelegate extends WatchUi.Menu2InputDelegate {
     hidden var mNestStatus;
-    function initialize(h as NestStatus) {
+
+    function initialize(ns as NestStatus) {
         Menu2InputDelegate.initialize();
-        mNestStatus = h;
+        mNestStatus = ns;
     }
 
-    function onSelect(item) {
+    function onSelect(item as WatchUi.MenuItem) {
         Properties.setValue("deviceId", item.getId());
         if (Globals.debug) {
-            System.println("deviceId: " + Properties.getValue("deviceId"));
+            System.println("DevicesMenuInputDelegate deviceId: " + Properties.getValue("deviceId"));
         }
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
         mNestStatus.getDeviceData();

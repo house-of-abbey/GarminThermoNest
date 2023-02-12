@@ -39,12 +39,24 @@
   <!-- Για να ενεργοποιήσετε την τοπική προσαρμογή γλώσσας -->
   <string id="setMode">Ρύθμιση Λειτουργιών</string>
   <string id="tapIcon">Πατήστε Εικονίδια</string>
-  <string id="selectDevice" scope="glance">Επιλέξτε συσκευή</string>
-  <string id="deviceList">Λίστα συσκευών</string>
-  <string id="thermostat">Θερμοστάτης</string>
+  <string id="selectDevice" scope="glance">Επιλέξτε Συσκευή</string>
+  <string id="changeModeLabel">Αλλαγή λειτουργίας</string>
+  <string id="thermostats">Θερμοστάτες</string>
   <string id="offStatus" scope="glance">Μακριά από</string>
+  <!-- Συμβολοσειρές ειδοποίησης -->
   <string id="cancelledAlert">Ακυρώθηκε</string>
   <string id="sendingAlert">Αποστολή</string>
   <string id="noChangeAlert">Χωρίς αλλαγές</string>
-  <string id="changeModeLabel">Αλλαγή λειτουργίας</string>
+  <string id="retrievingDataAlert">Ανάκτηση δεδομένων</string>
+  <!-- Μηνύματα κειμένου -->
+  <string id="getOAuthCodeMsg">Ολοκληρώστε το OAuth</string>
+  <!-- Μηνύματα λάθους σε ένα ErrorView -->
+  <string id="nullDataErrMsg">Το αίτημα API επέστρεψε μηδενικά δεδομένα.</string>
+  <string id="oAuthErrMsg" scope="glance">Δώστε έναν νέο κωδικό OAuth μέσω των ρυθμίσεων.</string>
+  <string id="authTokenErrMsg">Το πρόβλημα ελέγχου ταυτότητας, τα διακριτικά πρόσβασης και ανανέωσης διαγράφηκαν.</string>
+  <string id="noDevicesErrMsg">Πολύ γρήγορα! Δεν έχουν ανακτηθεί ακόμη όλες οι δομές και τα δωμάτια από το Nest.</string>
+  <string id="noDeviceErrMsg">Η συσκευή δεν βρέθηκε</string>
+  <!-- Μηνύματα ιδιοκτησίας -->
+  <string id="oAuthPropUsed" scope="glance">Επιτυχία και διαγραφή</string>
+  <string id="oAuthPropFail" scope="glance">ΑΠΟΤΥΧΕ, δοκιμάστε ξανά</string>
 </strings>

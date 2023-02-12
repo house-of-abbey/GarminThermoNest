@@ -39,12 +39,24 @@
   <!-- За да активирате езиковата локализация -->
   <string id="setMode">Задаване На Режими</string>
   <string id="tapIcon">Докоснете Икони</string>
-  <string id="selectDevice" scope="glance">Изберете Устройство</string>
-  <string id="deviceList">Списък с устройства</string>
-  <string id="thermostat">Термостат</string>
+  <string id="selectDevice" scope="glance">Изберете устройство</string>
+  <string id="changeModeLabel">Промяна на режима</string>
+  <string id="thermostats">Термостати</string>
   <string id="offStatus" scope="glance">Изкл</string>
+  <!-- Предупредителни низове -->
   <string id="cancelledAlert">Отменен</string>
   <string id="sendingAlert">Изпращане</string>
   <string id="noChangeAlert">Без промени</string>
-  <string id="changeModeLabel">Промяна на режима</string>
+  <string id="retrievingDataAlert">Извличане на данни</string>
+  <!-- Текстови съобщения -->
+  <string id="getOAuthCodeMsg">Завършете OAuth</string>
+  <!-- Съобщения за грешка в ErrorView -->
+  <string id="nullDataErrMsg">API заявката върна нулеви данни.</string>
+  <string id="oAuthErrMsg" scope="glance">Моля, въведете нов OAuth код чрез настройките.</string>
+  <string id="authTokenErrMsg">Проблем с удостоверяването, токените за достъп и опресняване са изтрити.</string>
+  <string id="noDevicesErrMsg">Твърде бързо! Все още не са извлечени всички структури и стаи от Nest.</string>
+  <string id="noDeviceErrMsg">Устройството не е намерено</string>
+  <!-- Съобщения за имоти -->
+  <string id="oAuthPropUsed" scope="glance">Успешно и изтрито</string>
+  <string id="oAuthPropFail" scope="glance">НЕУСПЕШНО, моля опитайте отново</string>
 </strings>

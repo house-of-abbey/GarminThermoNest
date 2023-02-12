@@ -28,7 +28,7 @@
   <string id="oauthCodeTitle">OAuth 코드 - Google Nest SDM API 프로젝트의 OAuth2 인증 코드입니다.</string>
   <string id="oauthCodePrompt">웹 페이지에서 결과를 붙여넣습니다.</string>
   <string id="faceTitle">온도 눈금면 선택</string>
-  <string id="facePrompt">고르다</string>
+  <string id="facePrompt">선택하다</string>
   <string id="ticksFace">진드기</string>
   <string id="minimalFace">최소</string>
   <string id="tokenGroupTitle">인증 토큰 - 애플리케이션이 이를 관리하지만 여기에서 가시성이 제공됩니다.</string>
@@ -40,11 +40,23 @@
   <string id="setMode">모드 설정</string>
   <string id="tapIcon">탭 아이콘</string>
   <string id="selectDevice" scope="glance">장치 선택</string>
-  <string id="deviceList">장치 목록</string>
-  <string id="thermostat">온도 조절기</string>
+  <string id="changeModeLabel">모드 변경</string>
+  <string id="thermostats">온도 조절기</string>
   <string id="offStatus" scope="glance">끄다</string>
+  <!-- 경고 문자열 -->
   <string id="cancelledAlert">취소 된</string>
   <string id="sendingAlert">배상</string>
-  <string id="noChangeAlert">변화가 없다</string>
-  <string id="changeModeLabel">모드 변경</string>
+  <string id="noChangeAlert">변경 사항 없음</string>
+  <string id="retrievingDataAlert">데이터 검색</string>
+  <!-- 문자 메시지 -->
+  <string id="getOAuthCodeMsg">완전한 OAuth</string>
+  <!-- ErrorView의 오류 메시지 -->
+  <string id="nullDataErrMsg">API 요청에서 null 데이터를 반환했습니다.</string>
+  <string id="oAuthErrMsg" scope="glance">설정을 통해 새 OAuth 코드를 제공하십시오.</string>
+  <string id="authTokenErrMsg">인증 문제, 액세스 및 갱신 토큰이 삭제되었습니다.</string>
+  <string id="noDevicesErrMsg">너무 빨라! 아직 Nest에서 모든 구조와 방을 검색하지 않았습니다.</string>
+  <string id="noDeviceErrMsg">기기를 찾을 수 없음</string>
+  <!-- 속성 메시지 -->
+  <string id="oAuthPropUsed" scope="glance">성공 및 삭제됨</string>
+  <string id="oAuthPropFail" scope="glance">실패했습니다. 다시 시도해 주세요.</string>
 </strings>

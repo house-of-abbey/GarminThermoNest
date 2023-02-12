@@ -392,9 +392,9 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
     hidden var mView;
     hidden var cancelledAlert;
 
-    function initialize(v) {
+    function initialize(view as TempChangeView) {
         WatchUi.BehaviorDelegate.initialize();
-        mView = v;
+        mView = view;
         cancelledAlert = new Alert({
             :timeout => Globals.alertTimeout,
             :font    => Graphics.FONT_MEDIUM,
@@ -405,27 +405,27 @@ class TempChangeDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function onIncTempButton() {
-        return mView.onIncTempButton(); 
+        mView.onIncTempButton(); 
     }
 
     function onDecTempButton() {
-        return mView.onDecTempButton(); 
+        mView.onDecTempButton(); 
     }
 
     function onHeatTempButton() {
-        return mView.onHeatTempButton(); 
+        mView.onHeatTempButton(); 
     }
 
     function onCoolTempButton() {
-        return mView.onCoolTempButton(); 
+        mView.onCoolTempButton(); 
     }
 
-    function onBack() {
+    function onBack() as Lang.Boolean {
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         cancelledAlert.pushView(WatchUi.SLIDE_IMMEDIATE);
         return true;
     }
-    function onPreviousPage() {
+    function onPreviousPage() as Lang.Boolean {
         WatchUi.popView(WatchUi.SLIDE_DOWN);
         mView.getNestStatus().executeChangeTemp(mView.getHeatTemp(), mView.getCoolTemp());
         return true;

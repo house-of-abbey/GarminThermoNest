@@ -40,11 +40,23 @@
   <string id="setMode">Ustaw Tryby</string>
   <string id="tapIcon">Stuknij Ikony</string>
   <string id="selectDevice" scope="glance">Wybierz urządzenie</string>
-  <string id="deviceList">Lista urządzeń</string>
-  <string id="thermostat">Termostat</string>
+  <string id="changeModeLabel">Zmień tryb</string>
+  <string id="thermostats">Termostaty</string>
   <string id="offStatus" scope="glance">Wyłączony</string>
+  <!-- Ciągi alertów -->
   <string id="cancelledAlert">Odwołany</string>
   <string id="sendingAlert">Wysyłanie</string>
   <string id="noChangeAlert">Bez zmian</string>
-  <string id="changeModeLabel">Zmień tryb</string>
+  <string id="retrievingDataAlert">Pobieranie danych</string>
+  <!-- Wiadomości SMS -->
+  <string id="getOAuthCodeMsg">Ukończ uwierzytelnianie OA</string>
+  <!-- Komunikaty o błędach w ErrorView -->
+  <string id="nullDataErrMsg">Żądanie interfejsu API zwróciło dane o wartości null.</string>
+  <string id="oAuthErrMsg" scope="glance">Podaj nowy kod OAuth w ustawieniach.</string>
+  <string id="authTokenErrMsg">Problem z uwierzytelnianiem, usunięte tokeny dostępu i odświeżania.</string>
+  <string id="noDevicesErrMsg">Za szybko! Nie odzyskano jeszcze wszystkich struktur i pomieszczeń z gniazda.</string>
+  <string id="noDeviceErrMsg">Urządzenie nie zostało znalezione</string>
+  <!-- Komunikaty właściwości -->
+  <string id="oAuthPropUsed" scope="glance">Udało się i usunięto</string>
+  <string id="oAuthPropFail" scope="glance">NIEPOWODZENIE, spróbuj ponownie</string>
 </strings>

@@ -39,12 +39,24 @@
     <!-- To enable language localisation -->
     <string id="setMode">Set Modes</string>
     <string id="tapIcon">Tap Icons</string>
-    <string id="selectDevice" scope="glance">Select Device</string>
-    <string id="deviceList">Device List</string>
-    <string id="thermostat">Thermostat</string>
+    <string id="selectDevice" scope="glance">Select A Device</string>
+    <string id="changeModeLabel">Change Mode</string>
+    <string id="thermostats">Thermostats</string>
     <string id="offStatus" scope="glance">Off</string>
+    <!-- Alert Strings -->
     <string id="cancelledAlert">Cancelled</string>
     <string id="sendingAlert">Sending</string>
     <string id="noChangeAlert">No Changes</string>
-    <string id="changeModeLabel">Change Mode</string>
+    <string id="retrievingDataAlert">Retrieving data</string>
+    <!-- Text Messages -->
+    <string id="getOAuthCodeMsg">Complete OAuth</string>
+    <!-- Error Messages in an ErrorView -->
+    <string id="nullDataErrMsg">API Request returned null data.</string>
+    <string id="oAuthErrMsg" scope="glance">Please supply a new OAuth Code via the settings.</string>
+    <string id="authTokenErrMsg">Authentication issue, access and refresh tokens deleted.</string>
+    <string id="noDevicesErrMsg">Too quick! Not yet retrieved all the structures and rooms from Nest.</string>
+    <string id="noDeviceErrMsg">Device not found</string>
+    <!-- Property Messages -->
+    <string id="oAuthPropUsed" scope="glance">Succeeded and deleted</string>
+    <string id="oAuthPropFail" scope="glance">FAILED, please try again</string>
 </strings>

@@ -39,12 +39,24 @@
   <!-- Um die Sprachlokalisierung zu aktivieren -->
   <string id="setMode">Modi Einstellen</string>
   <string id="tapIcon">Tippen Sie Auf Symbole</string>
-  <string id="selectDevice" scope="glance">Wählen Sie Gerät aus</string>
-  <string id="deviceList">Geräteliste</string>
-  <string id="thermostat">Thermostat</string>
-  <string id="offStatus" scope="glance">aus</string>
-  <string id="cancelledAlert">Abgebrochen</string>
+  <string id="selectDevice" scope="glance">Wählen Sie ein Gerät aus</string>
+  <string id="changeModeLabel">Modus ändern</string>
+  <string id="thermostats">Thermostate</string>
+  <string id="offStatus" scope="glance">Aus</string>
+  <!-- Warnzeichenfolgen -->
+  <string id="cancelledAlert">Abgesagt</string>
   <string id="sendingAlert">Senden</string>
   <string id="noChangeAlert">Keine Änderungen</string>
-  <string id="changeModeLabel">Modus ändern</string>
+  <string id="retrievingDataAlert">Abrufen von Daten</string>
+  <!-- Textnachrichten -->
+  <string id="getOAuthCodeMsg">Vollständige OAuth</string>
+  <!-- Fehlermeldungen in einer ErrorView -->
+  <string id="nullDataErrMsg">Die API-Anforderung hat Nulldaten zurückgegeben.</string>
+  <string id="oAuthErrMsg" scope="glance">Bitte geben Sie über die Einstellungen einen neuen OAuth-Code ein.</string>
+  <string id="authTokenErrMsg">Authentifizierungsproblem, Zugriffs- und Aktualisierungstoken gelöscht.</string>
+  <string id="noDevicesErrMsg">Zu schnell! Noch nicht alle Strukturen und Räume von Nest abgerufen.</string>
+  <string id="noDeviceErrMsg">Gerät nicht gefunden</string>
+  <!-- Eigenschaftsmeldungen -->
+  <string id="oAuthPropUsed" scope="glance">Erfolgreich und gelöscht</string>
+  <string id="oAuthPropFail" scope="glance">FEHLGESCHLAGEN, bitte versuchen Sie es erneut</string>
 </strings>

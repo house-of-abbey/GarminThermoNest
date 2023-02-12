@@ -39,12 +39,24 @@
   <!-- Če želite omogočiti jezikovno lokalizacijo -->
   <string id="setMode">Nastavite Načine</string>
   <string id="tapIcon">Tapnite Ikone</string>
-  <string id="selectDevice" scope="glance">Izberite Naprava</string>
-  <string id="deviceList">Seznam naprav</string>
-  <string id="thermostat">Termostat</string>
+  <string id="selectDevice" scope="glance">Izberite napravo</string>
+  <string id="changeModeLabel">Spremeni način</string>
+  <string id="thermostats">Termostati</string>
   <string id="offStatus" scope="glance">Izključeno</string>
+  <!-- Opozorilni nizi -->
   <string id="cancelledAlert">Prekinjeno</string>
   <string id="sendingAlert">Pošiljanje</string>
   <string id="noChangeAlert">Brez sprememb</string>
-  <string id="changeModeLabel">Spremeni način</string>
+  <string id="retrievingDataAlert">Pridobivanje podatkov</string>
+  <!-- Tekstovna sporočila -->
+  <string id="getOAuthCodeMsg">Dokončaj OAuth</string>
+  <!-- Sporočila o napakah v ErrorView -->
+  <string id="nullDataErrMsg">Zahteva API je vrnila ničelne podatke.</string>
+  <string id="oAuthErrMsg" scope="glance">Vnesite novo kodo OAuth v nastavitvah.</string>
+  <string id="authTokenErrMsg">Težava pri preverjanju pristnosti, žetoni za dostop in osveževanje izbrisani.</string>
+  <string id="noDevicesErrMsg">Prehitro! Iz Nesta še niso pridobljene vse strukture in sobe.</string>
+  <string id="noDeviceErrMsg">Naprave ni bilo mogoče najti</string>
+  <!-- Lastninska sporočila -->
+  <string id="oAuthPropUsed" scope="glance">Uspelo in izbrisano</string>
+  <string id="oAuthPropFail" scope="glance">NEUSPEŠNO, poskusite znova</string>
 </strings>

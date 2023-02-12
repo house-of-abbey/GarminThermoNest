@@ -27,7 +27,7 @@ using Toybox.Lang;
 class Globals {
     // Enable printing of messages to the debug console (don't make this a Property
     // as the messages can't be read from a watch!)
-    static const debug        = false;
+    static const debug        = true;
     // Multi-dot navigation drawable on each View
     static const navRadius    = 2.0f;
     static const navMarginX   = 10f;
@@ -63,6 +63,14 @@ class Globals {
     static const farenheitRes = 1.0f; // Resolution and increment for deg F
 
     static hidden const smartDeviceManagementUrl = "https://smartdevicemanagement.googleapis.com/v1/enterprises/";
+
+    static function getStructuresUrl() {
+        return smartDeviceManagementUrl + ClientId.projectId + "/structures";
+    }
+
+    static function getRoomsUrl(structure as Lang.String) {
+        return smartDeviceManagementUrl + ClientId.projectId + "/structures/" + structure + "/rooms";
+    }
 
     static function getDevicesUrl() {
         return smartDeviceManagementUrl + ClientId.projectId + "/devices";

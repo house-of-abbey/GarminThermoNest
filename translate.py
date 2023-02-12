@@ -50,7 +50,7 @@ languages: list[tuple[str, str, str]] = [
   ("dut", "nl", "Dutch"),
   ("deu", "de", "German"),
   ("gre", "el", "Greek"),
-  ("eng", "en", "English"),
+  # ("eng", "en", "English"),
   ("est", "et", "Estonian"),
   ("fin", "fi", "Finnish"),
   ("fre", "fr", "French"),

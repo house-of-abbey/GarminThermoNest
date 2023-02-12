@@ -39,12 +39,24 @@
   <!-- A nyelvi lokalizáció engedélyezése -->
   <string id="setMode">Módok Beállítása</string>
   <string id="tapIcon">Koppintson Az Ikonok Elemre</string>
-  <string id="selectDevice" scope="glance">Válassz eszközt</string>
-  <string id="deviceList">Eszközlista</string>
-  <string id="thermostat">Termosztát</string>
+  <string id="selectDevice" scope="glance">Válasszon egy eszközt</string>
+  <string id="changeModeLabel">Módváltás</string>
+  <string id="thermostats">Termosztátok</string>
   <string id="offStatus" scope="glance">Ki</string>
+  <!-- Figyelmeztető karakterláncok -->
   <string id="cancelledAlert">Törölve</string>
   <string id="sendingAlert">Küldés</string>
   <string id="noChangeAlert">Nincs változás</string>
-  <string id="changeModeLabel">Módváltás</string>
+  <string id="retrievingDataAlert">Adatok lekérése</string>
+  <!-- Szöveges üzenetek -->
+  <string id="getOAuthCodeMsg">Teljes OAuth</string>
+  <!-- Hibaüzenetek az ErrorView-ban -->
+  <string id="nullDataErrMsg">Az API-kérés null adatot adott vissza.</string>
+  <string id="oAuthErrMsg" scope="glance">Adjon meg egy új OAuth-kódot a beállításokon keresztül.</string>
+  <string id="authTokenErrMsg">Hitelesítési probléma, a hozzáférési és frissítési tokenek törölve.</string>
+  <string id="noDevicesErrMsg">Túl gyorsan! Még nem sikerült lekérni az összes szerkezetet és helyiséget a Nestből.</string>
+  <string id="noDeviceErrMsg">Eszköz nem található</string>
+  <!-- Tulajdonsági üzenetek -->
+  <string id="oAuthPropUsed" scope="glance">Sikerült és törölve</string>
+  <string id="oAuthPropFail" scope="glance">SIKERTELEN, próbálja újra</string>
 </strings>
