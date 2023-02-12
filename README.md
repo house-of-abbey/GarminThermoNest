@@ -6,6 +6,10 @@ An application for Garmin IQ watches that allows you to control your Nest thermo
 
 <img src="doc/images/venu2_ticks_set_mode.png" width="200" title="Status with 'Ticks' face"/>
 
+## Select Device
+
+<img src="doc/images/venusq_ticks_select.png" width="200" title="Thermostat device selection"/>
+
 ## Status
 
 Entry pain. Scroll up to set mode and scroll down to set the temperature
