@@ -13,15 +13,16 @@ The functionality is divide into 4 panes
 * Set Mode (swipe up)
 * Set Temperature (swipe down)
 
-### Navigation
+### View Layout
 
-Swipe the touch screen to change the view.
+To navigate the application, swipe the touch screen to change the view as shown below.
 
 ![Application Navigation](./images/navigation.png)
 
 ### Select Device
 
-Swipe left to bring the thermostat selector into view and tap on the desired device. The initial swipe may take a short while to populate the devices, after that the selcetor view will already have been constructed. If you change the layout of your structures, e.g. move the device to another room, you will need to exit the application to cause the selection list to be revised.
+Swipe left to bring the thermostat selector into view and tap on the desired device. The initial swipe may take a short while to populate the devices, after that the selector view will already have been constructed. If you change the layout of your structures, e.g. move the device to another room, you will need to exit the application to cause the selection list to be revised.
+
 ### Set Mode
 
 You can change two modes on this pain, by taping the relevant icon. Then the icon changes in a rotation according to the following table and depending on the availability of that mode via your Heating, Ventilation and Air-Conditioning (HVAC) installation, and the thermostat model's functionality.
@@ -63,7 +64,7 @@ These figures are encircled by a scale to illustrate the relative separation of 
 
 Two faces are currently provided:
 
-* 'Ticks' - Each degree of Celcium or Fahrenheit are marked by a line or 'tick'. 10s of degree are numbered.
+* 'Ticks' - Each degree of Celsius or Fahrenheit are marked by a line or 'tick'. 10s of degree are numbered.
 * 'Minimal' - No lines to mark temperatures, just a continuous arc from 9-23 °C or 48-90 °F
 
 <div style="text-align:center;">
@@ -111,7 +112,7 @@ On completion of your changes swipe down to return to the status pane. If any ch
 
 To cancel your changes swipe right. A confirmation "Cancelled" message will be displayed briefly.
 
-### Navigation
+### Navigation Aid
 
 When swiping between the watch panes, initially a navigation aid will be displayed to remind you where you are in the linear sequence. This aid will disappear shortly after swiping so as not to obscure the display. This aid has been designed to mimic the one used by the stock Garmin applications.
 
@@ -143,7 +144,7 @@ You may have been expecting the application to present you with the first page s
 #### OAuth References
 
 * [Remediation for OAuth via WebView](https://support.google.com/faqs/answer/12284343?hl=en-AU)
-* [Upcoming security changes to Google's OAuth 2.0 authorization endpoint in embedded webviews](https://developers.googleblog.com/2021/06/upcoming-security-changes-to-googles-oauth-2.0-authorization-endpoint.html)
+* [Upcoming security changes to Google's OAuth 2.0 authorization endpoint in embedded web views](https://developers.googleblog.com/2021/06/upcoming-security-changes-to-googles-oauth-2.0-authorization-endpoint.html)
 
 ## Frequently Asked Questions
 
@@ -166,7 +167,6 @@ You may have been expecting the application to present you with the first page s
 **Q: When setting the temperature is says "Change Mode", how do I change the temperature**
 
 **A:** This is because you are in Eco Mode, and the API does not allow changing of the trigger temperatures when in Eco mode. Turn off Eco mode and try again.
-
 
 ## Limited Use
 
