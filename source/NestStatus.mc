@@ -74,6 +74,7 @@ class NestStatus {
     hidden var gotDeviceDataError   = false as Lang.Boolean;
     hidden var alertSending;
     hidden var alertNoChange;
+    hidden var oAuthPropFail                as Lang.String;
 
     // Parameters:
     //  * isGlance = true when initialised from a GlanceView, otherwise false.
@@ -99,6 +100,7 @@ class NestStatus {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             getOAuthToken();
         }
+        oAuthPropFail = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
     }
 
     // When authorisation completes, update this view.
@@ -864,8 +866,8 @@ class NestStatus {
     // the initial web-based authoriation process.
     //
     function getOAuthToken() as Void {
-        var c = Properties.getValue("oauthCode");
-        if (c == null || c.equals("")) {
+        var o = Properties.getValue("oauthCode");
+        if (o == null || o.equals("") || o.equals(oAuthPropFail)) {
             if (!isGlance) {
                 // For the time being, we cannot use the OAuth API because Google does not allow sign in in a
                 // webview. Instead we will do it manually outside the application. This call opens the correct

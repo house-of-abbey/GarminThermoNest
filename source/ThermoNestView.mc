@@ -351,18 +351,33 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
     hidden var mView;
     hidden var tp;
     hidden var retrievingDataAlert as Lang.String;
+    hidden var oAuthPropUsed       as Lang.String;
+    hidden var oAuthPropFail       as Lang.String;
 
     function initialize(view as ThermoNestView) {
         WatchUi.BehaviorDelegate.initialize();
         mView               = view;
+        retrievingDataAlert = WatchUi.loadResource($.Rez.Strings.retrievingDataAlert) as Lang.String;
+        oAuthPropUsed       = WatchUi.loadResource($.Rez.Strings.oAuthPropUsed      ) as Lang.String;
+        oAuthPropFail       = WatchUi.loadResource($.Rez.Strings.oAuthPropFail      ) as Lang.String;
         // When to re-init this to pick up any changes?
         tp                  = new ThermoPick({ :title => WatchUi.loadResource($.Rez.Strings.thermostats) as Lang.String });
         view.getNestStatus().setAuthViewUpdate(tp);
-        retrievingDataAlert = WatchUi.loadResource($.Rez.Strings.retrievingDataAlert) as Lang.String;
     }
 
     function onRefreshButton() as Void {
-        mView.onRefreshButton();
+        var o = Properties.getValue("oauthCode");
+        if (o != null && !o.equals("")) {
+            // Suspect that ThermoNestApp.onSettingsChanged() is not firing on the actual watch due to emulation mismatch
+            if (!o.equals(oAuthPropUsed) && !o.equals(oAuthPropFail)) {
+                if (Globals.debug) {
+                    System.println("ThermoNestView onRefreshButton() New OAuth Code, getting new access token.");
+                }
+                // New oauthCode
+                mView.getNestStatus().getAccessToken();
+            }
+            mView.onRefreshButton();
+        }
     }
 
     // WatchUi.SWIPE_DOWN

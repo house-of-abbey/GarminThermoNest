@@ -13,6 +13,8 @@ The functionality is divide into 4 panes
 * Set Mode (swipe up)
 * Set Temperature (swipe down)
 
+![Status Display](../doc/images/1440x720_hero_image.png)
+
 ### View Layout
 
 To navigate the application, swipe the touch screen to change the view as shown below.
