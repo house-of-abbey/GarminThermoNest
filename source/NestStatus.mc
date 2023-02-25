@@ -112,7 +112,7 @@ class NestStatus {
     // There can be 0 or 1 'listeners' for auth updates. If more than one is
     // required, make 'authViewUpdate' into a list.
     //
-    hidden function updateAuthView() {
+    function updateAuthView() {
         if (authViewUpdate != null) {
             authViewUpdate.initData();
         }
@@ -735,6 +735,7 @@ class NestStatus {
         if (responseCode == 200) {
             Storage.setValue("accessToken", data.get("access_token"));
             Storage.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
+            updateAuthView();
             if (Globals.debug) {
                 System.println("NestStatus onReceiveRefreshToken() accessToken: " + Storage.getValue("accessToken"));
             }
@@ -769,6 +770,7 @@ class NestStatus {
                 Storage.setValue("accessToken", data.get("access_token"));
                 Storage.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
                 Storage.setValue("refreshToken", data.get("refresh_token"));
+                updateAuthView();
                 if (Globals.debug) {
                     System.println("NestStatus onRecieveAccessToken() accessToken:  " + Storage.getValue("accessToken"));
                     System.println("NestStatus onRecieveAccessToken() refreshToken: " + Storage.getValue("refreshToken"));
@@ -776,6 +778,9 @@ class NestStatus {
                 var d = Properties.getValue("deviceId");
                 if (d != null && !d.equals("")) {
                     getDeviceData();
+                }
+                if (Globals.debug) {
+                    System.println("NestStatus onRecieveAccessToken() Amended 'oauthCode'");
                 }
                 Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropUsed) as Lang.String);
             } else {

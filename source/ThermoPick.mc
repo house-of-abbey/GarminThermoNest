@@ -43,7 +43,6 @@ class ThermoPick extends WatchUi.Menu2 {
     hidden var structures_total       = -1 as Lang.Number;
     // The number of structures for which the rooms have been fetched.
     hidden var structures_fetched     = 0 as Lang.Number;
-    //
     hidden var menu_populated as Lang.Boolean = false;
 
     function initialize(options) {

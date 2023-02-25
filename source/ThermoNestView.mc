@@ -348,7 +348,7 @@ class ThermoNestView extends ThermoView {
 }
 
 class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
-    hidden var mView;
+    hidden var mNestStatus;
     hidden var tp;
     hidden var retrievingDataAlert as Lang.String;
     hidden var oAuthPropUsed       as Lang.String;
@@ -356,12 +356,16 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
 
     function initialize(view as ThermoNestView) {
         WatchUi.BehaviorDelegate.initialize();
-        mView               = view;
+        mNestStatus         = view;
         retrievingDataAlert = WatchUi.loadResource($.Rez.Strings.retrievingDataAlert) as Lang.String;
         oAuthPropUsed       = WatchUi.loadResource($.Rez.Strings.oAuthPropUsed      ) as Lang.String;
         oAuthPropFail       = WatchUi.loadResource($.Rez.Strings.oAuthPropFail      ) as Lang.String;
         // When to re-init this to pick up any changes?
-        tp                  = new ThermoPick({ :title => WatchUi.loadResource($.Rez.Strings.thermostats) as Lang.String });
+        tp                  = new ThermoPick(
+            {
+                :title => WatchUi.loadResource($.Rez.Strings.thermostats) as Lang.String
+            }
+        );
         view.getNestStatus().setAuthViewUpdate(tp);
     }
 
@@ -374,9 +378,9 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
                     System.println("ThermoNestView onRefreshButton() New OAuth Code, getting new access token.");
                 }
                 // New oauthCode
-                mView.getNestStatus().getAccessToken();
+                mNestStatus.getNestStatus().getAccessToken();
             }
-            mView.onRefreshButton();
+            mNestStatus.onRefreshButton();
         }
     }
 
@@ -385,7 +389,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         var d = Properties.getValue("deviceId") as Lang.String;
         if (d != null && !d.equals("")) {
             if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-                var v = new ModeChangeView(mView.getNestStatus());
+                var v = new ModeChangeView(mNestStatus.getNestStatus());
                 WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_DOWN);
             }
         }
@@ -397,7 +401,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         var d = Properties.getValue("deviceId") as Lang.String;
         if (d != null && !d.equals("")) {
             if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-                var v = new TempChangeView(mView.getNestStatus());
+                var v = new TempChangeView(mNestStatus.getNestStatus());
                 WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
             }
         }
@@ -416,7 +420,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
                 if (o != null && !o.equals("")) {
                     tp.initMenu();
                     if (tp.isInit()) {
-                        WatchUi.pushView(tp, new ThermoPickDelegate(tp, mView.getNestStatus()), WatchUi.SLIDE_LEFT);
+                        WatchUi.pushView(tp, new ThermoPickDelegate(tp, mNestStatus.getNestStatus()), WatchUi.SLIDE_LEFT);
                     } else {
                         new Alert({
                             :timeout => Globals.alertTimeout,

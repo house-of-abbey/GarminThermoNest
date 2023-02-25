@@ -86,6 +86,12 @@ class Alert extends WatchUi.View {
         if(dc has :setAntiAlias) {
             dc.setAntiAlias(true);
         }
+
+        dc.setColor(
+            Graphics.COLOR_WHITE,
+            Graphics.COLOR_TRANSPARENT
+        );
+        dc.clear();
         dc.setColor(bgcolor, bgcolor);
         dc.fillRoundedRectangle(bX, bY, bWidth, bHeight, bRadius);
 

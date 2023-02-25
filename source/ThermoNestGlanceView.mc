@@ -66,8 +66,7 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         var d = Properties.getValue("deviceId");
         if (System.getDeviceSettings().phoneConnected) {
             if (System.getDeviceSettings().connectionAvailable) {
-                var c = Properties.getValue("oauthCode");
-                if (c == null || c.equals("")) {
+                if (o == null || o.equals("")) {
                     // Drop through without a return to print text
                 } else {
                     if (d == null || d.equals("")) {
