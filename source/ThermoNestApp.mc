@@ -33,12 +33,12 @@ class ThermoNestApp extends Application.AppBase {
         AppBase.initialize();
         oAuthPropUsed = WatchUi.loadResource($.Rez.Strings.oAuthPropUsed) as Lang.String;
         oAuthPropFail = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
-        mNestStatus   = new NestStatus(true);
     }
 
     function getGlanceView() {
         var mySettings = System.getDeviceSettings();
         if ((mySettings has :isGlanceModeEnabled) && mySettings.isGlanceModeEnabled) {
+            mNestStatus = new NestStatus(true);
             return [new ThermoNestGlanceView(mNestStatus)];
         } else {
             return null;
@@ -65,6 +65,7 @@ class ThermoNestApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
+        mNestStatus = new NestStatus(false);
         var mView   = new ThermoNestView(mNestStatus);
         return [mView, new ThermoNestDelegate(mView)] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
     }
