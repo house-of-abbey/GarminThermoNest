@@ -785,6 +785,9 @@ class NestStatus {
                 Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropUsed) as Lang.String);
             } else {
                 Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String);
+                Storage.setValue("accessTokenExpire", 0);
+                Storage.setValue("accessToken", "");
+                Storage.setValue("refreshToken", "");
                 if (!isGlance) {
                     WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.oAuthErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
@@ -806,6 +809,9 @@ class NestStatus {
             // Access token expired, use refresh token to get a new one
             var c = Storage.getValue("refreshToken");
             if (c == null || c.equals("")) {
+                if (Globals.debug) {
+                    System.println("NestStatus getAccessToken(): Full auth");
+                }
                 // Full OAuth
                 var payload = {
                     "code"          => Properties.getValue("oauthCode"),
@@ -825,6 +831,9 @@ class NestStatus {
                 // This follows a check for Internet access
                 Communications.makeWebRequest(Globals.getOAuthTokenUrl(), payload, options, method(:onRecieveAccessToken));
             } else {
+                if (Globals.debug) {
+                    System.println("NestStatus getAccessToken(): Refresh Auth");
+                }
                 // Refresh Auth
                 var payload = {
                     "refresh_token" => c,
