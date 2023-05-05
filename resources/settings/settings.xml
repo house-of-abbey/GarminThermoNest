@@ -47,43 +47,4 @@
         <listEntry value="1">@Strings.minimalFace</listEntry>
     </settingConfig>
   </setting>
-
-  <!--
-  <group
-    id="tokenGroup"
-    title="@Strings.tokenGroupTitle"
-  >
-
-    <setting
-      propertyKey="@Properties.accessToken"
-      title="@Strings.accessTokenTitle"
-      prompt="@Strings.appManagedPrompt"
-    >
-      <settingConfig
-        type="alphaNumeric"
-      />
-    </setting>
-
-    <setting
-      propertyKey="@Properties.accessTokenExpire"
-      title="@Strings.accessTokenExpireTitle"
-      prompt="@Strings.appManagedPrompt"
-    >
-      <settingConfig
-        type="numeric"
-      />
-    </setting>
-
-    <setting
-      propertyKey="@Properties.refreshToken"
-      title="@Strings.refreshTokenTitle"
-      prompt="@Strings.appManagedPrompt"
-    >
-      <settingConfig
-        type="alphaNumeric"
-      />
-    </setting>
-
-  </group>
-  -->
 </settings>

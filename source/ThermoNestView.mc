@@ -341,14 +341,10 @@ class ThermoNestView extends ThermoView {
         }
         requestUpdate();
     }
-
-    function getNestStatus() as NestStatus {
-        return mNestStatus;
-    }
 }
 
 class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
-    hidden var mNestStatus;
+    hidden var mView;
     hidden var tp;
     hidden var retrievingDataAlert as Lang.String;
     hidden var oAuthPropUsed       as Lang.String;
@@ -356,16 +352,12 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
 
     function initialize(view as ThermoNestView) {
         WatchUi.BehaviorDelegate.initialize();
-        mNestStatus         = view;
+        mView               = view;
         retrievingDataAlert = WatchUi.loadResource($.Rez.Strings.retrievingDataAlert) as Lang.String;
         oAuthPropUsed       = WatchUi.loadResource($.Rez.Strings.oAuthPropUsed      ) as Lang.String;
         oAuthPropFail       = WatchUi.loadResource($.Rez.Strings.oAuthPropFail      ) as Lang.String;
         // When to re-init this to pick up any changes?
-        tp                  = new ThermoPick(
-            {
-                :title => WatchUi.loadResource($.Rez.Strings.thermostats) as Lang.String
-            }
-        );
+        tp                  = new ThermoPick(view.getNestStatus().isGlance);
         view.getNestStatus().setAuthViewUpdate(tp);
     }
 
@@ -375,12 +367,16 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
             // Suspect that ThermoNestApp.onSettingsChanged() is not firing on the actual watch due to emulation mismatch
             if (!o.equals(oAuthPropUsed) && !o.equals(oAuthPropFail)) {
                 if (Globals.debug) {
-                    System.println("ThermoNestView onRefreshButton() New OAuth Code, getting new access token.");
+                    System.println("ThermoNestView onRefreshButton(), new OAuth Code, getting new access token.");
                 }
-                // New oauthCode
-                mNestStatus.getNestStatus().getAccessToken();
+                // New OAuthCode
+                mView.getNestStatus().getAccessToken();
+                var mySettings = System.getDeviceSettings();
+                if ((mySettings has :isGlanceModeEnabled) && mySettings.isGlanceModeEnabled) {
+                    WatchUi.pushView(new ErrorView("ThermoNestView got new access token in onRefreshButton(), i.e. ThermoNestApp.onSettingsChanged() not fired. This should not happen"), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
             }
-            mNestStatus.onRefreshButton();
+            mView.onRefreshButton();
         }
     }
 
@@ -389,7 +385,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         var d = Properties.getValue("deviceId") as Lang.String;
         if (d != null && !d.equals("")) {
             if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-                var v = new ModeChangeView(mNestStatus.getNestStatus());
+                var v = new ModeChangeView(mView.getNestStatus());
                 WatchUi.pushView(v, new ModeChangeDelegate(v), WatchUi.SLIDE_DOWN);
             }
         }
@@ -401,7 +397,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
         var d = Properties.getValue("deviceId") as Lang.String;
         if (d != null && !d.equals("")) {
             if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
-                var v = new TempChangeView(mNestStatus.getNestStatus());
+                var v = new TempChangeView(mView.getNestStatus());
                 WatchUi.pushView(v, new TempChangeDelegate(v), WatchUi.SLIDE_UP);
             }
         }
@@ -418,17 +414,21 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
             case WatchUi.SWIPE_LEFT:
                 var o = Properties.getValue("oauthCode") as Lang.String;
                 if (o != null && !o.equals("")) {
-                    tp.initMenu();
-                    if (tp.isInit()) {
-                        WatchUi.pushView(tp, new ThermoPickDelegate(tp, mNestStatus.getNestStatus()), WatchUi.SLIDE_LEFT);
+                    if (tp != null) {
+                        tp.initMenu();
+                        if (tp.isInit()) {
+                            WatchUi.pushView(tp, new ThermoPickDelegate(tp, mView.getNestStatus()), WatchUi.SLIDE_LEFT);
+                        } else {
+                            new Alert({
+                                :timeout => Globals.alertTimeout,
+                                :font    => Graphics.FONT_MEDIUM,
+                                :text    => retrievingDataAlert,
+                                :fgcolor => Graphics.COLOR_RED,
+                                :bgcolor => Graphics.COLOR_BLACK
+                            }).pushView(WatchUi.SLIDE_IMMEDIATE);
+                        }
                     } else {
-                        new Alert({
-                            :timeout => Globals.alertTimeout,
-                            :font    => Graphics.FONT_MEDIUM,
-                            :text    => retrievingDataAlert,
-                            :fgcolor => Graphics.COLOR_RED,
-                            :bgcolor => Graphics.COLOR_BLACK
-                        }).pushView(WatchUi.SLIDE_IMMEDIATE);
+                        WatchUi.pushView(new ErrorView("ThermoPick view is not initialised."), new ErrorDelegate(), WatchUi.SLIDE_UP);
                     }
                 }
                 break;

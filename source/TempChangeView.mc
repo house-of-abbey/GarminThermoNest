@@ -382,10 +382,6 @@ class TempChangeView extends ThermoView {
     function onCoolTempButton() as Void {
         settingCool = true;
     }
-
-    function getNestStatus() as NestStatus {
-        return mNestStatus;
-    }
 }
 
 class TempChangeDelegate extends WatchUi.BehaviorDelegate {

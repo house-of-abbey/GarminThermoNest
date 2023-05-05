@@ -368,4 +368,7 @@ class ThermoView extends ScalableView {
         }
     }
 
+    function getNestStatus() as NestStatus {
+        return mNestStatus;
+    }
 }

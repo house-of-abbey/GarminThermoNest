@@ -45,10 +45,25 @@ class ThermoPick extends WatchUi.Menu2 {
     hidden var structures_fetched     = 0 as Lang.Number;
     hidden var menu_populated as Lang.Boolean = false;
 
-    function initialize(options) {
-        WatchUi.Menu2.initialize(options);
-        // Assumes we have an access token
-        initData();
+    function initialize(isGlance) {
+        WatchUi.Menu2.initialize(
+            {
+                :title => WatchUi.loadResource($.Rez.Strings.thermostats) as Lang.String
+            }
+        );
+        // Assumes we have a current access token
+        var e = Storage.getValue("accessTokenExpire");
+        if (e == null || Time.now().value() > e) {
+            // Access token expired, pre-condition not met.
+            if (Globals.debug) {
+                System.println("ThermoPick initialize() no access token, pre-condition not met.");
+            }
+            if (!isGlance) {
+                WatchUi.pushView(new ErrorView("ThermoPick initialize() no access token, pre-condition not met."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
+        } else {
+            initData();
+        }
     }
 
     // Initialise 'structures' and 'rooms' using asynchronous GET requests.

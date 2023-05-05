@@ -264,7 +264,7 @@ class NestStatus {
             System.println("NestStatus onReturnChangeTemp() Response Data: " + data);
         }
         if (responseCode != 200) {
-            if (!isGlance) {
+            if (!isGlance && (data != null)) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             getDeviceData();
@@ -397,7 +397,7 @@ class NestStatus {
             System.println("NestStatus onReturnThermoMode() Response Data: " + data);
         }
         if (responseCode != 200) {
-            if (!isGlance) {
+            if (!isGlance && (data != null)) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
@@ -453,7 +453,7 @@ class NestStatus {
             System.println("NestStatus onReturnEco() Response Data: " + data);
         }
         if (responseCode != 200) {
-            if (!isGlance) {
+            if (!isGlance && (data != null)) {
                 WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
@@ -673,6 +673,9 @@ class NestStatus {
                 System.println("NestStatus onReceiveDeviceData() Response Code: " + responseCode);
                 System.println("NestStatus onReceiveDeviceData() Response Data: " + data);
             }
+            if (!isGlance && (data != null)) {
+                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            }
             gotDeviceData      = true;
             gotDeviceDataError = true;
 
@@ -707,16 +710,15 @@ class NestStatus {
         if (Globals.debug) {
             System.println("NestStatus getDeviceData() fetching.");
         }
-        var options = {
-            :method  => Communications.HTTP_REQUEST_METHOD_GET,
-            :headers => {
-                "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-                "Authorization" => "Bearer " + Storage.getValue("accessToken")
-            },
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-        };
-
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
+            var options = {
+                :method  => Communications.HTTP_REQUEST_METHOD_GET,
+                :headers => {
+                    "Content-Type"  => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+                    "Authorization" => "Bearer " + Storage.getValue("accessToken")
+                },
+                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+            };
             Communications.makeWebRequest(Globals.getDeviceDataUrl(), null, options, method(:onReceiveDeviceData));
         } else {
             if (Globals.debug) {
@@ -725,38 +727,8 @@ class NestStatus {
         }
     }
 
-    // Callback function to execute when returning from the POST request to re-OAuth the application's device access.
-    //
-    function onReceiveRefreshToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
-        if (Globals.debug) {
-            System.println("NestStatus onReceiveRefreshToken() Response Code: " + responseCode);
-            System.println("NestStatus onReceiveRefreshToken() Response Data: " + data);
-        }
-        if (responseCode == 200) {
-            Storage.setValue("accessToken", data.get("access_token"));
-            Storage.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
-            updateAuthView();
-            if (Globals.debug) {
-                System.println("NestStatus onReceiveRefreshToken() accessToken: " + Storage.getValue("accessToken"));
-            }
-            var d = Properties.getValue("deviceId");
-            if (d == null || d.equals("")) {
-                updateAuthView();
-            } else {
-                getDeviceData();
-            }
-        } else {
-            Storage.setValue("accessToken", "");
-            Storage.setValue("accessTokenExpire", 0);
-            Storage.setValue("refreshToken", "");
-            if (Globals.debug) {
-                System.println("NestStatus onReceiveRefreshToken() Display Update");
-            }
-            WatchUi.requestUpdate();
-        }
-    }
-
-    // Callback function to execute when returning from the POST request to re-OAuth the application's device access.
+    // Callback function to execute when returning from the POST request to fully re-OAuth the application's device
+    // access, access & refresh tokens.
     //
     function onRecieveAccessToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
         if (Globals.debug) {
@@ -785,17 +757,59 @@ class NestStatus {
                 Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropUsed) as Lang.String);
             } else {
                 Properties.setValue("oauthCode", WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String);
-                Storage.setValue("accessTokenExpire", 0);
                 Storage.setValue("accessToken", "");
+                Storage.setValue("accessTokenExpire", 0);
                 Storage.setValue("refreshToken", "");
                 if (!isGlance) {
-                    WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.oAuthErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    if (data != null) {
+                        WatchUi.pushView(new ErrorView((data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    } else {
+                        WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.oAuthErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    }
                 }
                 if (Globals.debug) {
                     System.println("NestStatus onRecieveAccessToken() Display Update");
                 }
                 WatchUi.requestUpdate();
             }
+        }
+    }
+
+    // Callback function to execute when returning from the POST request to refresh the access token from the refresh
+    // token and hence re-OAuth the application's device access.
+    //
+    function onReceiveRefreshToken(responseCode as Lang.Number, data as Null or Lang.Dictionary or Lang.String) as Void {
+        if (Globals.debug) {
+            System.println("NestStatus onReceiveRefreshToken() Response Code: " + responseCode);
+            System.println("NestStatus onReceiveRefreshToken() Response Data: " + data);
+        }
+        if (responseCode == 200) {
+            Storage.setValue("accessToken", data.get("access_token"));
+            Storage.setValue("accessTokenExpire", Time.now().value() + (data.get("expires_in") as Lang.Number));
+            updateAuthView();
+            if (Globals.debug) {
+                System.println("NestStatus onReceiveRefreshToken() accessToken: " + Storage.getValue("accessToken"));
+            }
+            var d = Properties.getValue("deviceId");
+            if (d == null || d.equals("")) {
+                updateAuthView();
+            } else {
+                getDeviceData();
+            }
+        } else {
+            Storage.setValue("accessToken", "");
+            Storage.setValue("accessTokenExpire", 0);
+            if (!isGlance) {
+                if (data != null) {
+                    WatchUi.pushView(new ErrorView((data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                } else {
+                    WatchUi.pushView(new ErrorView("Token refresh failed in onReceiveRefreshToken()"), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                }
+            }
+            if (Globals.debug) {
+                System.println("NestStatus onReceiveRefreshToken() Display Update");
+            }
+            WatchUi.requestUpdate();
         }
     }
 

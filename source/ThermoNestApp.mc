@@ -52,6 +52,10 @@ class ThermoNestApp extends Application.AppBase {
             Storage.setValue("accessToken", "");
             Storage.setValue("accessTokenExpire", 0);
             Storage.setValue("refreshToken", "");
+            var mySettings = System.getDeviceSettings();
+            if (Globals.debug) {
+                System.println("ThermoNestApp onStart() - Force full OAuth");
+            }
         }
         if (Globals.debug) {
             System.println("ThermoNestApp onStart() oauthCode:   " + Properties.getValue("oauthCode"));
@@ -87,9 +91,13 @@ class ThermoNestApp extends Application.AppBase {
                 Storage.setValue("accessToken", "");
                 Storage.setValue("accessTokenExpire", 0);
                 Storage.setValue("refreshToken", "");
+                var mySettings = System.getDeviceSettings();
+                if (Globals.debug) {
+                    System.println("ThermoNestApp onSettingsChanged() - Force full OAuth");
+                }
+                mNestStatus.getAccessToken();
                 // Need new list of structures and rooms
                 mNestStatus.updateAuthView();
-                mNestStatus.getAccessToken();
                 WatchUi.requestUpdate();
             } else if (d != null && !d.equals("")) {
                 if (Globals.debug) {
