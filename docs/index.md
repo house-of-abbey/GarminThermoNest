@@ -15,7 +15,7 @@ The functionality is divide into 4 panes
 * Set Mode (swipe up)
 * Set Temperature (swipe down)
 
-![Status Display](../doc/images/1440x720_hero_image.png)
+![Status Display](./images/1440x720_hero_image.png)
 
 ### View Layout
 
@@ -39,17 +39,17 @@ To cancel your changes swipe right. A confirmation "Cancelled" message will be d
 
 | Icon                                                                | Mode        | Comment                                   |
 |:-------------------------------------------------------------------:|:-----------:|:------------------------------------------|
-| ![HVAC Off Icon](../resources-icons-48/mode_heat_off.svg)          | Off         |                                           |
-| ![HVAC Heat Icon](../resources-icons-48/mode_heat_on.svg)          | Heat        | Availability limited by the installation! |
-| ![HVAC Cool Icon](../resources-icons-48/mode_cool_on.svg)          | Cool        | Availability limited by the installation! |
-| ![HVAC Heat & Cool Icon](../resources-icons-48/mode_heat_cool.svg) | Heat & Cool | Availability limited by the installation! |
+| ![HVAC Off Icon](./icons/mode_heat_off.svg)          | Off         |                                           |
+| ![HVAC Heat Icon](./icons/mode_heat_on.svg)          | Heat        | Availability limited by the installation! |
+| ![HVAC Cool Icon](./icons/mode_cool_on.svg)          | Cool        | Availability limited by the installation! |
+| ![HVAC Heat & Cool Icon](./icons/mode_heat_cool.svg) | Heat & Cool | Availability limited by the installation! |
 
 #### Eco Mode
 
 | Icon                                                     | Mode | Comment                            |
 |:--------------------------------------------------------:|:----:|:-----------------------------------|
-| ![Eco Off](../resources-icons-48/eco_leaf_off.svg) | Off  | Availability limited by the model. |
-| ![Eco On](../resources-icons-48/eco_leaf_on.svg)   | Eco  | Availability limited by the model. |
+| ![Eco Off](./icons/eco_leaf_off.svg) | Off  | Availability limited by the model. |
+| ![Eco On](./icons/eco_leaf_on.svg)   | Eco  | Availability limited by the model. |
 
 ### Status
 
@@ -94,14 +94,14 @@ From this pane you can:
 
 Note the refresh icon may not be displayed if there is an issue retrieving the status. The following alternative icons might be displayed:
 
-| Icon                                                                | Meaning                                                      |
-|:-------------------------------------------------------------------:|:-------------------------------------------------------------|
-| ![Phone disconnected](../resources-icons-48/phone_disconnected.svg) | Phone disconnected                                           |
-| ![No Internet](../resources-icons-48/signal_disconnected.svg)       | No Internet connection                                       |
-| ![Authentication failed](../resources-icons-48/logged_out.svg)      | The current credentials failed authentication                |
-| ![Waiting](./images/hourglass-black.svg)                            | Waiting for the application to retrieve the Nest status      |
-| ![Error](../resources-icons-48/error.svg)                           | Error fetching Nest status                                   |
-| ![Off Line](../resources-icons-48/thermostat_offline.svg)           | Thermostat is offline according to the retrieved Nest status |
+| Icon                                                  | Meaning                                                      |
+|:-----------------------------------------------------:|:-------------------------------------------------------------|
+| ![Phone disconnected](./icons/phone_disconnected.svg) | Phone disconnected                                           |
+| ![No Internet](./icons/signal_disconnected.svg)       | No Internet connection                                       |
+| ![Authentication failed](./icons/logged_out.svg)      | The current credentials failed authentication                |
+| ![Waiting](./icons/hourglass-black.svg)               | Waiting for the application to retrieve the Nest status      |
+| ![Error](./icons/error.svg)                           | Error fetching Nest status                                   |
+| ![Off Line](./icons/thermostat_offline.svg)           | Thermostat is offline according to the retrieved Nest status |
 
 ### Set Temperatures
 
@@ -134,7 +134,7 @@ We wish this could be simpler, but it is not.
 
 ### Open Authentication (OAuth) for Smart Device Management API
 
-Open Authentication is an additional pain since <a href="https://auth0.com/blog/google-blocks-oauth-requests-from-embedded-browsers/">Google Blocks OAuth Requests Made Via Embedded Browsers</a>. If you try to complete OAuth on the device you are confronted with the first of these two screen shots. This is as expected. Sadly you cannot complete the authentication now as Google refuses based on security of using an embedded browser.
+Open Authentication is an additional pain since <a href="https://auth0.com/blog/google-blocks-oauth-requests-from-embedded-browsers/">Google Blocks OAuth Requests Made Via Embedded Browsers</a>. If you try to complete OAuth on the device you are confronted with the first of these two screen shots. This is as expected. Sadly you cannot complete the authentication now as Google refuses based on security of using an embedded browser. Google has done this for our protection, and the SDK has not kept pace with the changes.
 
 **This means you need to complete authentication in a supported browser and copy the OAuth code across to the application. Not the best user experience!**
 
