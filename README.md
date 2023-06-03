@@ -2,6 +2,8 @@
 
 An application for Garmin IQ watches that allows you to control your Nest thermostat.
 
+This is the README.md file, try the application [home page](./doc/).
+
 ## Select Device
 
 <img src="doc/images/venusq_ticks_select.png" width="200" title="Thermostat device selection"/>

@@ -29,7 +29,7 @@ _"After completing a Sandbox integration, if you would like to create a Commerci
 
 ### Compliance Matrix
 
-So I wonder if Google Device Access has considered how appropriate their review guidelines are for a watch application. I suggest a watch application lives in a world where the primary function of the watch is to tell the time. Telling anything else brings us to the point of this application. It is not an "always on" application, but a "fleeting glance" one. You fire the application up, make the changes required and then revert to telling the time or tracking an activity.
+So I wonder if Google Device Access has considered how appropriate their review guidelines are for a watch application? I suggest a watch application lives in a world where the primary function of the watch is to tell the time. Telling anything else brings us to the point of this application. It is not an "always on" application, but a "fleeting glance" one. You fire the application up, make the changes required and then revert to telling the time or tracking an activity.
 
 This changes the requirements against which I think Google should review applications:
 
