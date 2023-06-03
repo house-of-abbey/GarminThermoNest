@@ -81,6 +81,7 @@ class NestStatus {
     //
     function initialize(isGlance) {
         self.isGlance = isGlance;
+        oAuthPropFail = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
         if (!isGlance) {
             alertSending = new Alert({
                 :timeout => Globals.alertTimeout,
@@ -100,7 +101,6 @@ class NestStatus {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             getOAuthToken();
         }
-        oAuthPropFail = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
     }
 
     // When authorisation completes, update this view.
@@ -265,7 +265,7 @@ class NestStatus {
         }
         if (responseCode != 200) {
             if (!isGlance && (data != null)) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("NS1 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             getDeviceData();
         }
@@ -398,7 +398,7 @@ class NestStatus {
         }
         if (responseCode != 200) {
             if (!isGlance && (data != null)) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("NS2 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
         executeMode(Thermo, context as Lang.Dictionary);
@@ -454,7 +454,7 @@ class NestStatus {
         }
         if (responseCode != 200) {
             if (!isGlance && (data != null)) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("NS3 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
         executeMode(Eco, context as Lang.Dictionary);
@@ -674,7 +674,7 @@ class NestStatus {
                 System.println("NestStatus onReceiveDeviceData() Response Data: " + data);
             }
             if (!isGlance && (data != null)) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("NS4 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             gotDeviceData      = true;
             gotDeviceDataError = true;
@@ -682,19 +682,19 @@ class NestStatus {
             if (responseCode == 404) {
                 Properties.setValue("deviceId", "");
                 if (!isGlance) {
-                    WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.noDeviceErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("NS5 " + WatchUi.loadResource($.Rez.Strings.noDeviceErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             } else if (responseCode == 401) {
                 Storage.setValue("accessToken", "");
                 Storage.setValue("accessTokenExpire", 0);
                 Storage.setValue("refreshToken", "");
                 if (!isGlance) {
-                    WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.authTokenErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("NS6 " + WatchUi.loadResource($.Rez.Strings.authTokenErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             } else {
                 // This method might be called before authorisation has completed.
                 if (!isGlance && (data != null)) {
-                    WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("NS7 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             }
         }
@@ -736,7 +736,7 @@ class NestStatus {
             System.println("NestStatus onRecieveAccessToken() Response Data: " + data);
         }
         if (data == null) {
-            WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.nullDataErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+            WatchUi.pushView(new ErrorView("NS8 " + WatchUi.loadResource($.Rez.Strings.nullDataErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
         } else {
             if (responseCode == 200) {
                 Storage.setValue("accessToken", data.get("access_token"));
@@ -762,9 +762,9 @@ class NestStatus {
                 Storage.setValue("refreshToken", "");
                 if (!isGlance) {
                     if (data != null) {
-                        WatchUi.pushView(new ErrorView((data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                        WatchUi.pushView(new ErrorView("NS9 " + (data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                     } else {
-                        WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.oAuthErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                        WatchUi.pushView(new ErrorView("NS10 " + WatchUi.loadResource($.Rez.Strings.oAuthErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                     }
                 }
                 if (Globals.debug) {
@@ -801,9 +801,9 @@ class NestStatus {
             Storage.setValue("accessTokenExpire", 0);
             if (!isGlance) {
                 if (data != null) {
-                    WatchUi.pushView(new ErrorView((data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("NS11 " + (data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 } else {
-                    WatchUi.pushView(new ErrorView("Token refresh failed in onReceiveRefreshToken()"), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("NS12 " + "Token refresh failed in onReceiveRefreshToken()"), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             }
             if (Globals.debug) {
@@ -826,24 +826,31 @@ class NestStatus {
                 if (Globals.debug) {
                     System.println("NestStatus getAccessToken(): Full auth");
                 }
-                // Full OAuth
-                var payload = {
-                    "code"          => Properties.getValue("oauthCode"),
-                    "client_id"     => ClientId.clientId,
-                    "client_secret" => ClientId.clientSecret,
-                    "redirect_uri"  => Globals.getRedirectUrl(),
-                    "grant_type"    => "authorization_code"
-                };
+                var oa = Properties.getValue("oauthCode");
+                if (oa != null && !oa.equals("") && !oa.equals(oAuthPropFail)) {
+                    // Full OAuth
+                    var payload = {
+                        "code"          => oa,
+                        "client_id"     => ClientId.clientId,
+                        "client_secret" => ClientId.clientSecret,
+                        "redirect_uri"  => Globals.getRedirectUrl(),
+                        "grant_type"    => "authorization_code"
+                    };
 
-                var options = {
-                    :method => Communications.HTTP_REQUEST_METHOD_POST,
-                    :headers => {
-                        "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
-                    },
-                    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-                };
-                // This follows a check for Internet access
-                Communications.makeWebRequest(Globals.getOAuthTokenUrl(), payload, options, method(:onRecieveAccessToken));
+                    var options = {
+                        :method       => Communications.HTTP_REQUEST_METHOD_POST,
+                        :headers      => {
+                            "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
+                        },
+                        :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+                    };
+                    // This follows a check for Internet access
+                    Communications.makeWebRequest(Globals.getOAuthTokenUrl(), payload, options, method(:onRecieveAccessToken));
+                } else {
+                    if (Globals.debug) {
+                        System.println("NestStatus getAccessToken(): Need new OAuth code");
+                    }
+                }
             } else {
                 if (Globals.debug) {
                     System.println("NestStatus getAccessToken(): Refresh Auth");
@@ -857,8 +864,8 @@ class NestStatus {
                 };
 
                 var options = {
-                    :method => Communications.HTTP_REQUEST_METHOD_POST,
-                    :headers => {
+                    :method       => Communications.HTTP_REQUEST_METHOD_POST,
+                    :headers      => {
                         "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED
                     },
                     :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
@@ -914,7 +921,7 @@ class NestStatus {
                     },
                     {}
                 );
-                WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.getOAuthCodeMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("NS13 " + WatchUi.loadResource($.Rez.Strings.getOAuthCodeMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
             return;
         } else {

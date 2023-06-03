@@ -373,7 +373,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
                 mView.getNestStatus().getAccessToken();
                 var mySettings = System.getDeviceSettings();
                 if ((mySettings has :isGlanceModeEnabled) && mySettings.isGlanceModeEnabled) {
-                    WatchUi.pushView(new ErrorView("ThermoNestView got new access token in onRefreshButton(), i.e. ThermoNestApp.onSettingsChanged() not fired. This should not happen"), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("TN1 " + "ThermoNestView got new access token in onRefreshButton(), i.e. ThermoNestApp.onSettingsChanged() not fired. This should not happen"), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }
             }
             mView.onRefreshButton();
@@ -428,7 +428,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
                             }).pushView(WatchUi.SLIDE_IMMEDIATE);
                         }
                     } else {
-                        WatchUi.pushView(new ErrorView("ThermoPick view is not initialised."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                        WatchUi.pushView(new ErrorView("TN1 " + "ThermoPick view is not initialised."), new ErrorDelegate(), WatchUi.SLIDE_UP);
                     }
                 }
                 break;

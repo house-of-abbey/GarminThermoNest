@@ -49,8 +49,6 @@ class ErrorView extends ScalableView {
 
         var w = dc.getWidth();
         var h = dc.getHeight();
-        var hw = w/2;
-        var hh = h/2;
 
         textArea = new WatchUi.TextArea({
             :text          => text,
@@ -67,9 +65,7 @@ class ErrorView extends ScalableView {
     // Update the view
     function onUpdate(dc as Graphics.Dc) as Void {
         var w = dc.getWidth();
-        var h = dc.getHeight();
         var hw = w/2;
-        var hh = h/2;
         var bg = 0x3B444C;
         if(dc has :setAntiAlias) {
             dc.setAntiAlias(true);

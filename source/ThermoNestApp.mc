@@ -52,7 +52,6 @@ class ThermoNestApp extends Application.AppBase {
             Storage.setValue("accessToken", "");
             Storage.setValue("accessTokenExpire", 0);
             Storage.setValue("refreshToken", "");
-            var mySettings = System.getDeviceSettings();
             if (Globals.debug) {
                 System.println("ThermoNestApp onStart() - Force full OAuth");
             }
@@ -91,7 +90,6 @@ class ThermoNestApp extends Application.AppBase {
                 Storage.setValue("accessToken", "");
                 Storage.setValue("accessTokenExpire", 0);
                 Storage.setValue("refreshToken", "");
-                var mySettings = System.getDeviceSettings();
                 if (Globals.debug) {
                     System.println("ThermoNestApp onSettingsChanged() - Force full OAuth");
                 }

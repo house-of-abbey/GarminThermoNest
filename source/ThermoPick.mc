@@ -59,7 +59,7 @@ class ThermoPick extends WatchUi.Menu2 {
                 System.println("ThermoPick initialize() no access token, pre-condition not met.");
             }
             if (!isGlance) {
-                WatchUi.pushView(new ErrorView("ThermoPick initialize() no access token, pre-condition not met."), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("TP1 " + "ThermoPick initialize() no access token, pre-condition not met."), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         } else {
             initData();
@@ -176,7 +176,7 @@ class ThermoPick extends WatchUi.Menu2 {
             }
         } else {
             if (data != null) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("TP2 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
     }
@@ -229,7 +229,7 @@ class ThermoPick extends WatchUi.Menu2 {
             structures_fetched++;
         } else {
             if (data != null) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("TP3 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
     }
@@ -268,7 +268,7 @@ class ThermoPick extends WatchUi.Menu2 {
                 }
                 // Leave the selector view.
                 WatchUi.popView(WatchUi.SLIDE_LEFT);
-                WatchUi.pushView(new ErrorView(WatchUi.loadResource($.Rez.Strings.noDevicesErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("TP4 " + WatchUi.loadResource($.Rez.Strings.noDevicesErrMsg) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             } else {
                 var devices = data.get("devices") as Lang.Array;
                 for (var i = 0; i < devices.size(); i++) {
@@ -299,7 +299,7 @@ class ThermoPick extends WatchUi.Menu2 {
             }
         } else {
             if (data != null) {
-                WatchUi.pushView(new ErrorView((data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                WatchUi.pushView(new ErrorView("TP5 " + (data.get("error") as Lang.Dictionary).get("message") as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
             }
         }
     }
