@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------------
 //
 // Distributed under MIT Licence
-//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//   See https://github.com/house-of-abbey/GarminThermoNest/blob/main/LICENSE.
 //
 //-----------------------------------------------------------------------------------
 //
@@ -801,7 +801,7 @@ class NestStatus {
             Storage.setValue("accessTokenExpire", 0);
             if (!isGlance) {
                 if (data != null) {
-                    WatchUi.pushView(new ErrorView("NS11 " + (data.get("error") as Lang.String) + ": " + (data.get("error_description")) as Lang.String), new ErrorDelegate(), WatchUi.SLIDE_UP);
+                    WatchUi.pushView(new ErrorView("NS11 " + "You must renew your OAuth token via https://house-of-abbey.github.io/GarminThermoNest/auth."), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 } else {
                     WatchUi.pushView(new ErrorView("NS12 " + "Token refresh failed in onReceiveRefreshToken()"), new ErrorDelegate(), WatchUi.SLIDE_UP);
                 }

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------------
 //
 // Distributed under MIT Licence
-//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//   See https://github.com/house-of-abbey/GarminThermoNest/blob/main/LICENSE.
 //
 //-----------------------------------------------------------------------------------
 //

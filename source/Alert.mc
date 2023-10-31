@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------------
 //
 // Distributed under MIT Licence
-//   See https://github.com/house-of-abbey/scratch_vhdl/blob/main/LICENCE.
+//   See https://github.com/house-of-abbey/GarminThermoNest/blob/main/LICENSE.
 //
 //-----------------------------------------------------------------------------------
 //
@@ -14,7 +14,7 @@
 //
 // Description:
 //
-// AlertView provides a means to present application notifications to the user
+// Alert provides a means to present application notifications to the user
 // briefly. Credit to travis.vitek on forums.garmin.com.
 //
 // Reference:
@@ -22,6 +22,7 @@
 //
 //-----------------------------------------------------------------------------------
 
+using Toybox.Lang;
 using Toybox.Graphics;
 using Toybox.WatchUi;
 using Toybox.Timer;
@@ -36,7 +37,7 @@ class Alert extends WatchUi.View {
     hidden var fgcolor;
     hidden var bgcolor;
 
-    function initialize(params) {
+    function initialize(params as Lang.Dictionary) {
         View.initialize();
 
         text = params.get(:text);
@@ -117,11 +118,11 @@ class Alert extends WatchUi.View {
     }
 
     function pushView(transition) {
-        WatchUi.pushView(self, new Delegate(self), transition);
+        WatchUi.pushView(self, new AlertDelegate(self), transition);
     }
 }
 
-class Delegate extends WatchUi.InputDelegate {
+class AlertDelegate extends WatchUi.InputDelegate {
     hidden var mView;
 
     function initialize(view) {
