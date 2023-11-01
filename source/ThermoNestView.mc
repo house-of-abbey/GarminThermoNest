@@ -406,11 +406,6 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
 
     function onSwipe(swipeEvent) as Lang.Boolean {
         switch (swipeEvent.getDirection()) {
-            case WatchUi.SWIPE_RIGHT:
-                // Exit application
-                WatchUi.popView(WatchUi.SLIDE_RIGHT);
-                break;
-
             case WatchUi.SWIPE_LEFT:
                 var o = Properties.getValue("oauthCode") as Lang.String;
                 if (o != null && !o.equals("")) {
@@ -431,12 +426,12 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
                         WatchUi.pushView(new ErrorView("TN1 " + "ThermoPick view is not initialised."), new ErrorDelegate(), WatchUi.SLIDE_UP);
                     }
                 }
-                break;
+                return true;
 
             default:
                 // Do nothing
                 break;
         }
-        return true;
+        return false;
     }
 }
