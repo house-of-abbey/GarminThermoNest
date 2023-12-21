@@ -30,25 +30,23 @@ using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestGlanceView extends WatchUi.GlanceView {
-    hidden var screenWidth;
-    private const settings as Lang.Dictionary = {
-        :xOffset => 2.4f
-    };
+    private var screenWidth;
+    private const cXOffset = 2.4f;
     // Horizontal offset at which to draw the icon or write text
-    hidden var xOffset;
-    hidden var mNestStatus;
-    hidden var phoneDisconnectedIcon;
-    hidden var signalDisconnectedIcon;
-    hidden var thermostatOfflineIcon;
-    hidden var errorIcon;
-    hidden var hourglassIcon;
-    hidden var setOffLabel   as Lang.String;
-    hidden var oAuthPropFail as Lang.String;
+    private var xOffset;
+    private var mNestStatus;
+    private var phoneDisconnectedIcon;
+    private var signalDisconnectedIcon;
+    private var thermostatOfflineIcon;
+    private var errorIcon;
+    private var hourglassIcon;
+    private var setOffLabel   as Lang.String;
+    private var oAuthPropFail as Lang.String;
 
     function initialize(ns as NestStatus) {
         GlanceView.initialize();
         mNestStatus     = ns;
-        xOffset         = pixelsForScreen(settings.get(:xOffset) as Lang.Float);
+        xOffset         = pixelsForScreen(cXOffset);
         setOffLabel     = WatchUi.loadResource($.Rez.Strings.offStatus    ) as Lang.String;
         oAuthPropFail   = WatchUi.loadResource($.Rez.Strings.oAuthPropFail) as Lang.String;
     }

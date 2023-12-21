@@ -62,7 +62,7 @@ class Globals {
     static const celciusRes   = 0.5f; // Resolution and increment for deg C
     static const farenheitRes = 1.0f; // Resolution and increment for deg F
 
-    static hidden const smartDeviceManagementUrl = "https://smartdevicemanagement.googleapis.com/v1/enterprises/";
+    static private const smartDeviceManagementUrl = "https://smartdevicemanagement.googleapis.com/v1/enterprises/";
 
     static function getStructuresUrl() {
         return smartDeviceManagementUrl + ClientId.projectId + "/structures";

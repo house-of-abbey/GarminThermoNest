@@ -27,15 +27,14 @@ using Toybox.Graphics;
 using Toybox.WatchUi;
 using Toybox.Timer;
 
-const bRadius = 10;
-
 class Alert extends WatchUi.View {
-    hidden var timer;
-    hidden var timeout;
-    hidden var text;
-    hidden var font;
-    hidden var fgcolor;
-    hidden var bgcolor;
+    private static const bRadius = 10;
+    protected var timer;
+    protected var timeout;
+    protected var text;
+    protected var font;
+    protected var fgcolor;
+    protected var bgcolor;
 
     function initialize(params as Lang.Dictionary) {
         View.initialize();
@@ -76,7 +75,7 @@ class Alert extends WatchUi.View {
         timer.stop();
     }
 
-    function onUpdate(dc) {
+    function onUpdate(dc as Graphics.Dc) {
         var tWidth  = dc.getTextWidthInPixels(text, font);
         var tHeight = dc.getFontHeight(font);
         var bWidth  = tWidth  + 20;
@@ -123,7 +122,7 @@ class Alert extends WatchUi.View {
 }
 
 class AlertDelegate extends WatchUi.InputDelegate {
-    hidden var mView;
+    private var mView;
 
     function initialize(view) {
         InputDelegate.initialize();

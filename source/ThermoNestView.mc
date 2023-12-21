@@ -27,43 +27,40 @@ using Toybox.Timer;
 
 
 class ThermoNestView extends ThermoView {
-    private const settings as Lang.Dictionary = {
-        :modeHeight   => 14f,
-        :modeSpacing  => 1f,
-        :tempSpace    => 10f,
-        :statusHeight => 10f
-    };
+    private const cModeHeight   = 14f;
+    private const cModeSpacing  = 1f;
+    private const cTempSpace    = 10f;
+    private const cStatusHeight = 10;
     // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
-    hidden var modeHeight;
+    private var modeHeight;
     // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
     // icons are spaced at twice this value.
-    hidden var modeSpacing;
+    private var modeSpacing;
     // Vertical spacing either side of centre for the pair of temperature values
-    hidden var tempSpace;
+    private var tempSpace;
     // Vertical space of top centre icon for connectivity/refresh icon
-    hidden var statusHeight;
-    hidden const timeout = 10000; // ms
+    private var statusHeight;
+    protected const timeout = 10000; // ms
 
-    hidden var mViewNav;
-    hidden var refreshButton;
-    hidden var ecoOffIcon;
-    hidden var ecoOnIcon;
-    hidden var heatOffIcon;
-    hidden var heatOnIcon;
-    hidden var coolOnIcon;
-    hidden var heatCoolIcon;
-    hidden var humidityIcon;
-    hidden var thermostatIcon;
-    hidden var phoneDisconnectedIcon;
-    hidden var signalDisconnectedIcon;
-    hidden var thermostatOfflineIcon;
-    hidden var refreshIcon;
-    hidden var hourglassIcon;
-    hidden var loggedOutIcon;
-    hidden var errorIcon;
-    hidden var setOffLabel   as Lang.String;
-    hidden var oAuthPropFail as Lang.String;
-    hidden var timer;
+    private var mViewNav;
+    private var refreshButton;
+    private var ecoOffIcon;
+    private var ecoOnIcon;
+    private var heatOffIcon;
+    private var heatOnIcon;
+    private var coolOnIcon;
+    private var heatCoolIcon;
+    private var humidityIcon;
+    private var phoneDisconnectedIcon;
+    private var signalDisconnectedIcon;
+    private var thermostatOfflineIcon;
+    private var refreshIcon;
+    private var hourglassIcon;
+    private var loggedOutIcon;
+    private var errorIcon;
+    private var setOffLabel   as Lang.String;
+    private var oAuthPropFail as Lang.String;
+    private var timer;
 
     function initialize(ns as NestStatus) {
         ThermoView.initialize(ns);
@@ -80,7 +77,6 @@ class ThermoNestView extends ThermoView {
         coolOnIcon             = Application.loadResource(Rez.Drawables.CoolOnIcon            ) as Graphics.BitmapResource;
         heatCoolIcon           = Application.loadResource(Rez.Drawables.HeatCoolIcon          ) as Graphics.BitmapResource;
         humidityIcon           = Application.loadResource(Rez.Drawables.HumidityIcon          ) as Graphics.BitmapResource;
-        thermostatIcon         = Application.loadResource(Rez.Drawables.ThermostatIcon        ) as Graphics.BitmapResource;
         phoneDisconnectedIcon  = Application.loadResource(Rez.Drawables.PhoneDisconnectedIcon ) as Graphics.BitmapResource;
         signalDisconnectedIcon = Application.loadResource(Rez.Drawables.SignalDisconnectedIcon) as Graphics.BitmapResource;
         thermostatOfflineIcon  = Application.loadResource(Rez.Drawables.ThermostatOfflineIcon ) as Graphics.BitmapResource;
@@ -88,10 +84,10 @@ class ThermoNestView extends ThermoView {
         hourglassIcon          = Application.loadResource(Rez.Drawables.HourglassIcon         ) as Graphics.BitmapResource;
         loggedOutIcon          = Application.loadResource(Rez.Drawables.LoggedOutIcon         ) as Graphics.BitmapResource;
         errorIcon              = Application.loadResource(Rez.Drawables.ErrorIcon             ) as Graphics.BitmapResource;
-        modeHeight             = pixelsForScreen(settings.get(:modeHeight  ) as Lang.Float);
-        modeSpacing            = pixelsForScreen(settings.get(:modeSpacing ) as Lang.Float);
-        tempSpace              = pixelsForScreen(settings.get(:tempSpace   ) as Lang.Float);
-        statusHeight           = pixelsForScreen(settings.get(:statusHeight) as Lang.Float);
+        modeHeight             = pixelsForScreen(cModeHeight   as Lang.Float);
+        modeSpacing            = pixelsForScreen(cModeSpacing  as Lang.Float);
+        tempSpace              = pixelsForScreen(cTempSpace    as Lang.Float);
+        statusHeight           = pixelsForScreen(cStatusHeight as Lang.Float);
         mViewNav               = new ViewNav({
             :identifier => "StatusPane",
             :locX       => pixelsForScreen(Globals.navMarginX),
@@ -344,11 +340,11 @@ class ThermoNestView extends ThermoView {
 }
 
 class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
-    hidden var mView;
-    hidden var tp;
-    hidden var retrievingDataAlert as Lang.String;
-    hidden var oAuthPropUsed       as Lang.String;
-    hidden var oAuthPropFail       as Lang.String;
+    private var mView;
+    private var tp;
+    private var retrievingDataAlert as Lang.String;
+    private var oAuthPropUsed       as Lang.String;
+    private var oAuthPropFail       as Lang.String;
 
     function initialize(view as ThermoNestView) {
         WatchUi.BehaviorDelegate.initialize();
@@ -412,7 +408,7 @@ class ThermoNestDelegate extends WatchUi.BehaviorDelegate {
                     if (tp != null) {
                         tp.initMenu();
                         if (tp.isInit()) {
-                            WatchUi.pushView(tp, new ThermoPickDelegate(tp, mView.getNestStatus()), WatchUi.SLIDE_LEFT);
+                            WatchUi.pushView(tp, new ThermoPickDelegate(mView.getNestStatus()), WatchUi.SLIDE_LEFT);
                         } else {
                             new Alert({
                                 :timeout => Globals.alertTimeout,

@@ -67,6 +67,8 @@ for entry in os.listdir("."):
 for screen_size, icon_sizes in lookup.items():
   output_dir = output_dir_prefix + str(icon_sizes[Sing])
   print("\nCreate directory:", output_dir)
+  if os.path.exists(output_dir) and os.path.isdir(output_dir):
+    shutil.rmtree(output_dir)
   os.makedirs(output_dir)
   for entry in os.listdir(input_dir):
     if entry.endswith(".svg"):

@@ -25,22 +25,22 @@ using Toybox.System;
 using Toybox.WatchUi;
 
 class ModeChangeView extends ScalableView {
-    hidden var mNestStatus;
-    hidden var mViewNav;
-    hidden var modeButton;
-    hidden var ecoButton;
-    hidden var heatOffIcon;
-    hidden var heatOnIcon;
-    hidden var coolOnIcon;
-    hidden var heatCoolIcon;
-    hidden var ecoOffIcon;
-    hidden var ecoOnIcon;
-    hidden var setModeLabel         as Lang.String;
-    hidden var tapIconLabel         as Lang.String;
-    hidden var thermoMode           as Lang.String or Null;
-    hidden var ecoMode              as Lang.Boolean or Null;
-    hidden var availableThermoModes as Lang.Array;
-    hidden var availableEcoModes    as Lang.Array;
+    private var mNestStatus;
+    private var mViewNav;
+    private var modeButton;
+    private var ecoButton;
+    private var heatOffIcon;
+    private var heatOnIcon;
+    private var coolOnIcon;
+    private var heatCoolIcon;
+    private var ecoOffIcon;
+    private var ecoOnIcon;
+    private var setModeLabel         as Lang.String;
+    private var tapIconLabel         as Lang.String;
+    private var thermoMode           as Lang.String or Null;
+    private var ecoMode              as Lang.Boolean or Null;
+    private var availableThermoModes as Lang.Array;
+    private var availableEcoModes    as Lang.Array;
 
     function initialize(ns as NestStatus) {
         ScalableView.initialize();
@@ -221,8 +221,8 @@ class ModeChangeView extends ScalableView {
 }
 
 class ModeChangeDelegate extends WatchUi.BehaviorDelegate {
-    hidden var mView;
-    hidden var cancelledAlert;
+    private var mView;
+    private var cancelledAlert;
 
     function initialize(view as ModeChangeView) {
         WatchUi.BehaviorDelegate.initialize();

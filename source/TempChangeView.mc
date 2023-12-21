@@ -26,56 +26,54 @@ using Toybox.WatchUi;
 using Toybox.Communications;
 
 class TempChangeView extends ThermoView {
-    private const settings as Lang.Dictionary = {
-        :incDecMargin        => 4f,
-        :tempSpace           => 7f,
-        :thermoIconMargin    => 29f,
-        :heatCoolIconSpacing => 28f,
-        :modeSpacing         => 1f,
-        :modeHeight          => 14f
-    };
+    private const cIncDecMargin        = 4f;
+    private const cTempSpace           = 7f;
+    private const cThermoIconMargin    = 29f;
+    private const cHeatCoolIconSpacing = 28f;
+    private const cModeSpacing         = 1f;
+    private const cModeHeight          = 14f;
     // Vertical spacing between the outside of the face and the temperature change (arrow) buttons
-    hidden var incDecMargin;
+    private var incDecMargin;
     // Vertical spacing either side of centre for the temperature values
-    hidden var tempSpace;
+    private var tempSpace;
     // Vertical spacing between the outside of the face and the thermostat icon
-    hidden var thermoIconMargin;
+    private var thermoIconMargin;
     // Horizontal offset from screen centre of the heat and cool icons to the left of the one or two temperature values.
-    hidden var heatCoolIconSpacing;
+    private var heatCoolIconSpacing;
     // Horizontal spacing either side of centre for the HVAC & Eco mode statuses, i.e. the
     // icons are spaced at twice this value.
-    hidden var modeSpacing;
+    private var modeSpacing;
     // Vertical space of bottom either side of centre icons for HVAC & Eco mode statuses
-    hidden var modeHeight;
+    private var modeHeight;
 
-    hidden var mViewNav;
-    hidden var incTempButton;
-    hidden var decTempButton;
-    hidden var heatTempButton;
-    hidden var coolTempButton;
-    hidden var thermostatIcon;
-    hidden var settingCool as Lang.Boolean = false;
-    hidden var ecoOffIcon;
-    hidden var ecoOnIcon;
-    hidden var heatOffIcon;
-    hidden var heatOnIcon;
-    hidden var coolOnIcon;
-    hidden var heatCoolIcon;
-    hidden var changeModeLabel;
+    private var mViewNav;
+    private var incTempButton;
+    private var decTempButton;
+    private var heatTempButton;
+    private var coolTempButton;
+    private var thermostatIcon;
+    private var settingCool as Lang.Boolean = false;
+    private var ecoOffIcon;
+    private var ecoOnIcon;
+    private var heatOffIcon;
+    private var heatOnIcon;
+    private var coolOnIcon;
+    private var heatCoolIcon;
+    private var changeModeLabel;
 
-    hidden var heatTemp;
-    hidden var coolTemp;
+    private var heatTemp;
+    private var coolTemp;
 
     function initialize(ns as NestStatus) {
         ThermoView.initialize(ns);
         changeModeLabel  = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;changeModeLabel;
         // Convert the settings from % of screen size to pixels
-        incDecMargin        = pixelsForScreen(settings.get(:incDecMargin       ) as Lang.Float);
-        tempSpace           = pixelsForScreen(settings.get(:tempSpace          ) as Lang.Float);
-        thermoIconMargin    = pixelsForScreen(settings.get(:thermoIconMargin   ) as Lang.Float);
-        heatCoolIconSpacing = pixelsForScreen(settings.get(:heatCoolIconSpacing) as Lang.Float);
-        modeSpacing         = pixelsForScreen(settings.get(:modeSpacing        ) as Lang.Float);
-        modeHeight          = pixelsForScreen(settings.get(:modeHeight         ) as Lang.Float);
+        incDecMargin        = pixelsForScreen(cIncDecMargin       );
+        tempSpace           = pixelsForScreen(cTempSpace          );
+        thermoIconMargin    = pixelsForScreen(cThermoIconMargin   );
+        heatCoolIconSpacing = pixelsForScreen(cHeatCoolIconSpacing);
+        modeSpacing         = pixelsForScreen(cModeSpacing        );
+        modeHeight          = pixelsForScreen(cModeHeight         );
     }
 
     function getHeatTemp() as  Lang.Number or Null {
@@ -385,8 +383,8 @@ class TempChangeView extends ThermoView {
 }
 
 class TempChangeDelegate extends WatchUi.BehaviorDelegate {
-    hidden var mView;
-    hidden var cancelledAlert;
+    private var mView;
+    private var cancelledAlert;
 
     function initialize(view as TempChangeView) {
         WatchUi.BehaviorDelegate.initialize();

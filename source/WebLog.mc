@@ -52,9 +52,9 @@ using Toybox.Lang;
 
 (:glance)
 class WebLog {
-    hidden var callsbuffer =  4 as Lang.Number;
-    hidden var numCalls    =  0 as Lang.Number;
-    hidden var buffer      = "" as Lang.String;
+    private var callsbuffer =  4 as Lang.Number;
+    private var numCalls    =  0 as Lang.Number;
+    private var buffer      = "" as Lang.String;
 
     // Set the number of calls to print() before sending the buffer to the online
     // logger.

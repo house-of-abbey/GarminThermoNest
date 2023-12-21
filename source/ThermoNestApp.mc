@@ -17,6 +17,12 @@
 // ThermoNestApp provides the base of the application.
 //
 //-----------------------------------------------------------------------------------
+//
+// ** MUST USE SDK Version 4.2.4 **
+//
+// Version 6.3.1 can't compile.
+//
+//-----------------------------------------------------------------------------------
 
 using Toybox.Application;
 using Toybox.Lang;
@@ -25,9 +31,9 @@ using Toybox.Application.Properties;
 
 (:glance)
 class ThermoNestApp extends Application.AppBase {
-    hidden var mNestStatus;
-    hidden var oAuthPropUsed as Lang.String;
-    hidden var oAuthPropFail as Lang.String;
+    private var mNestStatus;
+    private var oAuthPropUsed as Lang.String;
+    private var oAuthPropFail as Lang.String;
 
     function initialize() {
         AppBase.initialize();

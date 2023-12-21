@@ -48,33 +48,33 @@ class NestStatus {
     }
 
     public var isGlance             = false as Lang.Boolean;
-    hidden var authViewUpdate; // ThermoPick to update
+    private var authViewUpdate; // ThermoPick to update
 
-    hidden var online               = false as Lang.Boolean;
-    hidden var name                 = ""    as Lang.String;
+    private var online               = false as Lang.Boolean;
+    private var name                 = ""    as Lang.String;
     // Set this to 'C' or 'F' for temperature scale
-    hidden var scale                = '-'   as Lang.Char;
+    private var scale                = '-'   as Lang.Char;
     // Always Celsius
-    hidden var ambientTemp          = 0.0   as Lang.Number;
+    private var ambientTemp          = 0.0   as Lang.Number;
     // Always Celsius
-    hidden var heatTemp             = 0.0   as Lang.Number;
+    private var heatTemp             = 0.0   as Lang.Number;
     // Always Celsius
-    hidden var coolTemp             = 0.0   as Lang.Number;
+    private var coolTemp             = 0.0   as Lang.Number;
     // Always Celsius
-    hidden var ecoHeatTemp          = 0.0   as Lang.Number;
+    private var ecoHeatTemp          = 0.0   as Lang.Number;
     // Always Celsius
-    hidden var ecoCoolTemp          = 0.0   as Lang.Number;
-    hidden var humidity             = 0.0   as Lang.Number;
-    hidden var availableThermoModes = null  as Lang.Array;
-    hidden var thermoMode           = ""    as Lang.String;
-    hidden var hvac                 = ""    as Lang.String;
-    hidden var availableEcoModes    = null  as Lang.Array;
-    hidden var eco                  = false as Lang.Boolean;
-    hidden var gotDeviceData        = false as Lang.Boolean;
-    hidden var gotDeviceDataError   = false as Lang.Boolean;
-    hidden var alertSending;
-    hidden var alertNoChange;
-    hidden var oAuthPropFail                as Lang.String;
+    private var ecoCoolTemp          = 0.0   as Lang.Number;
+    private var humidity             = 0.0   as Lang.Number;
+    private var availableThermoModes = null  as Lang.Array;
+    protected var thermoMode           = ""    as Lang.String;
+    private var hvac                 = ""    as Lang.String;
+    private var availableEcoModes    = null  as Lang.Array;
+    private var eco                  = false as Lang.Boolean;
+    private var gotDeviceData        = false as Lang.Boolean;
+    private var gotDeviceDataError   = false as Lang.Boolean;
+    private var alertSending;
+    private var alertNoChange;
+    private var oAuthPropFail                as Lang.String;
 
     // Parameters:
     //  * isGlance = true when initialised from a GlanceView, otherwise false.
@@ -1003,7 +1003,7 @@ class NestStatus {
 }
 
 class DevicesMenuInputDelegate extends WatchUi.Menu2InputDelegate {
-    hidden var mNestStatus;
+    private var mNestStatus;
 
     function initialize(ns as NestStatus) {
         Menu2InputDelegate.initialize();

@@ -25,79 +25,76 @@ using Toybox.Application.Properties;
 using Toybox.Math;
 
 class ThermoView extends ScalableView {
-    private const settings as Lang.Dictionary = {
-        :margin        => 3f,
-        :full_arc_w    => 1.5f,
-        :range_arc_w   => 3f,
-        :hct_tick_w    => 2f,
-        :at_tick_w     => 2f,
-        :tick_st_r     => 1f,
-        :tick_ren_r    => 7f,
-        :tick_aen_r    => 5f,
-        :tick_major_r  => 6f,
-        :tick_half_r   => 4f,
-        :tick_minor_r  => 3f,
-        :tick_major_w  => 3f,
-        :tick_half_w   => 1f,
-        :tick_minor_w  => 0.5f,
-        :diamondwidth  => 2f,
-        :diamondHeight => 7f
-    };
+    private const cMargin        = 3f;
+    private const cFull_arc_w    = 1.5f;
+    private const cRange_arc_w   = 3f;
+    private const cHct_tick_w    = 2f;
+    private const cAt_tick_w     = 2f;
+    private const cTick_st_r     = 1f;
+    private const cTick_ren_r    = 7f;
+    private const cTick_aen_r    = 5f;
+    private const cTick_major_r  = 6f;
+    private const cTick_half_r   = 4f;
+    private const cTick_minor_r  = 3f;
+    private const cTick_major_w  = 3f;
+    private const cTick_half_w   = 1f;
+    private const cTick_minor_w  = 0.5f;
+    private const cDiamondwidth  = 2f;
+    private const cDiamondHeight = 7f;
     // Between the full range arc and the outside of the watch face
-    hidden var margin        = 3f;
+    private var margin        = 3f;
     // Line width of the full range arc
-    hidden var full_arc_w    = 1.5f;
+    private var full_arc_w    = 1.5f;
     // Line width of the range arc (thicker than full_arc_w)
-    hidden var range_arc_w   = 3f;
+    private var range_arc_w   = 3f;
     // Heat & cool line width of a tick mark
-    hidden var hct_tick_w    = 1f;
+    private var hct_tick_w    = 1f;
     // Ambient temperature line width of a tick mark
-    hidden var at_tick_w     = 2f;
+    private var at_tick_w     = 2f;
     // Ticks start at: watch radius - tick_st_r
-    hidden var tick_st_r     = 1f;
+    private var tick_st_r     = 1f;
     // Temperature range ends: watch radius - tick_ren_r
-    hidden var tick_ren_r    = 7f;
+    private var tick_ren_r    = 7f;
     // Ambient temperature: watch radius - tick_aen_r
-    hidden var tick_aen_r    = 5f;
+    private var tick_aen_r    = 5f;
     // Temperature major tick (10s): watch radius - tick_deep_r
-    hidden var tick_major_r  = 6f;
+    private var tick_major_r  = 6f;
     // Temperature half tick (5s): watch radius - tick_half_r
-    hidden var tick_half_r   = 4f;
+    private var tick_half_r   = 4f;
     // Temperature minor tick (1s): watch radius - tick_minor_r
-    hidden var tick_minor_r  = 2f;
+    private var tick_minor_r  = 2f;
     // Temperature major tick width (10s)
-    hidden var tick_major_w  = 3f;
+    private var tick_major_w  = 3f;
     // Temperature half tick width (5s)
-    hidden var tick_half_w   = 1f;
+    private var tick_half_w   = 1f;
     // Temperature minor tick width (1s)
-    hidden var tick_minor_w  = 0.5f;
+    private var tick_minor_w  = 0.5f;
     // Diamond dimensions
-    hidden var diamondwidth  = 2f;
-    hidden var diamondHeight = 7f;
+    private var diamondwidth  = 2f;
+    private var diamondHeight = 7f;
     // Additional colours over Globals
-    hidden const darkGreyColor = 0xaaaaaa;
-
-    hidden var mNestStatus as NestStatus;
+    protected const darkGreyColor = 0xaaaaaa;
+    protected var mNestStatus as NestStatus;
 
     function initialize(ns as NestStatus) {
         ScalableView.initialize();
         mNestStatus   = ns;
-        margin        = pixelsForScreen(settings.get(:margin       ) as Lang.Float);
-        full_arc_w    = pixelsForScreen(settings.get(:full_arc_w   ) as Lang.Float);
-        range_arc_w   = pixelsForScreen(settings.get(:range_arc_w  ) as Lang.Float);
-        hct_tick_w    = pixelsForScreen(settings.get(:hct_tick_w   ) as Lang.Float);
-        at_tick_w     = pixelsForScreen(settings.get(:at_tick_w    ) as Lang.Float);
-        tick_st_r     = pixelsForScreen(settings.get(:tick_st_r    ) as Lang.Float);
-        tick_ren_r    = pixelsForScreen(settings.get(:tick_ren_r   ) as Lang.Float);
-        tick_aen_r    = pixelsForScreen(settings.get(:tick_aen_r   ) as Lang.Float);
-        tick_major_r  = pixelsForScreen(settings.get(:tick_major_r ) as Lang.Float);
-        tick_half_r   = pixelsForScreen(settings.get(:tick_half_r  ) as Lang.Float);
-        tick_minor_r  = pixelsForScreen(settings.get(:tick_minor_r ) as Lang.Float);
-        tick_major_w  = pixelsForScreen(settings.get(:tick_major_w ) as Lang.Float);
-        tick_half_w   = pixelsForScreen(settings.get(:tick_half_w  ) as Lang.Float);
-        tick_minor_w  = pixelsForScreen(settings.get(:tick_minor_w ) as Lang.Float);
-        diamondwidth  = pixelsForScreen(settings.get(:diamondwidth ) as Lang.Float);
-        diamondHeight = pixelsForScreen(settings.get(:diamondHeight) as Lang.Float);
+        margin        = pixelsForScreen(cMargin       );
+        full_arc_w    = pixelsForScreen(cFull_arc_w   );
+        range_arc_w   = pixelsForScreen(cRange_arc_w  );
+        hct_tick_w    = pixelsForScreen(cHct_tick_w   );
+        at_tick_w     = pixelsForScreen(cAt_tick_w    );
+        tick_st_r     = pixelsForScreen(cTick_st_r    );
+        tick_ren_r    = pixelsForScreen(cTick_ren_r   );
+        tick_aen_r    = pixelsForScreen(cTick_aen_r   );
+        tick_major_r  = pixelsForScreen(cTick_major_r );
+        tick_half_r   = pixelsForScreen(cTick_half_r  );
+        tick_minor_r  = pixelsForScreen(cTick_minor_r );
+        tick_major_w  = pixelsForScreen(cTick_major_w );
+        tick_half_w   = pixelsForScreen(cTick_half_w  );
+        tick_minor_w  = pixelsForScreen(cTick_minor_w );
+        diamondwidth  = pixelsForScreen(cDiamondwidth );
+        diamondHeight = pixelsForScreen(cDiamondHeight);
     }
 
     // Linear IntERPolatation

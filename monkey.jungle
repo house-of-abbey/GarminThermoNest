@@ -27,7 +27,7 @@ project.manifest = manifest.xml
 
 # The icons need to scale as a ratio of screen size 48:416 pixels
 #
-# Icon     48   45   42   37   32   30   28   25
+# Icon     48   45   42   37   32   30   28   26
 # Screen  416  390  360  320  280  260  240  218
 
 # Screen Size 416x416 launcher icon size 70x70

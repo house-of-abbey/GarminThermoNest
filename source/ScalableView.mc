@@ -23,10 +23,11 @@ using Toybox.WatchUi;
 using Toybox.Math;
 
 class ScalableView extends WatchUi.View {
-    hidden var screenWidth;
+    private var screenWidth;
 
     function initialize() {
         View.initialize();
+        screenWidth = System.getDeviceSettings().screenWidth;
     }
 
     // Convert a fraction expressed as a percentage (%) to a number of pixels for the
@@ -40,9 +41,6 @@ class ScalableView extends WatchUi.View {
     // height > width.
     //
     function pixelsForScreen(pc as Lang.Float) as Lang.Number {
-        if (screenWidth == null) {
-            screenWidth = System.getDeviceSettings().screenWidth;
-        }
         return Math.round(pc * screenWidth) / 100;
     }
 }

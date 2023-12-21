@@ -40,10 +40,10 @@ class ThermoPick extends WatchUi.Menu2 {
     // Lookup with key: structure id, value: custom name
     var rooms as Lang.Dictionary      = {};
     // The number of structures for which the rooms need to be fetched.
-    hidden var structures_total       = -1 as Lang.Number;
+    private var structures_total       = -1 as Lang.Number;
     // The number of structures for which the rooms have been fetched.
-    hidden var structures_fetched     = 0 as Lang.Number;
-    hidden var menu_populated as Lang.Boolean = false;
+    private var structures_fetched     = 0 as Lang.Number;
+    private var menu_populated as Lang.Boolean = false;
 
     function initialize(isGlance) {
         WatchUi.Menu2.initialize(
@@ -126,7 +126,7 @@ class ThermoPick extends WatchUi.Menu2 {
     // * s - String to split.
     // * c - Character to split the string on.
     //
-    hidden function split(s as Lang.String, c as Lang.Char) as Lang.Array<Lang.String> {
+    private function split(s as Lang.String, c as Lang.Char) as Lang.Array<Lang.String> {
         var lastCharPos = -1; // Default to the whole string
         var charArr = s.toCharArray();
         var ret = new Lang.Array<Lang.String>[0];
@@ -143,7 +143,7 @@ class ThermoPick extends WatchUi.Menu2 {
         return ret;
     }
 
-    hidden function lastSection(s as Lang.String, c as Lang.Char) as Lang.String {
+    private function lastSection(s as Lang.String, c as Lang.Char) as Lang.String {
         var lastCharPos = 0; // Default to the whole string
         var charArr = s.toCharArray();
         // Loop through the characters in the string to find the position of the last instance of 'c'
@@ -183,7 +183,7 @@ class ThermoPick extends WatchUi.Menu2 {
 
     // Initiate the GET request to fetch the list of structures from the user's Nest account.
     //
-    hidden function getStructures() {
+    private function getStructures() {
         var at = Storage.getValue("accessToken");
         if (at != null && !at.equals("")) {
             if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
@@ -236,7 +236,7 @@ class ThermoPick extends WatchUi.Menu2 {
 
     // Initiate the GET request to fetch the list of devices to control from the user's Nest account.
     //
-    hidden function getRooms(structure) {
+    private function getRooms(structure) {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var options  = {
                 :method  => Communications.HTTP_REQUEST_METHOD_GET,
@@ -306,7 +306,7 @@ class ThermoPick extends WatchUi.Menu2 {
 
     // Initiate the GET request to fetch the list of devices to control from the user's Nest account.
     //
-    hidden function getDevices() {
+    private function getDevices() {
         if (System.getDeviceSettings().phoneConnected && System.getDeviceSettings().connectionAvailable) {
             var options  = {
                 :method  => Communications.HTTP_REQUEST_METHOD_GET,
@@ -327,12 +327,10 @@ class ThermoPick extends WatchUi.Menu2 {
 }
 
 class ThermoPickDelegate extends WatchUi.Menu2InputDelegate {
-    hidden var mView;
-    hidden var mNestStatus;
+    private var mNestStatus;
 
-    function initialize(view as ThermoPick, ns as NestStatus) {
+    function initialize(ns as NestStatus) {
         Menu2InputDelegate.initialize();
-        mView       = view;
         mNestStatus = ns;
     }
 

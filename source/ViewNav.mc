@@ -28,15 +28,14 @@ using Toybox.Timer;
 using Toybox.Math;
 
 class ViewNav extends WatchUi.Drawable {
-    hidden var olocX;
-    hidden var ilocX;
-    hidden var ilocY;
-    hidden var radius  = 5;
-    hidden var panes   = 1;
-    hidden var nth     = 1;
-    hidden var timeout = 2000; // ms
-    hidden var period  = 0.5;  // s
-    hidden var timer as Timer.Timer;
+    private var olocX;
+    private var ilocX;
+    private var ilocY;
+    private var timer as Timer.Timer;
+    protected var radius  = 5;
+    protected var panes   = 1;
+    protected var nth     = 1;
+    protected var timeout = 2000; // ms
 
     function initialize(settings as {
             :identifier as Lang.Object,  // Just use a string if nothing else to provide
@@ -56,7 +55,6 @@ class ViewNav extends WatchUi.Drawable {
         panes   = settings.get(:panes);
         nth     = settings.get(:nth);
         timeout = settings.get(:timeout);
-        period  = settings.get(:period);
 
         var lr    = (System.getDeviceSettings().screenWidth / 2) - ilocX; // Large radius from the centre of the screen
         var theta = Math.acos(1 - (2 * Math.pow(radius, 2) / Math.pow(lr, 2)));
