@@ -96,8 +96,9 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
             return;
         }
 
-        var heat = mNestStatus.getHeatTemp();
-        var cool = mNestStatus.getCoolTemp();
+        var heat  = mNestStatus.getHeatTemp();
+        var cool  = mNestStatus.getCoolTemp();
+        var scale = mNestStatus.getScale();
         var text;
 
         if (o == null || o.equals("") || o.equals(oAuthPropFail)) {
@@ -105,11 +106,11 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         } else if (d == null || d.equals("")) {
             text = WatchUi.loadResource($.Rez.Strings.selectDevice) as Lang.String;;
         } else if (mNestStatus.getThermoMode().equals("HEATCOOL") && (heat != null) && (cool != null)) {
-            text = Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), mNestStatus.getScale()]);
+            text = Lang.format("$1$°$3$ • $2$°$3$", [heat.format("%2.1f"), cool.format("%2.1f"), scale]);
         } else if (mNestStatus.getThermoMode().equals("HEAT") && (heat != null)) {
-            text = Lang.format("$1$°$2$", [heat.format("%2.1f"), mNestStatus.getScale()]);
+            text = Lang.format("$1$°$2$", [heat.format("%2.1f"), scale]);
         } else if (mNestStatus.getThermoMode().equals("COOL") && (cool != null)) {
-            text = Lang.format("$1$°$2$", [cool.format("%2.1f"), mNestStatus.getScale()]);
+            text = Lang.format("$1$°$2$", [cool.format("%2.1f"), scale]);
         } else {
             text = setOffLabel;
         }
@@ -125,9 +126,16 @@ class ThermoNestGlanceView extends WatchUi.GlanceView {
         dc.clear();
         dc.drawText(
             xOffset,
-            dc.getHeight() / 2,
+            1 * dc.getHeight() / 4,
             Graphics.FONT_SMALL,
             text,
+            Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+            xOffset,
+            3 * dc.getHeight() / 4,
+            Graphics.FONT_SMALL,
+            Lang.format("$1$°$2$", [mNestStatus.getAmbientTemp().format("%2.1f"), scale]),
             Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
     }
