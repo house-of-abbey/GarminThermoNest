@@ -49,6 +49,7 @@
 
 using Toybox.Communications;
 using Toybox.Lang;
+using Toybox.System;
 
 (:glance)
 class WebLog {
@@ -74,7 +75,8 @@ class WebLog {
     // execution.
     //
     function print(str as Lang.String) {
-        buffer += str;
+        var myTime = System.getClockTime();
+        buffer += myTime.hour.format("%02d") + ":" + myTime.min.format("%02d") + ":" + myTime.sec.format("%02d") + " " + str;
         numCalls++;
         if (Globals.debug) {
             System.println("WebLog print() str      = " + str);
@@ -109,7 +111,6 @@ class WebLog {
         if (Globals.debug) {
             System.println("WebLog doPrint()");
         }
-        numCalls = 0;
         Communications.makeWebRequest(
             ClientId.webLogUrl,
             {
@@ -124,6 +125,8 @@ class WebLog {
             },
             method(:onLog)
         );
+        numCalls = 0;
+        buffer   = "";
     }
 
     // Clear the debug log over the Internet to start a new track of the watch's runtime
