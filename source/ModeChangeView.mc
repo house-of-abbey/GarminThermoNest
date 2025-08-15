@@ -107,7 +107,7 @@ class ModeChangeView extends ScalableView {
             :width                    => w/4,
             :height                   => h/2
         });
-        setLayout([modeButton, ecoButton] as Lang.Array<WatchUi.Button>);
+        setLayout([modeButton, ecoButton] as Lang.Array<WatchUi.Drawable>);
     }
 
     function onShow() {

@@ -17,10 +17,6 @@
 // ThermoNestApp provides the base of the application.
 //
 //-----------------------------------------------------------------------------------
-//
-//                       ** MUST NOT USE SDK Version 6.3.1 **
-//
-//-----------------------------------------------------------------------------------
 
 using Toybox.Application;
 using Toybox.Lang;
@@ -71,10 +67,10 @@ class ThermoNestApp extends Application.AppBase {
     function onStop(state as Lang.Dictionary?) as Void {}
 
     // Return the initial view of your application here
-    function getInitialView() as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>? {
+    function getInitialView() as [ WatchUi.Views ] or [ WatchUi.Views, WatchUi.InputDelegates ] {
         mNestStatus = new NestStatus(false);
         var mView   = new ThermoNestView(mNestStatus);
-        return [mView, new ThermoNestDelegate(mView)] as Lang.Array<WatchUi.Views or WatchUi.InputDelegates>;
+        return [mView, new ThermoNestDelegate(mView)];
     }
 
     function onSettingsChanged() {
@@ -105,7 +101,7 @@ class ThermoNestApp extends Application.AppBase {
                 if (Globals.debug) {
                     System.println("ThermoNestApp onSettingsChanged() Getting Device Data");
                 }
-                // Setting change might be a new devide ID
+                // Setting change might be a new device ID
                 mNestStatus.getDeviceData();
             }
         } else {

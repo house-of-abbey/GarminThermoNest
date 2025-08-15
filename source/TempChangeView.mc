@@ -66,7 +66,7 @@ class TempChangeView extends ThermoView {
 
     function initialize(ns as NestStatus) {
         ThermoView.initialize(ns);
-        changeModeLabel  = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;changeModeLabel;
+        changeModeLabel     = WatchUi.loadResource($.Rez.Strings.changeModeLabel) as Lang.String;
         // Convert the settings from % of screen size to pixels
         incDecMargin        = pixelsForScreen(cIncDecMargin       );
         tempSpace           = pixelsForScreen(cTempSpace          );
