@@ -47,7 +47,8 @@ class NestStatus {
         NoEco    = 4
     }
 
-    public var isGlance             = false as Lang.Boolean;
+    public var isGlance              = false as Lang.Boolean;
+    protected var thermoMode         = ""    as Lang.String;
     private var authViewUpdate; // ThermoPick to update
 
     private var online               = false as Lang.Boolean;
@@ -66,7 +67,6 @@ class NestStatus {
     private var ecoCoolTemp          = 0.0   as Lang.Number;
     private var humidity             = 0.0   as Lang.Number;
     private var availableThermoModes = null  as Lang.Array;
-    protected var thermoMode           = ""    as Lang.String;
     private var hvac                 = ""    as Lang.String;
     private var availableEcoModes    = null  as Lang.Array;
     private var eco                  = false as Lang.Boolean;
